@@ -1,6 +1,3 @@
-import { SearchFiltersProvider } from "@/context/SearchFiltersContext";
-import "../global.css";
-
 import {
   Manrope_400Regular,
   Manrope_500Medium,
@@ -12,7 +9,7 @@ import {
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import "react-native-reanimated";
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
@@ -26,15 +23,15 @@ export default function RootLayout() {
   if (!fontsLoaded) return null;
 
   return (
-    <SearchFiltersProvider>
-      <ThemeProvider value={DefaultTheme}>
-        <Stack>
-          {/* Layout principal avec les onglets */}
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        </Stack>
-
-        <StatusBar style="auto" />
-      </ThemeProvider>
-    </SearchFiltersProvider>
+    <ThemeProvider value={DefaultTheme}>
+      <Stack>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="modal"
+          options={{ presentation: "modal", title: "Modal" }}
+        />
+      </Stack>
+      <StatusBar style="auto" />
+    </ThemeProvider>
   );
 }
