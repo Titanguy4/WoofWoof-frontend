@@ -1,6 +1,6 @@
 // app/(tabs)/explore.tsx
-import { Explore } from '@/screens';
+import { Saved } from '@/screens';
 
 export default function ExploreTab() {
-  return <Explore />;
+  return <Saved />;
 }
