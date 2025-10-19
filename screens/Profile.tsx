@@ -1,9 +1,10 @@
-import React from "react";
-import { ScrollView, View, Text, Image } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
+import React from "react";
+import { Image, ScrollView, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS } from "../constants/colors";
-import { Ionicons } from "@expo/vector-icons";
+
 
 export default function ProfileScreen() {
   return (
@@ -28,8 +29,8 @@ export default function ProfileScreen() {
         </View>
 
         {/* === CARTE PROFIL === */}
-        <View className="bg-white mx-4 -mt-36 rounded-2xl shadow p-4">
-          
+        <View className="bg-white mx-4 -mt-36 mb-2 rounded-2xl shadow p-4">
+
           {/* --- Ligne 1 : Photo + Nom + Upgrade + Edit --- */}
           <View className="flex-row items-center">
             <Image
@@ -56,7 +57,7 @@ export default function ProfileScreen() {
           </View>
 
           {/* --- Ligne 2 : Maison + Woofer + Volunteers --- */}
-          <View className="flex-row rounded-lg border border-woofGreyBorder items-center justify-between mt-4">
+          <View className="py-3 px-4 flex-row rounded-lg border border-woofGreyBorder items-center justify-between mt-4">
             <View className="flex-row items-center">
               <Image
                 source={require("../assets/images/home.png")}
@@ -68,9 +69,69 @@ export default function ProfileScreen() {
               </Text>
             </View>
 
-            <Text className="font-manropeSemiBold text-sm text-[#FF8243]">
+            <Text className="font-manropeSemiBold text-base text-woofBrown">
               27 Volunteers hosted
             </Text>
+          </View>
+        </View>
+        <View className="bg-white px-4 gap-y-1">
+          <Text className="mt-3 text-lg text-black font-manrope">
+            General
+          </Text>
+          <View className="flex-row py-3 items-center justify-between">
+
+            <View className="flex-row items-center">
+              <Ionicons name="globe-outline" size={30} />
+              <Text className="ml-3 text-xl text-black font-manropeBold">
+                Language
+              </Text>
+            </View>
+            <MaterialIcons name="chevron-right" className="start-end" size={24} color={COLORS.woofDarkGrey} />
+          </View>
+          <View className="flex-row py-3 mb-4 items-center justify-between">
+
+            <View className="flex-row items-center">
+              <Ionicons name="notifications" size={30} />
+              <Text className="ml-3 text-xl text-black font-manropeBold">
+                Notifications
+              </Text>
+            </View>
+            <MaterialIcons name="chevron-right" className="start-end" size={24} color={COLORS.woofDarkGrey} />
+          </View>
+        </View>
+        <View className="bg-white px-4 gap-y-1">
+          <View className="border-t border-woofGrey"></View>
+          <Text className="mt-3 text-lg text-black font-manrope">
+            Preferences
+          </Text>
+          <View className="flex-row py-3 items-center justify-between">
+
+            <View className="flex-row items-center">
+              <Ionicons name="shield-checkmark-outline" size={30} color="black" />
+              <Text className="ml-3 text-xl text-black font-manropeBold">
+                Legal & Policies
+              </Text>
+            </View>
+            <MaterialIcons name="chevron-right" className="start-end" size={24} color={COLORS.woofDarkGrey} />
+          </View>
+          <View className="flex-row py-3 items-center justify-between">
+
+            <View className="flex-row items-center">
+              <Ionicons name="help-circle-outline" size={30} />
+              <Text className="ml-3 text-xl text-black font-manropeBold">
+                Help & Support
+              </Text>
+            </View>
+            <MaterialIcons name="chevron-right" className="start-end" size={24} color={COLORS.woofDarkGrey} />
+          </View>
+          <View className="flex-row py-3 items-center justify-between">
+
+            <View className="flex-row items-center">
+              <Ionicons name="log-out-outline" size={30} />
+              <Text className="ml-3 text-xl text-black font-manropeBold">
+                Logout
+              </Text>
+            </View>
           </View>
         </View>
       </ScrollView>

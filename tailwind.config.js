@@ -16,6 +16,7 @@ module.exports = {
         woofGrey: "#A6A9AC",
         woofHeart: "#ED1F4F",
         woofGreyBorder: "#EDF1F5",
+        woofDarkGrey: "#747677",
       },
       fontFamily: {
         manrope: ["Manrope_400Regular"],
