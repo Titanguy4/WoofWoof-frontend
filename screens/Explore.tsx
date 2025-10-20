@@ -1,11 +1,12 @@
-import React from "react";
-import { ScrollView, View, Text, Image, TextInput } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { StatusBar } from "expo-status-bar";
-import { COLORS } from "../constants/colors";
 import { Ionicons } from '@expo/vector-icons';
-import { missionsNearby, missionsFarm, missionsAnimal, missionsEnv, missionsCultural } from "../data/missions";
+import { router } from 'expo-router';
+import { StatusBar } from "expo-status-bar";
+import React from "react";
+import { Image, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import HomeMissionCard from "../components/HomeMissionCard";
+import { COLORS } from "../constants/colors";
+import { missionsAnimal, missionsCultural, missionsEnv, missionsFarm, missionsNearby } from "../data/missions";
 
 export default function ExploreScreen() {
   return (
@@ -26,10 +27,12 @@ export default function ExploreScreen() {
               </Text>
             </View>
             <View className="flex-row justify-end items-center gap-2 flex-1">
+              <TouchableOpacity onPress={() => router.push("/messages")} >
               <Image
                 source={require("../assets/icons/message.png")}
                 className="w-10 h-10  "
               />
+              </TouchableOpacity>
               <Image
                 source={require("../assets/icons/notif.png")}
                 className="w-10 h-10  "
