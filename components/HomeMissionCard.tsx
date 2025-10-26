@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, ImageSourcePropType } from "react-native";
+import { View, Text, Image, ImageSourcePropType, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "../constants/colors";
 
@@ -23,7 +23,7 @@ export default function HomeMissionCard({
     heart = false,
 }: HomeMissionCardProps) {
     return (
-        <View className="w-[165px] h-[250px] bg-white rounded-2xl mr-4 overflow-hidden">
+        <TouchableOpacity onPress className="w-[165px] h-[250px] bg-white rounded-2xl mr-4 overflow-hidden">
             {/* Image */}
             <View className="relative">
                 <Image source={image} className="w-full h-[148px]" resizeMode="cover" />
@@ -53,6 +53,6 @@ export default function HomeMissionCard({
                     </Text>
                 </View>
             </View>
-        </View>
+        </TouchableOpacity>
     );
 }

@@ -1,5 +1,13 @@
 import { ImageSourcePropType } from "react-native";
 
+export type Review = {
+  id: number;
+  name: string;
+  date: string;
+  rating: string;
+  comment: string;
+};
+
 export type Mission = {
   id: number;
   image: ImageSourcePropType;
@@ -9,6 +17,10 @@ export type Mission = {
   distance: string;
   housing: string;
   heart?: boolean;
+  description : string;
+  advantages : string[];
+  reviews : Review[];
+  locationDetails : string;
 };
 
 export const missionsNearby: Mission[] = [
@@ -40,6 +52,34 @@ export const missionsNearby: Mission[] = [
     rating: "4.8",
     distance: "25km away",
     housing: "All meals included",
+    description: "Our Cahors wine farm offers a unique volunteering experience in the heart of Occitanie. Volunteers can help with grape harvesting, vineyard maintenance, and animal care, while enjoying the peaceful countryside and traditional French farm life. Accommodation is shared on-site, and all meals are included, giving you the chance to experience local cuisine. This is an ideal opportunity for those looking to connect with nature, learn about sustainable farming, and immerse themselves in rural French culture.",
+    advantages: [
+      "Shared housing",
+      "AC",
+      "Wifi",
+      "Flexible schedule",
+      "All meals",
+      "TV",
+      "Hot water",
+      "View all",
+    ],
+    reviews: [
+      {
+        id: 1,
+        name: "Amanda",
+        date: "2024-01-10",
+        rating: "4",
+        comment: "Overall, it was a very good experience. I liked that it was private room because I am too shy to live with some other people",
+      },
+      {
+        id: 2,
+        name: "John D.",
+        date: "2024-09-10",
+        rating: "4.5",
+        comment: "Great opportunity to learn about wine farming and sustainable practices. The hosts were very welcoming and accommodating.",
+      },
+    ],
+    locationDetails: "Domaine de la Vigne, 46000 Cahors, Occitanie, France",
   },
 ];
 
