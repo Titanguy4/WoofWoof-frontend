@@ -27,7 +27,7 @@ export default function ExploreScreen() {
             </View>
             <View className="flex-row justify-end items-center gap-2 flex-1">
               <Image
-                source={require("../assets/icons/message.png")}
+                source={require("../assets/icons/message-2.png")}
                 className="w-10 h-10  "
               />
               <Image
