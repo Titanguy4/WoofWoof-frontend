@@ -2,8 +2,10 @@ import React from "react";
 import { View, Text, Image, ImageSourcePropType, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "../constants/colors";
+import { router } from "expo-router";
 
 type HomeMissionCardProps = {
+    id: number;
     image: ImageSourcePropType;
     title: string;
     location: string;
@@ -14,6 +16,7 @@ type HomeMissionCardProps = {
 };
 
 export default function HomeMissionCard({
+    id,
     image,
     title,
     location,
@@ -23,7 +26,7 @@ export default function HomeMissionCard({
     heart = false,
 }: HomeMissionCardProps) {
     return (
-        <TouchableOpacity onPress className="w-[165px] h-[250px] bg-white rounded-2xl mr-4 overflow-hidden">
+        <TouchableOpacity onPress={() => router.push(`/details/${id}`)}className="w-[165px] h-[250px] bg-white rounded-2xl mr-4 overflow-hidden">
             {/* Image */}
             <View className="relative">
                 <Image source={image} className="w-full h-[148px]" resizeMode="cover" />

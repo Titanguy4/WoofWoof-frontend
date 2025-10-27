@@ -2,6 +2,7 @@ import { ImageSourcePropType } from "react-native";
 
 export type Review = {
   id: number;
+  country: string;
   name: string;
   date: string;
   rating: string;
@@ -11,16 +12,17 @@ export type Review = {
 export type Mission = {
   id: number;
   image: ImageSourcePropType;
+  image2x?: ImageSourcePropType;
   title: string;
   location: string;
   rating: string;
   distance: string;
   housing: string;
   heart?: boolean;
-  description : string;
-  advantages : string[];
-  reviews : Review[];
-  locationDetails : string;
+  description? : string;
+  advantages? : string[];
+  reviews? : Review[];
+  locationDetails? : string;
 };
 
 export const missionsNearby: Mission[] = [
@@ -47,9 +49,53 @@ export const missionsNearby: Mission[] = [
   {
     id: 3,
     image: require("../assets/images/winefarm.png"),
+    image2x: require("../assets/images/winefarm_x2.png"),
     title: "Wine farm",
-    location: "Bordeaux, France",
-    rating: "4.8",
+    location: "Cahors, Occitanie, France",
+    rating: "3.3",
+    distance: "25km away",
+    housing: "🍽 All meals included",
+    description: "Our Cahors wine farm offers a unique volunteering experience in the heart of Occitanie. Volunteers can help with grape harvesting, vineyard maintenance, and animal care, while enjoying the peaceful countryside and traditional French farm life. Accommodation is shared on-site, and all meals are included, giving you the chance to experience local cuisine. This is an ideal opportunity for those looking to connect with nature, learn about sustainable farming, and immerse themselves in rural French culture.",
+    advantages: [
+      "Shared housing",
+      "AC",
+      "Wifi",
+      "Flexible schedule",
+      "All meals",
+      "TV",
+      "Hot water",
+      "View all",
+    ],
+    reviews: [
+      {
+        id: 1,
+        name: "Amanda",
+        country: "France",
+        date: "2024-01-10",
+        rating: "4",
+        comment: "Overall, it was a very good experience. I liked that it was private room because I am too shy to live with some other people",
+      },
+      {
+        id: 2,
+        country: "USA",
+        name: "John D.",
+        date: "2024-09-10",
+        rating: "4.5",
+        comment: "Great opportunity to learn about wine farming and sustainable practices. The hosts were very welcoming and accommodating.",
+      },
+    ],
+    locationDetails: "Domaine de la Vigne, 46000 Cahors, Occitanie, France",
+  },
+];
+
+export const missionsFarm: Mission[] = [
+  {
+    id: 3,
+    image: require("../assets/images/winefarm.png"),
+    image2x: require("../assets/images/winefarm_x2.png"),
+    title: "Wine farm",
+    location: "Cahors, Occitanie, France",
+    rating: "3.3",
     distance: "25km away",
     housing: "All meals included",
     description: "Our Cahors wine farm offers a unique volunteering experience in the heart of Occitanie. Volunteers can help with grape harvesting, vineyard maintenance, and animal care, while enjoying the peaceful countryside and traditional French farm life. Accommodation is shared on-site, and all meals are included, giving you the chance to experience local cuisine. This is an ideal opportunity for those looking to connect with nature, learn about sustainable farming, and immerse themselves in rural French culture.",
@@ -67,6 +113,7 @@ export const missionsNearby: Mission[] = [
       {
         id: 1,
         name: "Amanda",
+        country: "France",
         date: "2024-01-10",
         rating: "4",
         comment: "Overall, it was a very good experience. I liked that it was private room because I am too shy to live with some other people",
@@ -74,24 +121,13 @@ export const missionsNearby: Mission[] = [
       {
         id: 2,
         name: "John D.",
+        country: "USA",
         date: "2024-09-10",
         rating: "4.5",
         comment: "Great opportunity to learn about wine farming and sustainable practices. The hosts were very welcoming and accommodating.",
       },
     ],
     locationDetails: "Domaine de la Vigne, 46000 Cahors, Occitanie, France",
-  },
-];
-
-export const missionsFarm: Mission[] = [
-  {
-    id: 3,
-    image: require("../assets/images/winefarm.png"),
-    title: "Wine farm",
-    location: "Bordeaux, France",
-    rating: "4.8",
-    distance: "25km away",
-    housing: "All meals included",
   },
   {
     id: 4,
@@ -178,3 +214,30 @@ export const missionsCultural: Mission[] = [
     heart: true,
   },
 ];
+
+
+// --------------------
+// 🔧 Icon mapping for advantages
+// --------------------
+export const getIconForAdvantage = (advantage: string): string => {
+  switch (advantage.toLowerCase()) {
+    case "shared housing":
+      return "home";
+    case "ac":
+      return "snow";
+    case "wifi":
+      return "wifi";
+    case "flexible schedule":
+      return "time-outline";
+    case "all meals":
+      return "restaurant";
+    case "tv":
+      return "tv-outline";
+    case "hot water":
+      return "water-outline";
+    case "view all":
+      return "grid";
+    default:
+      return "checkmark-circle-outline"; // fallback icône
+  }
+};
