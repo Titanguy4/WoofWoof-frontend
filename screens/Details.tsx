@@ -1,12 +1,12 @@
 // screens/DetailsScreen.tsx
-import { missionsAnimal, missionsCultural, missionsEnv, missionsFarm, missionsNearby, getIconForAdvantage, } from "@/data/missions";
-import React, { useState } from "react";
-import { ScrollView, View, Text, Image, TextInput, TouchableOpacity, Pressable } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { StatusBar } from "expo-status-bar";
-import { COLORS } from "../constants/colors";
+import { getIconForAdvantage, missionsAnimal, missionsCultural, missionsEnv, missionsFarm, missionsNearby, } from "@/data/missions";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import React, { useState } from "react";
+import { Image, Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { COLORS } from "../constants/colors";
 
 type Props = {
   id: string | string[] | undefined;
@@ -241,11 +241,11 @@ export default function DetailsScreen({ id }: Props) {
         </View>
         <View className="mx-4 border-b border-b-gray-300 mb-4"></View>
         <View className="items-center mb-4">
-          <View className="bg-woofBrown w-36 h-12 px-3 py-1 rounded-2xl items-center justify-center mb-6">
+          <TouchableOpacity onPress={() => router.push(`/missionrequest/${id}`)} className="bg-woofBrown w-36 h-12 px-3 py-1 rounded-2xl items-center justify-center mb-6">
             <Text className="text-base font-manropeBold text-white">
               Apply
             </Text>
-          </View>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>
