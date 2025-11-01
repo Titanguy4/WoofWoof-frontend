@@ -1,10 +1,9 @@
-import React from "react";
-import { View, Text, Image, ImageSourcePropType, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import React from "react";
+import { Image, ImageSourcePropType, Text, View } from "react-native";
 import { COLORS } from "../constants/colors";
-import { router } from "expo-router";
 
-type HomeMissionCardProps = {
+type ApplyMissionCardProps = {
     id: number;
     image: ImageSourcePropType;
     title: string;
@@ -15,7 +14,7 @@ type HomeMissionCardProps = {
     heart?: boolean;
 };
 
-export default function HomeMissionCard({
+export default function ApplyMissionCard({
     id,
     image,
     title,
@@ -24,12 +23,12 @@ export default function HomeMissionCard({
     distance,
     housing,
     heart = false,
-}: HomeMissionCardProps) {
+}: ApplyMissionCardProps) {
     return (
-        <TouchableOpacity onPress={() => router.push(`/details/${id}`)}className="w-[165px] h-[250px] bg-white rounded-2xl mr-4 overflow-hidden">
+        <View className="w-full h-[144px] bg-white rounded-2xl flex-row overflow-hidden border border-woofBrown">
             {/* Image */}
             <View className="relative">
-                <Image source={image} className="w-full h-[148px]" resizeMode="cover" />
+                <Image source={image} className="h-full w-[115px]" resizeMode="cover" />
                 {heart && (
                     <Ionicons className="absolute top-2 right-2" name="heart" size={20} color={COLORS.woofHeart} />
                 )}
@@ -56,6 +55,6 @@ export default function HomeMissionCard({
                     </Text>
                 </View>
             </View>
-        </TouchableOpacity>
+        </View>
     );
 }
