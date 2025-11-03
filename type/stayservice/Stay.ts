@@ -27,5 +27,4 @@ export interface Stay {
   // Only storing IDs, no relation objects here
   photoId: number[];
   wooferId: number;
-  bookingId?: number | null;
 }
