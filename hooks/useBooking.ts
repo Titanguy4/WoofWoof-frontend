@@ -1,13 +1,13 @@
 import { useState } from "react";
 
+//le type est déjà écris dans le dossier type mais je te le laisse le gérer
 export interface BookingData {
-  missionId: number;
-  userId: number;
-  startRequestedDate: string;
-  endRequestedDate: string;
-  status: string;
-  email: string;
-  number: string;
+  stayId: number;
+  backpackerId: number;
+  short_description: string;
+  request_date_start: Date;
+  request_date_end: Date;
+  status: 'pending' | 'accepted' | 'rejected' | 'cancelled';
 }
 
 export const useBooking = () => {
