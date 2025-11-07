@@ -12,11 +12,13 @@ export interface Stay {
 
   // Geographic coordinates [latitude, longitude]
   localisation: number[];
+  region: string;
+  department: string;
 
   startDate: string;   // ISO date string (e.g. "2025-11-03T00:00:00Z")
   endDate: string;
 
-  status: boolean;
+  status: boolean
 
   activities: Activity[];
   learningSkills: LearningSkill[];
@@ -27,5 +29,4 @@ export interface Stay {
   // Only storing IDs, no relation objects here
   photoId: number[];
   wooferId: number;
-  bookingId?: number | null;
 }
