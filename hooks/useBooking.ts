@@ -1,20 +1,15 @@
+import { Booking } from "@/type/Booking";
 import { useState } from "react";
 
-//le type est déjà écris dans le dossier type mais je te le laisse le gérer
-export interface BookingData {
-  stayId: number;
-  backpackerId: number;
-  short_description: string;
-  request_date_start: Date;
-  request_date_end: Date;
-  status: 'pending' | 'accepted' | 'rejected' | 'cancelled';
-}
 
 export const useBooking = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const createBooking = async (booking: BookingData) => {
+  // On retire "id_booking" car il sera généré par le backend
+  type BookingInput = Omit<Booking, "id_booking">;
+
+  const createBooking = async (booking: BookingInput) => {
     try {
       setLoading(true);
       setError(null);
@@ -31,7 +26,7 @@ export const useBooking = () => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const data = await response.json();
+      const data: Booking = await response.json(); // la réponse contient probablement l'objet complet
       return data;
     } catch (err: any) {
       setError(err.message || "Error creating booking");
@@ -43,3 +38,4 @@ export const useBooking = () => {
 
   return { createBooking, loading, error };
 };
+
