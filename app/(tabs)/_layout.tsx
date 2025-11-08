@@ -1,4 +1,4 @@
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import React from "react";
 
@@ -56,6 +56,31 @@ export default function TabLayout() {
           ),
         }}
       />
+
+      <Tabs.Screen
+        name="myoffer"
+        options={{
+          title: "My offer",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="clipboard" size={size} color={color} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="backpackers"
+        options={{
+          title: "Backpackers",
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons
+              name="bag-personal-outline"
+              size={size}
+              color={color}
+            />
+          ),
+        }}
+      />
+
       <Tabs.Screen
         name="profile"
         options={{

@@ -10,11 +10,8 @@ import {
 } from "@expo-google-fonts/manrope";
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { Stack } from "expo-router";
-import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
-import React, { useEffect } from "react";
-
-SplashScreen.preventAutoHideAsync();
+import React from "react";
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
@@ -24,10 +21,6 @@ export default function RootLayout() {
     Manrope_700Bold,
     Manrope_800ExtraBold,
   });
-
-  useEffect(() => {
-    if (fontsLoaded) SplashScreen.hideAsync();
-  }, [fontsLoaded]);
 
   if (!fontsLoaded) return null;
 
