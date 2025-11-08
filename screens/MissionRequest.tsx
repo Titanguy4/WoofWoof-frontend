@@ -7,24 +7,25 @@ import {
   missionsFarm,
   missionsNearby,
 } from "@/data/missions";
+import { useBooking } from "@/hooks/useBooking";
+import { Booking } from "@/type/Booking";
 import { MaterialIcons } from "@expo/vector-icons";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import dayjs from "dayjs";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import {
+  KeyboardAvoidingView,
+  Platform,
   ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
   View,
-  KeyboardAvoidingView,
-  Platform,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS } from "../constants/colors";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import dayjs from "dayjs";
-import { useBooking } from "@/hooks/useBooking";
 
 type Props = {
   id: string | string[] | undefined;
@@ -65,32 +66,33 @@ export default function MissionRequest({ id }: Props) {
   const handleApply = async () => {
     if (!mission || !startDate || !endDate) return;
 
-    const booking = {
-      missionId: mission.id,
-      userId: 999, // temporaire
-      startRequestedDate: dayjs(startDate).format("YYYY-MM-DD"),
-      endRequestedDate: dayjs(endDate).format("YYYY-MM-DD"),
-      status: "PENDING",
+    // ✅ correspond au type Omit<Booking, "id_booking">
+    const booking: Omit<Booking, "id_booking"> = {
+      stayId: mission.id,
+      backpackerId: 999, // temporaire
+      short_description: "Mission request",
+      request_date_start: startDate,
+      request_date_end: endDate,
+      status: "pending",
       email,
       number,
     };
 
     const result = await createBooking(booking);
+
     if (result) {
       router.push({
         pathname: "/requestsuccess/[id]",
         params: {
           id: String(id),
-          start: booking.startRequestedDate,
-          end: booking.endRequestedDate,
-          email: booking.email,
-          number: booking.number,
+          start: dayjs(startDate).format("YYYY-MM-DD"),
+          end: dayjs(endDate).format("YYYY-MM-DD"),
+          email,
+          number,
         },
       });
-
     }
   };
-
 
   return (
     <SafeAreaView
@@ -100,6 +102,7 @@ export default function MissionRequest({ id }: Props) {
     >
       <StatusBar backgroundColor={COLORS.woofBrown} style="light" />
 
+      {/* Header */}
       <View className="items-center w-full h-[56px] bg-white flex-row py-4">
         <TouchableOpacity
           onPress={() => router.back()}
@@ -229,8 +232,9 @@ export default function MissionRequest({ id }: Props) {
             <TouchableOpacity
               disabled={!isFormValid || loading}
               onPress={handleApply}
-              className={`w-36 h-12 px-3 py-1 rounded-2xl items-center justify-center ${isFormValid ? "bg-woofBrown" : "bg-gray-400"
-                }`}
+              className={`w-36 h-12 px-3 py-1 rounded-2xl items-center justify-center ${
+                isFormValid ? "bg-woofBrown" : "bg-gray-400"
+              }`}
             >
               <Text className="text-base font-manropeBold text-white">
                 {loading ? "Submitting..." : "Apply now"}

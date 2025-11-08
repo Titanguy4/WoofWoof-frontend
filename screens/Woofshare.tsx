@@ -1,10 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 const WoofShare: React.FC = () => {
   return (
     <View style={styles.container}>
-      <Text>Explore (Home)</Text>
+      <Text>Screen Woofshare</Text>
     </View>
   );
 };
