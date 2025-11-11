@@ -1,12 +1,18 @@
+import LanguageModal from "@/components/LanguageModal";
+import LogoutModal from "@/components/LogoutModal";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
-import React from "react";
-import { Image, ScrollView, Text, View } from "react-native";
+import React, { useState } from "react";
+import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS } from "../constants/colors";
 
 
 export default function ProfileScreen() {
+
+  const [logoutVisible, setLogoutVisible] = useState(false);
+  const [languageVisible, setLanguageVisible] = useState(false);
+
   return (
     <SafeAreaView
       style={{ backgroundColor: COLORS.woofBrown }}
@@ -78,7 +84,7 @@ export default function ProfileScreen() {
           <Text className="mt-3 text-lg text-black font-manrope">
             General
           </Text>
-          <View className="flex-row py-3 items-center justify-between">
+          <TouchableOpacity onPress={() => setLanguageVisible(true)} className="flex-row py-3 items-center justify-between">
 
             <View className="flex-row items-center">
               <Ionicons name="globe-outline" size={30} />
@@ -87,8 +93,8 @@ export default function ProfileScreen() {
               </Text>
             </View>
             <MaterialIcons name="chevron-right" className="start-end" size={24} color={COLORS.woofDarkGrey} />
-          </View>
-          <View className="flex-row py-3 mb-4 items-center justify-between">
+          </TouchableOpacity>
+          <TouchableOpacity className="flex-row py-3 mb-4 items-center justify-between">
 
             <View className="flex-row items-center">
               <Ionicons name="notifications" size={30} />
@@ -97,7 +103,7 @@ export default function ProfileScreen() {
               </Text>
             </View>
             <MaterialIcons name="chevron-right" className="start-end" size={24} color={COLORS.woofDarkGrey} />
-          </View>
+          </TouchableOpacity>
         </View>
         <View className="bg-white px-4 gap-y-1">
           <View className="border-t border-woofGrey"></View>
@@ -124,17 +130,31 @@ export default function ProfileScreen() {
             </View>
             <MaterialIcons name="chevron-right" className="start-end" size={24} color={COLORS.woofDarkGrey} />
           </View>
-          <View className="flex-row py-3 items-center justify-between">
-
+          <TouchableOpacity
+            className="flex-row py-3 items-center justify-between"
+            onPress={() => setLogoutVisible(true)}
+          >
             <View className="flex-row items-center">
               <Ionicons name="log-out-outline" size={30} />
               <Text className="ml-3 text-xl text-black font-manropeBold">
                 Logout
               </Text>
             </View>
-          </View>
+          </TouchableOpacity>
         </View>
       </ScrollView>
+
+      {/* ✅ MODAL LOGOUT */}
+      <LogoutModal
+        visible={logoutVisible}
+        onClose={() => setLogoutVisible(false)}
+      />
+
+      <LanguageModal
+        visible={languageVisible}
+        onClose={() => setLanguageVisible(false)}
+      />
+
     </SafeAreaView>
   );
 }
