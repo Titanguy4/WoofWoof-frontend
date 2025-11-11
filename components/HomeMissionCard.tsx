@@ -14,16 +14,30 @@ type HomeMissionCardProps = {
 
 
 export default function HomeMissionCard({ stay, heart = false, image }: HomeMissionCardProps) {
-  const { id_stay, title, description, localisation, accomodations, reviews, region, department } = stay;
+  const { id_stay, title, description, localisation, region, department, status, accomodations, reviews, learningSkills, meals, activities } = stay;
 
-  // localisation = [longitude, latitude]
-  const longitude = localisation[0];
-  const latitude = localisation[1]; 
+  const distance = "5 km away"; // Placeholder
+  const longitude = localisation[1];
+  const latitude = localisation[0]; 
+
   const accomodation_list = accomodations.map((item) => item.label).join(", ");
-  //Calculate average rating from reviews, if none reviews, there is no rating
-  const rating = reviews.length > 0 ? (reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length).toFixed(1) : "No rating";
+  const activity_list = activities.map((item) => item.label).join(", ");
+  const learningSkill_list = learningSkills.map((item) => item.label).join(", ");
+  const meal_list = meals.map((item) => item.label).join(", ");
+
+  const rating = (reviews ?? []).length > 0
+    ? ((reviews ?? []).reduce((acc, r) => acc + r.rating, 0) / reviews.length).toFixed(1): "No rating";
+    
     return (
-        <TouchableOpacity onPress={() => router.push(`/details/${id_stay}`)}className="w-[165px] h-[250px] bg-white rounded-2xl mr-4 overflow-hidden">
+        <TouchableOpacity
+          onPress={() =>
+            router.push({
+              pathname: "/details/[id]",
+              params: { id: String(id_stay) },
+            })
+          }
+          className="w-[165px] h-[250px] bg-white rounded-2xl mr-4 overflow-hidden"
+        >
             {/* Image */}
             <View className="relative">
                 <Image source={image} className="w-full h-[148px]" resizeMode="cover" />
@@ -38,7 +52,7 @@ export default function HomeMissionCard({ stay, heart = false, image }: HomeMiss
                     {title}
                 </Text>
                 <Text className="text-[12px] text-[#7E7E7E] mt-[2px]" numberOfLines={1}>
-                    {location}
+                    {department}, {region}
                 </Text>
                 <View className="flex-row items-center mt-2">
                     <Ionicons name="star" size={14} color="#F4B400" />
