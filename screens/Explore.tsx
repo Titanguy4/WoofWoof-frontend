@@ -33,7 +33,7 @@ export default function ExploreScreen() {
                 className="w-10 h-10  "
               />
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => router.push("/notifications")}>
               <Image
                 source={require("../assets/icons/notif.png")}
                 className="w-10 h-10  "
