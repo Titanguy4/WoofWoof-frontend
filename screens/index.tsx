@@ -1,5 +1,7 @@
 export { default as Backpackers } from './Backpackers';
+export { default as ChatScreen } from './ChatScreen';
 export { default as Details } from './Details';
+export { default as Discussion } from './Discussion';
 export { default as EditProfile } from './EditProfile';
 export { default as Explore } from './Explore';
 export { default as MissionRequest } from './MissionRequest';
@@ -10,6 +12,5 @@ export { default as RequestReceived } from './RequestReceived';
 export { default as RequestSuccess } from './RequestSuccess';
 export { default as Saved } from './Saved';
 export { default as Woofshare } from './Woofshare';
-
 
 // ajoute ici d'autres écrans
