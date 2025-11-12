@@ -1,11 +1,12 @@
-import React from "react";
-import { ScrollView, View, Text, Image, TextInput } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { StatusBar } from "expo-status-bar";
-import { COLORS } from "../constants/colors";
 import { Ionicons } from '@expo/vector-icons';
-import { missionsNearby, missionsFarm, missionsAnimal, missionsEnv, missionsCultural } from "../data/missions";
+import { router } from 'expo-router';
+import { StatusBar } from "expo-status-bar";
+import React from "react";
+import { Image, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import HomeMissionCard from "../components/HomeMissionCard";
+import { COLORS } from "../constants/colors";
+import { missionsAnimal, missionsCultural, missionsEnv, missionsFarm, missionsNearby } from "../data/missions";
 
 export default function ExploreScreen() {
   return (
@@ -16,42 +17,46 @@ export default function ExploreScreen() {
     >
       <StatusBar backgroundColor={COLORS.woofBrown} style="light" />
       <View className="bg-woofBrown h-[128px] px-4  ">
-          <View className="flex-row  ">
-            <View className="h-[48px] w-[267px] gap-2  ">
-              <Text className="text-base font-manrope text-white ">
-                Find your place to make an impact
-              </Text>
-              <Text className="text-xl font-manropeBold text-black  ">
-                WOOF WOOF !
-              </Text>
-            </View>
-            <View className="flex-row justify-end items-center gap-2 flex-1">
+        <View className="flex-row  ">
+          <View className="h-[48px] w-[267px] gap-2  ">
+            <Text className="text-base font-manrope text-white ">
+              Find your place to make an impact
+            </Text>
+            <Text className="text-xl font-manropeBold text-black  ">
+              WOOF WOOF !
+            </Text>
+          </View>
+          <View className="flex-row justify-end items-center gap-2 flex-1">
+            <TouchableOpacity onPress={() => router.push("/chat")}>
               <Image
                 source={require("../assets/icons/message-2.png")}
                 className="w-10 h-10  "
               />
+            </TouchableOpacity>
+            <TouchableOpacity>
               <Image
                 source={require("../assets/icons/notif.png")}
                 className="w-10 h-10  "
               />
-            </View>
-          </View>
-          <View className="flex-row items-center mt-5">
-            <View className="flex-row items-center bg-white rounded-3xl h-[48px] flex-1 mr-[10px]">
-              <TextInput
-                placeholder="Where do you want to help?"
-                placeholderTextColor={COLORS.woofGrey}
-                className="flex-1 text-[15px] font-manropeMedium ml-4"
-              />
-              <Ionicons className="mr-[14px]" name="search" size={20} color={COLORS.woofGrey}/>
-            </View>
-            <Image
-              source={require("../assets/images/maps.png")}
-              className="w-[48px] h-[48px]"
-              resizeMode="contain"
-            />
+            </TouchableOpacity>
           </View>
         </View>
+        <View className="flex-row items-center mt-5">
+          <View className="flex-row items-center bg-white rounded-3xl h-[48px] flex-1 mr-[10px]">
+            <TextInput
+              placeholder="Where do you want to help?"
+              placeholderTextColor={COLORS.woofGrey}
+              className="flex-1 text-[15px] font-manropeMedium ml-4"
+            />
+            <Ionicons className="mr-[14px]" name="search" size={20} color={COLORS.woofGrey} />
+          </View>
+          <Image
+            source={require("../assets/images/maps.png")}
+            className="w-[48px] h-[48px]"
+            resizeMode="contain"
+          />
+        </View>
+      </View>
       <ScrollView
         showsVerticalScrollIndicator={false}
         className="bg-woofCream "
