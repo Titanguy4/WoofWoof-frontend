@@ -1,5 +1,6 @@
 export { default as Backpackers } from './Backpackers';
 export { default as Details } from './Details';
+export { default as EditProfile } from './EditProfile';
 export { default as Explore } from './Explore';
 export { default as MissionRequest } from './MissionRequest';
 export { default as Missions } from './Missions';
