@@ -1,6 +1,7 @@
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import React, { useMemo, useState } from "react";
 import {
   ScrollView,
   Text,
@@ -14,9 +15,20 @@ import { COLORS } from "../constants/colors";
 import { conversations } from "../data/conversations";
 
 export default function ChatScreen() {
+  const [searchQuery, setSearchQuery] = useState("");
 
+  // 🔍 Filtrage intelligent (nom + contenu du dernier message)
+  const filteredConversations = useMemo(() => {
+    return conversations.filter((conv) => {
+      const lastMessage = conv.messages?.[conv.messages.length - 1]?.text || "";
+      const searchLower = searchQuery.toLowerCase();
 
-
+      return (
+        conv.name.toLowerCase().includes(searchLower) ||
+        lastMessage.toLowerCase().includes(searchLower)
+      );
+    });
+  }, [searchQuery]);
 
   return (
     <SafeAreaView
@@ -50,21 +62,29 @@ export default function ChatScreen() {
             placeholder="Search"
             placeholderTextColor={COLORS.woofGrey}
             className="flex-1 text-[15px] font-manropeMedium ml-4"
+            value={searchQuery}
+            onChangeText={setSearchQuery}
           />
         </View>
 
         {/* Liste des conversations */}
         <ScrollView className="flex-1 mt-4 pb-10 px-2">
-          {conversations.map((conv) => (
-            <Conversation
-              key={conv.id}
-              id={conv.id} 
-              name={conv.name}
-              messages={conv.messages}
-              image={conv.image}
-              unread={conv.unread}
-            />
-          ))}
+          {filteredConversations.length > 0 ? (
+            filteredConversations.map((conv) => (
+              <Conversation
+                key={conv.id}
+                id={conv.id}
+                name={conv.name}
+                messages={conv.messages}
+                image={conv.image}
+                unread={conv.unread}
+              />
+            ))
+          ) : (
+            <Text className="text-center text-woofGrey mt-6">
+              No conversations found
+            </Text>
+          )}
         </ScrollView>
       </View>
     </SafeAreaView>
