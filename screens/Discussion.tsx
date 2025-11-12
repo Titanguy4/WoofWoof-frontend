@@ -31,7 +31,6 @@ type Props = {
 export default function Discussion({ id, name, image, messages }: Props) {
 
 
-
   const parsedMessages: Message[] = JSON.parse(messages);
   const [text, setText] = useState("");
 
