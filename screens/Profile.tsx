@@ -144,6 +144,28 @@ export default function ProfileScreen() {
               </Text>
             </View>
           </TouchableOpacity>
+          <TouchableOpacity
+            className="flex-row py-3 items-center justify-between"
+            onPress={() => router.push('/signin')}
+          >
+            <View className="flex-row items-center">
+              <Ionicons name="log-out-outline" size={30} />
+              <Text className="ml-3 text-xl text-black font-manropeBold">
+                Signin
+              </Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            className="flex-row py-3 items-center justify-between"
+            onPress={() => router.push('/changepassword')}
+          >
+            <View className="flex-row items-center">
+              <Ionicons name="log-out-outline" size={30} />
+              <Text className="ml-3 text-xl text-black font-manropeBold">
+                Change password
+              </Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </ScrollView>
 
