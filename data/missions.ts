@@ -93,7 +93,6 @@ export const missionsNearby: Mission[] = [
       "All meals",
       "TV",
       "Hot water",
-      "View all",
     ],
     reviews: [
       {

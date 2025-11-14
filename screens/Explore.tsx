@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { Image, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HomeMissionCard from "../components/HomeMissionCard";
 import { COLORS } from "../constants/colors";
@@ -43,11 +43,17 @@ export default function ExploreScreen() {
         </View>
         <View className="flex-row items-center mt-5">
           <View className="flex-row items-center bg-white rounded-3xl h-[48px] flex-1 mr-[10px]">
-            <TextInput
-              placeholder="Where do you want to help?"
-              placeholderTextColor={COLORS.woofGrey}
-              className="flex-1 text-[15px] font-manropeMedium ml-4"
-            />
+            <TouchableOpacity
+              onPress={() => router.push('/search')}
+              className="flex-row items-center flex-1"
+            >
+              <Text
+                style={{ color: COLORS.woofGrey }}
+                className="flex-1 text-[15px] font-manropeMedium ml-4"
+              >
+                Where do you want to help?
+              </Text>
+            </TouchableOpacity>
             <Ionicons className="mr-[14px]" name="search" size={20} color={COLORS.woofGrey} />
           </View>
           <Image
