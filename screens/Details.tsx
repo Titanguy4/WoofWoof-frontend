@@ -1,5 +1,6 @@
 // screens/DetailsScreen.tsx
-import { getIconForAdvantage, missionsAnimal, missionsCultural, missionsEnv, missionsFarm, missionsNearby, } from "@/data/missions";
+import { getIconForAdvantage } from "@/constants/advantages";
+import { missionsAnimal, missionsCultural, missionsEnv, missionsFarm, missionsNearby, } from "@/data/missions";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -41,7 +42,7 @@ export default function DetailsScreen({ id }: Props) {
     label: string;
   }) => {
     return (
-      <View className="w-[78px] h-[78px] bg-white rounded-2xl border border-gray-300 items-center justify-center mx-3 mb-4">
+      <View className="w-[78px] h-[78px] bg-white rounded-2xl border border-gray-300 items-center justify-center mx-2 mb-4">
         {icon}
         <Text className="text-xs text-gray-700 mt-2 text-center">{label}</Text>
       </View>

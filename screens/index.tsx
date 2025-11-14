@@ -14,10 +14,14 @@ export { default as Notifications } from './Notifications';
 export { default as Profile } from './Profile';
 export { default as RequestReceived } from './RequestReceived';
 export { default as RequestSuccess } from './RequestSuccess';
+export { default as Results } from './Results';
 export { default as Saved } from './Saved';
+export { default as Search } from './Search';
+export { default as SearchFilter } from './SearchFilter';
 export { default as SignIn } from './SignIn';
 export { default as SignUp } from './Signup';
 export { default as Woofshare } from './Woofshare';
+
 
 
 // ajoute ici d'autres écrans
