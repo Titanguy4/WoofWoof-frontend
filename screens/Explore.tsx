@@ -56,11 +56,13 @@ export default function ExploreScreen() {
             </TouchableOpacity>
             <Ionicons className="mr-[14px]" name="search" size={20} color={COLORS.woofGrey} />
           </View>
-          <Image
-            source={require("../assets/images/maps.png")}
-            className="w-[48px] h-[48px]"
-            resizeMode="contain"
-          />
+          <TouchableOpacity onPress={() => router.push("/map")}>
+            <Image
+              source={require("../assets/images/maps.png")}
+              className="w-[48px] h-[48px]"
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
         </View>
       </View>
       <ScrollView
