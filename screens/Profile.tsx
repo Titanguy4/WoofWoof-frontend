@@ -1,5 +1,7 @@
+import CardModal from "@/components/CardModal";
 import LanguageModal from "@/components/LanguageModal";
 import LogoutModal from "@/components/LogoutModal";
+import SubscriptionModal from "@/components/SubscriptionModal";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -13,6 +15,12 @@ export default function ProfileScreen() {
 
   const [logoutVisible, setLogoutVisible] = useState(false);
   const [languageVisible, setLanguageVisible] = useState(false);
+  const [upgradeVisible, setUpgradeVisible] = useState(false);
+  const [selectedType, setSelectedType] = useState<string | null>(null);
+  const [cardVisible, setCardVisible] = useState(false);
+  const [selectedAdvantages, setSelectedAdvantages] = useState<string[]>([]);
+
+
 
   return (
     <SafeAreaView
@@ -52,11 +60,15 @@ export default function ProfileScreen() {
                 brookedavis@gmail.com
               </Text>
             </View>
-            <View className="bg-woofBrown px-3 py-1 rounded-full">
+            <TouchableOpacity
+              onPress={() => setUpgradeVisible(true)}
+              className="bg-woofBrown px-3 py-1 rounded-full"
+            >
               <Text className="text-[12px] font-manropeSemiBold text-white">
                 Upgrade
               </Text>
-            </View>
+            </TouchableOpacity>
+
             <TouchableOpacity onPress={() => router.push('/editProfile')}>
               <Image
                 source={require("../assets/icons/edit.png")}
@@ -179,6 +191,25 @@ export default function ProfileScreen() {
         visible={languageVisible}
         onClose={() => setLanguageVisible(false)}
       />
+
+      <SubscriptionModal
+        visible={upgradeVisible}
+        onClose={() => setUpgradeVisible(false)}
+        selectedType={selectedType}
+        setSelectedType={setSelectedType}
+        onApply={() => {
+          setUpgradeVisible(false);   // ferme abonnement
+          setTimeout(() => setCardVisible(true), 300); // ouvre carte après animation
+        }}
+      />
+
+      <CardModal
+        visible={cardVisible}
+        onClose={() => setCardVisible(false)}
+      />
+
+
+
 
     </SafeAreaView>
   );
