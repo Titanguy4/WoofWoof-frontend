@@ -18,14 +18,18 @@ export type Mission = {
   rating: string;
   distance: string;
   housing: string;
-  heart: boolean;                // ✅ toujours défini
-  description: string;           // ✅ toujours défini
-  advantages: string[];          // ✅ toujours défini
-  reviews: Review[];             // ✅ toujours défini
-  locationDetails: string;       // ✅ toujours défini
+  heart: boolean;
+  description: string;
+  advantages: string[];
+  reviews: Review[];
+  locationDetails: string;
+  coords: {
+    latitude: number;
+    longitude: number;
+  };
 };
 
-// ✅ Helper values
+// Helpers
 const defaultDescription =
   "Join this mission to contribute to local development, help the community and enjoy an enriching volunteer experience.";
 
@@ -40,9 +44,8 @@ const defaultReviews: Review[] = [];
 
 const defaultLocationDetails = "France";
 
-
 // --------------------
-// ✅ Missions Nearby
+// Missions Nearby
 // --------------------
 export const missionsNearby: Mission[] = [
   {
@@ -58,6 +61,7 @@ export const missionsNearby: Mission[] = [
     advantages: defaultAdvantages,
     reviews: defaultReviews,
     locationDetails: defaultLocationDetails,
+    coords: { latitude: 45.1445, longitude: 1.1540 }, // Dordogne
   },
   {
     id: 2,
@@ -72,6 +76,7 @@ export const missionsNearby: Mission[] = [
     advantages: defaultAdvantages,
     reviews: defaultReviews,
     locationDetails: defaultLocationDetails,
+    coords: { latitude: 43.9352, longitude: 5.7800 }, // Provence
   },
   {
     id: 3,
@@ -115,11 +120,12 @@ export const missionsNearby: Mission[] = [
       },
     ],
     locationDetails: "Domaine de la Vigne, 46000 Cahors, Occitanie, France",
+    coords: { latitude: 44.4490, longitude: 1.4400 }, // Cahors
   },
 ];
 
 // --------------------
-// ✅ Missions Farm
+// Missions Farm
 // --------------------
 export const missionsFarm: Mission[] = [
   {
@@ -136,6 +142,7 @@ export const missionsFarm: Mission[] = [
     advantages: defaultAdvantages,
     reviews: defaultReviews,
     locationDetails: defaultLocationDetails,
+    coords: { latitude: 44.4490, longitude: 1.4400 },
   },
   {
     id: 4,
@@ -150,11 +157,12 @@ export const missionsFarm: Mission[] = [
     advantages: defaultAdvantages,
     reviews: defaultReviews,
     locationDetails: defaultLocationDetails,
+    coords: { latitude: 49.1829, longitude: -0.3707 }, // Caen, Normandy
   },
 ];
 
 // --------------------
-// ✅ Missions Animal
+// Missions Animal
 // --------------------
 export const missionsAnimal: Mission[] = [
   {
@@ -170,6 +178,7 @@ export const missionsAnimal: Mission[] = [
     advantages: defaultAdvantages,
     reviews: defaultReviews,
     locationDetails: defaultLocationDetails,
+    coords: { latitude: 43.2965, longitude: 5.3698 }, // Marseille
   },
   {
     id: 6,
@@ -184,11 +193,12 @@ export const missionsAnimal: Mission[] = [
     advantages: defaultAdvantages,
     reviews: defaultReviews,
     locationDetails: defaultLocationDetails,
+    coords: { latitude: 42.8263, longitude: -0.0064 }, // Pyrenees
   },
 ];
 
 // --------------------
-// ✅ Missions Env
+// Missions Env
 // --------------------
 export const missionsEnv: Mission[] = [
   {
@@ -204,6 +214,7 @@ export const missionsEnv: Mission[] = [
     advantages: defaultAdvantages,
     reviews: defaultReviews,
     locationDetails: defaultLocationDetails,
+    coords: { latitude: 48.1173, longitude: -1.6778 }, // Bretagne
   },
   {
     id: 8,
@@ -218,11 +229,12 @@ export const missionsEnv: Mission[] = [
     advantages: defaultAdvantages,
     reviews: defaultReviews,
     locationDetails: defaultLocationDetails,
+    coords: { latitude: 45.9237, longitude: 6.8694 }, // Alpes
   },
 ];
 
 // --------------------
-// ✅ Missions Cultural
+// Missions Cultural
 // --------------------
 export const missionsCultural: Mission[] = [
   {
@@ -238,6 +250,7 @@ export const missionsCultural: Mission[] = [
     advantages: defaultAdvantages,
     reviews: defaultReviews,
     locationDetails: defaultLocationDetails,
+    coords: { latitude: 43.7102, longitude: 7.2620 }, // Nice
   },
   {
     id: 10,
@@ -252,11 +265,11 @@ export const missionsCultural: Mission[] = [
     advantages: defaultAdvantages,
     reviews: defaultReviews,
     locationDetails: defaultLocationDetails,
+    coords: { latitude: 43.6045, longitude: 1.4442 }, // Toulouse
   },
 ];
 
-
-// ✅ Favorites
+// Favorites
 export const missionsFavorited: Mission[] = [
   ...missionsNearby,
   ...missionsFarm,
