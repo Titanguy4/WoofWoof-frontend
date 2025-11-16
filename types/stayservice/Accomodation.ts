@@ -1,7 +1,7 @@
 export interface Accomodation {
-	id_accomodation: number;
+  id_accomodation: number;
 
-	label: string;
+  label: string;
 }
 
 export default Accomodation;

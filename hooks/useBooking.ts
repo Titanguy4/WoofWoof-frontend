@@ -1,6 +1,5 @@
-import { Booking } from "@/type/Booking";
+import { Booking } from "@/types/Booking";
 import { useState } from "react";
-
 
 export const useBooking = () => {
   const [loading, setLoading] = useState(false);
@@ -38,4 +37,3 @@ export const useBooking = () => {
 
   return { createBooking, loading, error };
 };
-
