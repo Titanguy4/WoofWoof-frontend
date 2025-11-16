@@ -1,3 +1,4 @@
+import { COLORS } from "@/utils/constants/colors";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -11,11 +12,9 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS } from "../constants/colors";
 import { mockImages } from "../data/woofshare";
 
 export default function Woofshare() {
-
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   const [selectedFilters, setSelectedFilters] = useState<string[]>([
@@ -32,7 +31,6 @@ export default function Woofshare() {
   };
   type CategoryLabel = "Farm work" | "Animal care" | "Cultural" | "Environment";
 
-
   const categoryLabels: CategoryLabel[] = [
     "Farm work",
     "Animal care",
@@ -43,20 +41,17 @@ export default function Woofshare() {
   const categoryIcons: Record<CategoryLabel, any> = {
     "Farm work": require("../assets/images/farmType.png"),
     "Animal care": require("../assets/images/animalType.png"),
-    "Cultural": require("../assets/images/culturalType.png"),
-    "Environment": require("../assets/images/environmentalType.png"),
+    Cultural: require("../assets/images/culturalType.png"),
+    Environment: require("../assets/images/environmentalType.png"),
   };
-
-
-
 
   return (
     <SafeAreaView
-      style={{ backgroundColor: COLORS.woofBrown }}
+      style={{ backgroundColor: COLORS.woofBrown[500] }}
       className="flex-1"
       edges={["top"]}
     >
-      <StatusBar backgroundColor={COLORS.woofBrown} style="light" />
+      <StatusBar backgroundColor={COLORS.woofBrown[500]} style="light" />
 
       {/* Header */}
       <View className="items-center w-full h-[56px] bg-white flex-row py-4">
@@ -64,22 +59,25 @@ export default function Woofshare() {
           onPress={() => router.back()}
           className="items-center justify-center ml-6 w-12 h-12"
         >
-          <MaterialIcons name="chevron-left" size={30} color={COLORS.woofBrown} />
+          <MaterialIcons
+            name="chevron-left"
+            size={30}
+            color={COLORS.woofBrown[500]}
+          />
         </TouchableOpacity>
         <Text className="text-lg font-manropeBold ml-[106.5px]">Woofshare</Text>
       </View>
 
       {/* Search + Filter */}
       <View className="bg-white px-6 py-2 flex-row items-center gap-3">
-
         {/* ✅ Search */}
         <View className="flex-row items-center bg-white border border-woofGrey rounded-full h-[55px] px-4 flex-1">
           <TextInput
             placeholder="Search"
-            placeholderTextColor={COLORS.woofGrey}
+            placeholderTextColor={COLORS.woofGrey[500]}
             className="flex-1 text-[15px] font-manropeMedium ml-2"
           />
-          <Ionicons name="search" size={20} color={COLORS.woofGrey} />
+          <Ionicons name="search" size={20} color={COLORS.woofGrey[500]} />
         </View>
 
         {/* ✅ Filter */}
@@ -87,7 +85,7 @@ export default function Woofshare() {
           onPress={() => setFiltersOpen(!filtersOpen)}
           className="flex-row items-center bg-white border border-woofGrey rounded-full px-4 h-[55px]"
         >
-          <Ionicons name="filter" size={20} color={COLORS.woofGrey} />
+          <Ionicons name="filter" size={20} color={COLORS.woofGrey[500]} />
           <Text className="ml-2 font-manropeMedium">Filter</Text>
 
           {/* ✅ Badge dynamic */}
@@ -104,7 +102,6 @@ export default function Woofshare() {
       {/* ✅ FILTER POPOVER */}
       {filtersOpen && (
         <View className="absolute top-[150px] right-6 bg-white p-4 rounded-2xl shadow-lg z-50 w-[210px]">
-
           <Text className="font-manropeBold mb-2 text-[15px]">Filter by</Text>
 
           <View className="flex-row flex-wrap gap-2">
@@ -114,14 +111,14 @@ export default function Woofshare() {
                 <TouchableOpacity
                   key={label}
                   onPress={() => toggleFilter(label)}
-                  className={`px-3 py-1 rounded-full border ${active ?
-                    "bg-woofBrown border-woofBrown" :
-                    "border-woofGrey"
-                    }`}
+                  className={`px-3 py-1 rounded-full border ${
+                    active ? "bg-woofBrown border-woofBrown" : "border-woofGrey"
+                  }`}
                 >
                   <Text
-                    className={`text-[12px] ${active ? "text-white" : "text-black"
-                      }`}
+                    className={`text-[12px] ${
+                      active ? "text-white" : "text-black"
+                    }`}
                   >
                     {label}
                   </Text>
@@ -139,7 +136,6 @@ export default function Woofshare() {
               Apply
             </Text>
           </TouchableOpacity>
-
         </View>
       )}
 
@@ -174,8 +170,9 @@ export default function Woofshare() {
                   />
 
                   <Text
-                    className={`ml-2 text-[12px] ${active ? "text-white font-manropeBold" : "text-black"
-                      }`}
+                    className={`ml-2 text-[12px] ${
+                      active ? "text-white font-manropeBold" : "text-black"
+                    }`}
                     numberOfLines={1}
                   >
                     {label}
@@ -186,11 +183,6 @@ export default function Woofshare() {
           </View>
         </ScrollView>
       </View>
-
-
-
-
-
 
       {/* Images Grid */}
       <ScrollView className="flex-1 bg-woofCream px-4 pt-2">
@@ -224,9 +216,6 @@ export default function Woofshare() {
           </View>
         </View>
       </ScrollView>
-
-
-
     </SafeAreaView>
   );
 }

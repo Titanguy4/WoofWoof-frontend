@@ -3,8 +3,8 @@ import React from "react";
 
 import { HapticTab } from "@/components/haptic-tab";
 import { IconSymbol } from "@/components/ui/icon-symbol";
-import { Colors } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
+import { Colors } from "@/utils/constants/theme";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default function TabLayout() {
@@ -17,6 +17,7 @@ export default function TabLayout() {
         headerShown: false,
         tabBarInactiveTintColor: "#8e8e93",
         tabBarButton: HapticTab,
+        tabBarInactiveTintColor: "#8e8e93",
       }}
     >
       <Tabs.Screen

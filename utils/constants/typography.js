@@ -19,5 +19,4 @@ export const TYPOGRAPHY = {
     xl: 20,
     "2xl": 24,
   },
-
 };
