@@ -1,15 +1,10 @@
+import { COLORS } from "@/utils/constants/colors";
 import { MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
-import {
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS } from "../constants/colors";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -24,11 +19,11 @@ export default function ForgotPassword() {
 
   return (
     <SafeAreaView
-      style={{ backgroundColor: COLORS.woofCream }}
+      style={{ backgroundColor: COLORS.woofCream[500] }}
       className="flex-1"
       edges={["top"]}
     >
-      <StatusBar backgroundColor={COLORS.woofBrown} style="dark" />
+      <StatusBar backgroundColor={COLORS.woofBrown[500]} style="dark" />
 
       {/* Header */}
       <View className="items-center w-full h-[56px] flex-row py-4">

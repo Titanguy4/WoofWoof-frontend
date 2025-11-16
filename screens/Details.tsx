@@ -1,13 +1,26 @@
 // screens/DetailsScreen.tsx
-import { getIconForAdvantage } from "@/constants/advantages";
-import { missionsAnimal, missionsCultural, missionsEnv, missionsFarm, missionsNearby, } from "@/data/missions";
+import {
+  missionsAnimal,
+  missionsCultural,
+  missionsEnv,
+  missionsFarm,
+  missionsNearby,
+} from "@/data/missions";
+import { getIconForAdvantage } from "@/utils/constants/advantages";
+import { COLORS } from "@/utils/constants/colors";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
-import { Image, Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  Pressable,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS } from "../constants/colors";
 
 type Props = {
   id: string | string[] | undefined;
@@ -75,7 +88,9 @@ export default function DetailsScreen({ id }: Props) {
             className="w-[42px] h-[42px] rounded-full mr-3"
           />
           <View>
-            <Text className="font-manropeBold text-base text-black">{name}</Text>
+            <Text className="font-manropeBold text-base text-black">
+              {name}
+            </Text>
             <Text className="text-xs text-gray-500">{country}</Text>
           </View>
         </View>
@@ -112,11 +127,11 @@ export default function DetailsScreen({ id }: Props) {
 
   return (
     <SafeAreaView
-      style={{ backgroundColor: COLORS.woofBrown }}
+      style={{ backgroundColor: COLORS.woofBrown[500][500] }}
       className="flex-1"
       edges={["top"]}
     >
-      <StatusBar backgroundColor={COLORS.woofBrown} style="light" />
+      <StatusBar backgroundColor={COLORS.woofBrown[500][500]} style="light" />
       <ScrollView className="flex-1 bg-white">
         <View className="flex-row mx-3 -mb-16 justify-between items-center">
           {/* Chevron gauche */}
@@ -129,29 +144,36 @@ export default function DetailsScreen({ id }: Props) {
 
           {/* Conteneur des 2 chevrons droits */}
           <View className="flex-row items-center">
-            <TouchableOpacity
-              className="items-center justify-center z-10 ml-3 mt-4 w-12 h-12 bg-white rounded-full shadow-md"
-            >
+            <TouchableOpacity className="items-center justify-center z-10 ml-3 mt-4 w-12 h-12 bg-white rounded-full shadow-md">
               <Ionicons name="share-outline" size={20} color="black" />
             </TouchableOpacity>
 
-            <TouchableOpacity
-              className="items-center justify-center z-10 ml-3 mt-4 w-12 h-12 bg-white rounded-full shadow-md"
-            >
+            <TouchableOpacity className="items-center justify-center z-10 ml-3 mt-4 w-12 h-12 bg-white rounded-full shadow-md">
               <Ionicons name="heart-outline" size={20} color="black" />
             </TouchableOpacity>
           </View>
         </View>
-        <Image source={mission.image2x ? mission.image2x : mission.image} className="w-full h-[275] " resizeMode="cover" />
+        <Image
+          source={mission.image2x ? mission.image2x : mission.image}
+          className="w-full h-[275] "
+          resizeMode="cover"
+        />
         <View className="p-4">
-          <Text className="text-2xl font-manropeBold mb-2">{mission.title}</Text>
+          <Text className="text-2xl font-manropeBold mb-2">
+            {mission.title}
+          </Text>
           <View className="flex-row items-center justify-between mb-4">
-            <Text className="text-base text-gray-700">📍 {mission.location}</Text>
+            <Text className="text-base text-gray-700">
+              📍 {mission.location}
+            </Text>
             <Text className="text-sm text-gray-500">
-              ⭐ {mission.rating} ({mission.reviews ? mission.reviews.length : 0} reviews)
+              ⭐ {mission.rating} (
+              {mission.reviews ? mission.reviews.length : 0} reviews)
             </Text>
           </View>
-          <Text className="text-base text-gray-700 mb-4">{mission.housing}</Text>
+          <Text className="text-base text-gray-700 mb-4">
+            {mission.housing}
+          </Text>
           <View className="py-5 border-t border-b border-t-gray-300 border-b-gray-300 flex-row items-center">
             <Image
               source={require("../assets/images/brookeprofile.png")}
@@ -176,9 +198,13 @@ export default function DetailsScreen({ id }: Props) {
               className="w-[28px] h-[28px] mr-4"
             />
           </View>
-          <Text className="text-xl mt-4 font-manropeBold mb-2">Description</Text>
+          <Text className="text-xl mt-4 font-manropeBold mb-2">
+            Description
+          </Text>
           <Text className="text-base text-gray-700">{mission.description}</Text>
-          <Text className="text-xl mt-4 font-manropeBold mb-2">What this missions offers</Text>
+          <Text className="text-xl mt-4 font-manropeBold mb-2">
+            What this missions offers
+          </Text>
           {mission.advantages && mission.advantages.length > 0 && (
             <View className="mt-3 items-center justify-center border-b border-b-gray-300 mb-4">
               <View className="flex-row flex-wrap justify-start">
@@ -189,7 +215,7 @@ export default function DetailsScreen({ id }: Props) {
                       <Ionicons
                         name={getIconForAdvantage(adv) as any}
                         size={24}
-                        color={COLORS.woofDarkGrey}
+                        color={COLORS.woofGrey[900]}
                       />
                     }
                     label={adv}
@@ -201,7 +227,8 @@ export default function DetailsScreen({ id }: Props) {
         </View>
         <View className="px-4 flex-row items-center justify-between mb-4">
           <Text className="text-xl font-manropeBold mb-2">
-            ⭐ {mission.rating} ({mission.reviews ? mission.reviews.length : 0} reviews)
+            ⭐ {mission.rating} ({mission.reviews ? mission.reviews.length : 0}{" "}
+            reviews)
           </Text>
           <Text className="text-lg text-black underline font-manrope mb-2">
             Show all
@@ -230,9 +257,7 @@ export default function DetailsScreen({ id }: Props) {
         )}
         <View className="mx-4 border-b border-b-gray-300 "></View>
         <View className="px-4 mt-4 mb-4">
-          <Text className="text-xl font-manropeBold mb-2">
-            Location
-          </Text>
+          <Text className="text-xl font-manropeBold mb-2">Location</Text>
           <Text className="text-lg text-woofDarkGrey font-manrope mb-2">
             {mission.locationDetails}
           </Text>
@@ -242,14 +267,14 @@ export default function DetailsScreen({ id }: Props) {
         </View>
         <View className="mx-4 border-b border-b-gray-300 mb-4"></View>
         <View className="items-center mb-4">
-          <TouchableOpacity onPress={() => router.push(`/missionrequest/${id}`)} className="bg-woofBrown w-36 h-12 px-3 py-1 rounded-2xl items-center justify-center mb-6">
-            <Text className="text-base font-manropeBold text-white">
-              Apply
-            </Text>
+          <TouchableOpacity
+            onPress={() => router.push(`/missionrequest/${id}`)}
+            className="bg-woofBrown w-36 h-12 px-3 py-1 rounded-2xl items-center justify-center mb-6"
+          >
+            <Text className="text-base font-manropeBold text-white">Apply</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>
-
   );
 }

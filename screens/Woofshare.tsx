@@ -26,7 +26,7 @@ export default function Woofshare() {
     setSelectedFilters((prev) =>
       prev.includes(label)
         ? prev.filter((item) => item !== label)
-        : [...prev, label]
+        : [...prev, label],
     );
   };
   type CategoryLabel = "Farm work" | "Animal care" | "Cultural" | "Environment";
@@ -47,11 +47,11 @@ export default function Woofshare() {
 
   return (
     <SafeAreaView
-      style={{ backgroundColor: COLORS.woofBrown[500] }}
+      style={{ backgroundColor: COLORS.woofBrown[500][500] }}
       className="flex-1"
       edges={["top"]}
     >
-      <StatusBar backgroundColor={COLORS.woofBrown[500]} style="light" />
+      <StatusBar backgroundColor={COLORS.woofBrown[500][500]} style="light" />
 
       {/* Header */}
       <View className="items-center w-full h-[56px] bg-white flex-row py-4">
@@ -62,7 +62,7 @@ export default function Woofshare() {
           <MaterialIcons
             name="chevron-left"
             size={30}
-            color={COLORS.woofBrown[500]}
+            color={COLORS.woofBrown[500][500]}
           />
         </TouchableOpacity>
         <Text className="text-lg font-manropeBold ml-[106.5px]">Woofshare</Text>
@@ -74,10 +74,10 @@ export default function Woofshare() {
         <View className="flex-row items-center bg-white border border-woofGrey rounded-full h-[55px] px-4 flex-1">
           <TextInput
             placeholder="Search"
-            placeholderTextColor={COLORS.woofGrey[500]}
+            placeholderTextColor={COLORS.woofGrey[500][500]}
             className="flex-1 text-[15px] font-manropeMedium ml-2"
           />
-          <Ionicons name="search" size={20} color={COLORS.woofGrey[500]} />
+          <Ionicons name="search" size={20} color={COLORS.woofGrey[500][500]} />
         </View>
 
         {/* ✅ Filter */}
@@ -85,7 +85,7 @@ export default function Woofshare() {
           onPress={() => setFiltersOpen(!filtersOpen)}
           className="flex-row items-center bg-white border border-woofGrey rounded-full px-4 h-[55px]"
         >
-          <Ionicons name="filter" size={20} color={COLORS.woofGrey[500]} />
+          <Ionicons name="filter" size={20} color={COLORS.woofGrey[500][500]} />
           <Text className="ml-2 font-manropeMedium">Filter</Text>
 
           {/* ✅ Badge dynamic */}

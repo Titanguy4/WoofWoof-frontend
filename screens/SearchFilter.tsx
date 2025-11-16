@@ -1,3 +1,4 @@
+import { COLORS } from "@/utils/constants/colors";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useMemo } from "react";
@@ -6,10 +7,9 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS } from "../constants/colors";
 import { useSearchFilters } from "../context/SearchFiltersContext";
 import {
   missionsAnimal,
@@ -62,11 +62,11 @@ export default function SearchFilter() {
 
   return (
     <SafeAreaView
-      style={{ backgroundColor: COLORS.woofBrown }}
+      style={{ backgroundColor: COLORS.woofBrown[500] }}
       className="flex-1"
       edges={["top"]}
     >
-      <StatusBar backgroundColor={COLORS.woofBrown} style="light" />
+      <StatusBar backgroundColor={COLORS.woofBrown[500]} style="light" />
 
       {/* HEADER */}
       <View className="items-center w-full h-[56px] bg-white flex-row px-6 justify-between">
@@ -87,7 +87,6 @@ export default function SearchFilter() {
 
       {/* CONTENT */}
       <ScrollView className="flex-1 bg-white px-4 pt-2">
-
         {/* --------------------- */}
         {/* ADVANTAGES SECTION */}
         {/* --------------------- */}
@@ -137,8 +136,7 @@ export default function SearchFilter() {
                   key={i}
                   onPress={() => toggleFilter("activityTypes", label)}
                   className={`px-4 py-2 rounded-full border
-                    ${active ? "bg-woofBrown border-woofBrown" : "bg-[#f2f6ff] border-[#ddd]"}`
-                  }
+                    ${active ? "bg-woofBrown border-woofBrown" : "bg-[#f2f6ff] border-[#ddd]"}`}
                 >
                   <Text
                     className={`font-manropeMedium
@@ -171,8 +169,7 @@ export default function SearchFilter() {
                   key={i}
                   onPress={() => toggleFilter("volunteerProfile", label)}
                   className={`px-4 py-2 rounded-full border
-                    ${active ? "bg-woofBrown border-woofBrown" : "bg-[#f2f6ff] border-[#ddd]"}`
-                  }
+                    ${active ? "bg-woofBrown border-woofBrown" : "bg-[#f2f6ff] border-[#ddd]"}`}
                 >
                   <Text
                     className={`font-manropeMedium
@@ -195,7 +192,6 @@ export default function SearchFilter() {
             Apply Filters
           </Text>
         </TouchableOpacity>
-
       </ScrollView>
     </SafeAreaView>
   );

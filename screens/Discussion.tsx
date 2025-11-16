@@ -1,4 +1,4 @@
-import { COLORS } from "@/constants/colors";
+import { COLORS } from "@/utils/constants/colors";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useState } from "react";
@@ -29,8 +29,6 @@ type Props = {
 };
 
 export default function Discussion({ id, name, image, messages }: Props) {
-
-
   const parsedMessages: Message[] = JSON.parse(messages);
   const [text, setText] = useState("");
 
@@ -66,19 +64,26 @@ export default function Discussion({ id, name, image, messages }: Props) {
     <SafeAreaView
       edges={["top"]}
       className="flex-1"
-      style={{ backgroundColor: COLORS.woofBrown }}
+      style={{ backgroundColor: COLORS.woofBrown[500][500] }}
     >
       {/* Header */}
       <View className="justify-between flex-row items-center h-[56px] bg-white px-4">
         <TouchableOpacity onPress={() => router.back()} className="mr-3">
-          <MaterialIcons name="chevron-left" size={30} color={COLORS.woofBrown} />
+          <MaterialIcons
+            name="chevron-left"
+            size={30}
+            color={COLORS.woofBrown[500][500]}
+          />
         </TouchableOpacity>
         <Text className="text-lg font-manropeBold">{name}</Text>
         {image ? (
-          <Image source={{ uri: image }} className="w-10 h-10 rounded-full mr-2" />
+          <Image
+            source={{ uri: image }}
+            className="w-10 h-10 rounded-full mr-2"
+          />
         ) : (
           <View className="w-8 h-8 rounded-full bg-[#F4E3D3] items-center justify-center mr-2">
-            <Text className="text-[13px] font-manropeBold text-woofBrown">
+            <Text className="text-[13px] font-manropeBold text-woofBrown-500">
               {name?.charAt(0)}
             </Text>
           </View>
@@ -101,7 +106,7 @@ export default function Discussion({ id, name, image, messages }: Props) {
       >
         <View className="flex-row items-center bg-white rounded-3xl px-3 py-2">
           <TouchableOpacity className="mr-2">
-            <Ionicons name="add" size={24} color={COLORS.woofBrown} />
+            <Ionicons name="add" size={24} color={COLORS.woofBrown[500][500]} />
           </TouchableOpacity>
           <TextInput
             className="flex-1 text-[15px] font-manropeMedium ml-1"
@@ -113,7 +118,9 @@ export default function Discussion({ id, name, image, messages }: Props) {
             <Ionicons
               name="send"
               size={22}
-              color={text ? COLORS.woofBrown : COLORS.woofGrey}
+              color={
+                text ? COLORS.woofBrown[500][500] : COLORS.woofGrey[500][500]
+              }
             />
           </TouchableOpacity>
         </View>

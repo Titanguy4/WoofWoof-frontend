@@ -1,8 +1,3 @@
-import { useLocalSearchParams, router } from "expo-router";
-import { StatusBar } from "expo-status-bar";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { COLORS } from "../constants/colors";
 import {
   missionsAnimal,
   missionsCultural,
@@ -10,6 +5,11 @@ import {
   missionsFarm,
   missionsNearby,
 } from "@/data/missions";
+import { COLORS } from "@/utils/constants/colors";
+import { router, useLocalSearchParams } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function RequestSuccessScreen() {
   const { id, start, end, email, number } = useLocalSearchParams();
@@ -34,11 +34,11 @@ export default function RequestSuccessScreen() {
 
   return (
     <SafeAreaView
-      style={{ backgroundColor: COLORS.woofBrown }}
+      style={{ backgroundColor: COLORS.woofBrown[500] }}
       className="flex-1"
       edges={["top"]}
     >
-      <StatusBar backgroundColor={COLORS.woofBrown} style="light" />
+      <StatusBar backgroundColor={COLORS.woofBrown[500]} style="light" />
 
       <ScrollView className="flex-1 bg-woofCream px-4">
         <View className="rounded-2xl items-center mt-12 px-4 bg-white">
@@ -52,7 +52,9 @@ export default function RequestSuccessScreen() {
 
           {/* --- Mission details --- */}
           <View className="px-4 py-7 border-b border-gray-300 w-full">
-            <Text className="text-lg font-manropeBold mb-2">{mission.title}</Text>
+            <Text className="text-lg font-manropeBold mb-2">
+              {mission.title}
+            </Text>
             <Text className="text-sm font-manrope mb-6 text-woofDarkGrey">
               {mission.locationDetails}
             </Text>

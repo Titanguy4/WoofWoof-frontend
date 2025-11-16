@@ -27,17 +27,17 @@ export default function Missions() {
   const filteredMissions =
     selectedIndex === 0
       ? sortedMissions.filter(
-          (m) => m.status === "accepted" || m.status === "pending"
+          (m) => m.status === "accepted" || m.status === "pending",
         )
       : sortedMissions; // 🔹 History contient TOUTES les missions
 
   return (
     <SafeAreaView
-      style={{ backgroundColor: COLORS.woofBrown[500] }}
+      style={{ backgroundColor: COLORS.woofBrown[500][500] }}
       className="flex-1"
       edges={["top"]}
     >
-      <StatusBar backgroundColor={COLORS.woofBrown[500]} style="light" />
+      <StatusBar backgroundColor={COLORS.woofBrown[500][500]} style="light" />
 
       {/* Header */}
       <View className="items-center w-full h-[56px] bg-white flex-row py-4">
@@ -48,7 +48,7 @@ export default function Missions() {
           <MaterialIcons
             name="chevron-left"
             size={30}
-            color={COLORS.woofBrown[500]}
+            color={COLORS.woofBrown[500][500]}
           />
         </TouchableOpacity>
         <Text className="text-lg font-manropeBold ml-[105px]">My missions</Text>
@@ -65,14 +65,14 @@ export default function Missions() {
             backgroundColor: "white",
           }}
           tabStyle={{
-            borderColor: COLORS.woofBrown[500],
+            borderColor: COLORS.woofBrown[500][500],
             height: 48,
           }}
           activeTabStyle={{
-            backgroundColor: COLORS.woofBrown[500],
+            backgroundColor: COLORS.woofBrown[500][500],
           }}
           tabTextStyle={{
-            color: COLORS.woofBrown[500],
+            color: COLORS.woofBrown[500][500],
             fontWeight: "600",
             fontSize: 16,
           }}

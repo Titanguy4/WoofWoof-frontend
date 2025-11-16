@@ -1,3 +1,4 @@
+import { COLORS } from "@/utils/constants/colors";
 import { MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -11,7 +12,6 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS } from "../constants/colors";
 
 export default function ChangePassword() {
   const [password, setPassword] = useState("");
@@ -20,18 +20,19 @@ export default function ChangePassword() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // ✅ Vérifie si les deux mots de passe correspondent
-  const arePasswordsMatched = password.trim() !== "" && password === confirmPassword;
+  const arePasswordsMatched =
+    password.trim() !== "" && password === confirmPassword;
 
   // ✅ Bouton désactivé tant que ça ne correspond pas
   const isDisabled = !arePasswordsMatched;
 
   return (
     <SafeAreaView
-      style={{ backgroundColor: COLORS.woofCream }}
+      style={{ backgroundColor: COLORS.woofCream[500][500] }}
       className="flex-1"
       edges={["top"]}
     >
-      <StatusBar backgroundColor={COLORS.woofBrown} style="dark" />
+      <StatusBar backgroundColor={COLORS.woofBrown[500][500]} style="dark" />
 
       {/* Header */}
       <View className="items-center w-full h-[56px] flex-row py-4">
@@ -94,9 +95,9 @@ export default function ChangePassword() {
               onPress={() => setShowConfirmPassword(!showConfirmPassword)}
             >
               {showConfirmPassword ? (
-                <EyeOff size={22} color={COLORS.woofDarkGrey} />
+                <EyeOff size={22} color={COLORS.woofGrey[900]} />
               ) : (
-                <Eye size={22} color={COLORS.woofDarkGrey} />
+                <Eye size={22} color={COLORS.woofGrey[900]} />
               )}
             </Pressable>
           </View>
@@ -115,12 +116,10 @@ export default function ChangePassword() {
               isDisabled ? "bg-gray-300" : "bg-woofBrown"
             }`}
             onPress={() => {
-              router.push('/changepasswordsuccess');
+              router.push("/changepasswordsuccess");
             }}
           >
-            <Text
-              className="font-manropeBold text-base text-white"
-            >
+            <Text className="font-manropeBold text-base text-white">
               Change password
             </Text>
           </TouchableOpacity>

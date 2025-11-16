@@ -27,7 +27,7 @@ export function SectionButton({
           <ChevronRight
             className="start-end"
             size={24}
-            color={COLORS.woofGrey[900]}
+            color={COLORS.woofGrey[500][900]}
           />
         )}
       </View>

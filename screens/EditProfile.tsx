@@ -1,17 +1,11 @@
+import { COLORS } from "@/utils/constants/colors";
 import { MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
-import {
-  Image,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import EditProfileModal from "../components/EditProfileModal";
-import { COLORS } from "../constants/colors";
 import { user as initialUser } from "../data/user";
 
 // ✅ Type du user (à adapter selon ton backend)
@@ -48,11 +42,11 @@ export default function EditProfile() {
 
   return (
     <SafeAreaView
-      style={{ backgroundColor: COLORS.woofBrown }}
+      style={{ backgroundColor: COLORS.woofBrown[500][500] }}
       className="flex-1"
       edges={["top"]}
     >
-      <StatusBar backgroundColor={COLORS.woofBrown} style="light" />
+      <StatusBar backgroundColor={COLORS.woofBrown[500][500]} style="light" />
 
       {/* Header */}
       <View className="items-center w-full h-[56px] bg-white flex-row py-4">
@@ -60,7 +54,11 @@ export default function EditProfile() {
           onPress={() => router.back()}
           className="items-center justify-center ml-6 w-12 h-12"
         >
-          <MaterialIcons name="chevron-left" size={30} color={COLORS.woofBrown} />
+          <MaterialIcons
+            name="chevron-left"
+            size={30}
+            color={COLORS.woofBrown[500][500]}
+          />
         </TouchableOpacity>
         <Text className="text-lg font-manropeBold ml-4">Edit Profile</Text>
       </View>
@@ -72,7 +70,7 @@ export default function EditProfile() {
             source={require("../assets/images/scoobyprofile.png")}
             className="w-[100px] h-[100px] rounded-full"
           />
-          <TouchableOpacity className="rounded-xl w-[95px] h-[45px] justify-center border border-gray-300 items-center mt-4">
+          <TouchableOpacity className="rounded-xl w-[95px] h-[45px] justify-center border border-woofGrey-200 items-center mt-4">
             <Text className="font-manropeMedium text-base text-black">
               Edit Photo
             </Text>
@@ -86,7 +84,7 @@ export default function EditProfile() {
             className="bg-white px-4 flex-row justify-between py-2 mt-2"
           >
             <View className="py-1 gap-y-2 flex-1">
-              <Text className="mt-3 text-sm text-woofDarkGrey font-manrope capitalize">
+              <Text className="mt-3 text-sm text-woofGrey-900 font-manrope capitalize">
                 {key}
               </Text>
               <Text className="text-base text-black font-manropeBold">

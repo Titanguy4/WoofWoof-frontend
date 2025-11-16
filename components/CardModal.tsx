@@ -1,4 +1,4 @@
-import { COLORS } from "@/constants/colors";
+import { COLORS } from "@/utils/constants/colors";
 import { BlurView } from "expo-blur";
 import { router } from "expo-router";
 import React, { useState } from "react";
@@ -8,7 +8,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import Animated, {
   Layout,
@@ -21,16 +21,10 @@ type Props = {
   onClose: () => void;
 };
 
-export default function CardModal({
-  visible,
-  onClose,
-}: Props) {
+export default function CardModal({ visible, onClose }: Props) {
   const [cardNumber, setCardNumber] = useState("");
   const [expirationDate, setExpirationDate] = useState("");
   const [cvv, setCVV] = useState("");
-  const [cardVisible, setCardVisible] = useState(false);
-
-
 
   return (
     <Modal
@@ -68,7 +62,7 @@ export default function CardModal({
               <View className="flex-row items-center mt-[6px] mb-5 border border-gray-300 rounded-2xl h-[52px] pr-3">
                 <TextInput
                   placeholder="Type your card number"
-                  placeholderTextColor={COLORS.woofGrey}
+                  placeholderTextColor={COLORS.woofGrey[500]}
                   value={cardNumber}
                   onChangeText={setCardNumber}
                   className="flex-1 text-[15px] font-manropeMedium ml-4"
@@ -87,7 +81,7 @@ export default function CardModal({
                 <View className="flex-row items-center mt-[6px] mb-5 border border-gray-300 rounded-2xl h-[52px]">
                   <TextInput
                     placeholder="MM/YY"
-                    placeholderTextColor={COLORS.woofGrey}
+                    placeholderTextColor={COLORS.woofGrey[500]}
                     value={expirationDate}
                     onChangeText={setExpirationDate}
                     className="flex-1 text-[15px] font-manropeMedium ml-4"
@@ -101,7 +95,7 @@ export default function CardModal({
                 <View className="flex-row items-center mt-[6px] mb-5 border border-gray-300 rounded-2xl h-[52px]">
                   <TextInput
                     placeholder="XXX"
-                    placeholderTextColor={COLORS.woofGrey}
+                    placeholderTextColor={COLORS.woofGrey[500]}
                     value={cvv}
                     onChangeText={setCVV}
                     className="flex-1 text-[15px] font-manropeMedium ml-4"
@@ -109,8 +103,6 @@ export default function CardModal({
                 </View>
               </View>
             </View>
-
-
 
             {/* ✅ Bouton Add */}
             <TouchableOpacity
@@ -125,12 +117,13 @@ export default function CardModal({
                 expirationDate.trim() === "" ||
                 cvv.trim() === ""
               }
-              className={`rounded-2xl py-3 mt-6 items-center ${cardNumber.trim() !== "" &&
+              className={`rounded-2xl py-3 mt-6 items-center ${
+                cardNumber.trim() !== "" &&
                 expirationDate.trim() !== "" &&
                 cvv.trim() !== ""
-                ? "bg-woofBrown"
-                : "bg-gray-400"
-                }`}
+                  ? "bg-woofBrown"
+                  : "bg-gray-400"
+              }`}
             >
               <Text className="text-white font-manropeBold text-base">
                 Apply

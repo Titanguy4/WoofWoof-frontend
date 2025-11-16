@@ -1,4 +1,5 @@
 import { useSearchFilters } from "@/context/SearchFiltersContext";
+import { COLORS } from "@/utils/constants/colors";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
@@ -15,7 +16,6 @@ import {
 } from "react-native";
 import { Calendar } from "react-native-calendars";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS } from "../constants/colors";
 
 import {
   missionsAnimal,
@@ -98,7 +98,7 @@ export default function Search() {
   });
 
   const uniqueCities = Array.from(
-    new Map(extractedCities.map((c) => [c.city, c])).values()
+    new Map(extractedCities.map((c) => [c.city, c])).values(),
   );
 
   // -----------------------------
@@ -108,7 +108,7 @@ export default function Search() {
     query.length === 0
       ? []
       : uniqueCities.filter((c) =>
-          c.fullLocation.toLowerCase().includes(query.toLowerCase())
+          c.fullLocation.toLowerCase().includes(query.toLowerCase()),
         );
 
   // -----------------------------
@@ -135,11 +135,11 @@ export default function Search() {
 
   return (
     <SafeAreaView
-      style={{ backgroundColor: COLORS.woofBrown }}
+      style={{ backgroundColor: COLORS.woofBrown[500] }}
       className="flex-1"
       edges={["top"]}
     >
-      <StatusBar backgroundColor={COLORS.woofBrown} style="light" />
+      <StatusBar backgroundColor={COLORS.woofBrown[500]} style="light" />
 
       {/* HEADER */}
       <View className="items-center w-full bg-white flex-row px-4 pt-2">
@@ -150,7 +150,7 @@ export default function Search() {
           <MaterialIcons
             name="chevron-left"
             size={30}
-            color={COLORS.woofBrown}
+            color={COLORS.woofBrown[500]}
           />
         </TouchableOpacity>
 
@@ -158,12 +158,12 @@ export default function Search() {
         <View className="ml-6 flex-row items-center bg-white border border-woofGrey rounded-full h-[55px] px-4 flex-1">
           <TextInput
             placeholder="Where do you want to help?"
-            placeholderTextColor={COLORS.woofGrey}
+            placeholderTextColor={COLORS.woofGrey[500]}
             className="flex-1 text-[15px] font-manropeMedium ml-2"
             value={query}
             onChangeText={setQuery}
           />
-          <Ionicons name="search" size={20} color={COLORS.woofGrey} />
+          <Ionicons name="search" size={20} color={COLORS.woofGrey[500]} />
         </View>
       </View>
 
@@ -193,7 +193,7 @@ export default function Search() {
           onPress={() => router.push("/searchfilter")}
           className="flex-row items-center bg-white border border-woofGrey rounded-full px-4 h-[45px]"
         >
-          <Ionicons name="filter" size={20} color={COLORS.woofGrey} />
+          <Ionicons name="filter" size={20} color={COLORS.woofGrey[500]} />
           <Text className="ml-2 font-manropeMedium">Filter</Text>
           <View className="ml-2 bg-woofBrown px-2 rounded-full">
             <Text className="text-white text-[12px] font-manropeBold">
@@ -233,7 +233,7 @@ export default function Search() {
                   <Ionicons
                     name="location-outline"
                     size={20}
-                    color={COLORS.woofBrown}
+                    color={COLORS.woofBrown[500]}
                   />
                 </View>
 
@@ -269,7 +269,11 @@ export default function Search() {
               }
             >
               <View className="flex-row items-center">
-                <Ionicons name="location" size={24} color={COLORS.woofBrown} />
+                <Ionicons
+                  name="location"
+                  size={24}
+                  color={COLORS.woofBrown[500]}
+                />
                 <Text className="ml-2 font-manrope">100+ Missions</Text>
               </View>
               <Ionicons name="chevron-forward" size={22} color={"gray"} />
@@ -337,12 +341,12 @@ export default function Search() {
               markedDates={{
                 [startDate || ""]: {
                   startingDay: true,
-                  color: COLORS.woofBrown,
+                  color: COLORS.woofBrown[500],
                   textColor: "#fff",
                 },
                 [endDate || ""]: {
                   endingDay: true,
-                  color: COLORS.woofBrown,
+                  color: COLORS.woofBrown[500],
                   textColor: "#fff",
                 },
               }}

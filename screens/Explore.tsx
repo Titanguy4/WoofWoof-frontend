@@ -47,7 +47,7 @@ export default function ExploreScreen() {
               className="flex-row items-center flex-1"
             >
               <Text
-                style={{ color: COLORS.woofGrey[500] }}
+                style={{ color: COLORS.woofGrey[500][500] }}
                 className="flex-1 text-[15px] font-manropeMedium ml-4"
               >
                 Where do you want to help?
@@ -57,7 +57,7 @@ export default function ExploreScreen() {
               className="mr-[14px]"
               name="search"
               size={20}
-              color={COLORS.woofGrey[500]}
+              color={COLORS.woofGrey[500][500]}
             />
           </View>
           <TouchableOpacity onPress={() => router.push("/map")}>
