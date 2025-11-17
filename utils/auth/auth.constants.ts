@@ -5,7 +5,7 @@ export const REFRESH_TOKEN_KEY = "keycloak_refresh_token";
 
 export const redirectUri = AuthSession.makeRedirectUri({
   scheme: "woofwoof",
-  path: "redirect",
+  path: "explore",
 });
 
 export const authRequestConfig: AuthSession.AuthRequestConfig = {

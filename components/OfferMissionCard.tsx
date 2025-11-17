@@ -33,7 +33,7 @@ export default function OfferMissionCard({
   backpackersTotal,
 }: OfferMissionCardProps) {
   return (
-    <View className="w-full h-[250px] bg-white rounded-2xl flex-row overflow-hidden border border-woofBrown">
+    <View className="w-full h-[250px] bg-white rounded-2xl flex-row overflow-hidden border border-woofBrown-500">
       {/* Image */}
       <View className="relative">
         <Image source={image} className="h-full w-[115px]" resizeMode="cover" />
@@ -70,7 +70,7 @@ export default function OfferMissionCard({
           </Text>
           <View className="px-2 flex-row items-center justify-between">
             <Text
-              className="mt-2 mb-2 font-manropeBold text-[16px] text-woofBrown"
+              className="mt-2 mb-2 font-manropeBold text-[16px] text-woofBrown-500"
               numberOfLines={1}
             >
               {backpackersTotal} backpackers hosted

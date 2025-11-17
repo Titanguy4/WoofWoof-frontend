@@ -8,11 +8,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function ChangePasswordSuccess() {
   return (
     <SafeAreaView
-      style={{ backgroundColor: COLORS.woofCream[500][500] }}
+      style={{ backgroundColor: COLORS.woofCream[500] }}
       className="flex-1"
       edges={["top"]}
     >
-      <StatusBar backgroundColor={COLORS.woofBrown[500][500]} style="dark" />
+      <StatusBar backgroundColor={COLORS.woofBrown[500]} style="dark" />
 
       {/* Contenu principal */}
       <View className="px-6 mt-6">
@@ -24,7 +24,7 @@ export default function ChangePasswordSuccess() {
               resizeMode="contain"
             />
 
-            <Text className="text-woofBrown font-manropeBold text-lg mb-12">
+            <Text className="text-woofBrow-500 font-manropeBold text-lg mb-12">
               Change password successfully!
             </Text>
 
@@ -38,7 +38,7 @@ export default function ChangePasswordSuccess() {
           </View>
 
           <TouchableOpacity
-            className="bg-woofBrown rounded-2xl py-3 items-center"
+            className="bg-woofBrow-500 rounded-2xl py-3 items-center"
             onPress={() => {
               router.push("/(tabs)/explore");
             }}

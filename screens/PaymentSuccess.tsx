@@ -24,7 +24,7 @@ export default function PaymentSuccess() {
               resizeMode="contain"
             />
 
-            <Text className="text-woofBrown font-manropeBold text-lg mb-12">
+            <Text className="text-woofBrown-500 font-manropeBold text-lg mb-12">
               Payment Successful
             </Text>
 
@@ -43,7 +43,7 @@ export default function PaymentSuccess() {
           </View>
 
           <TouchableOpacity
-            className="bg-woofBrown rounded-2xl py-3 items-center"
+            className="bg-woofBrown-500 rounded-2xl py-3 items-center"
             onPress={() => {
               router.push("/(tabs)/profile");
             }}

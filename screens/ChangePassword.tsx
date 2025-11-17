@@ -28,11 +28,11 @@ export default function ChangePassword() {
 
   return (
     <SafeAreaView
-      style={{ backgroundColor: COLORS.woofCream[500][500] }}
+      style={{ backgroundColor: COLORS.woofCream[500] }}
       className="flex-1"
       edges={["top"]}
     >
-      <StatusBar backgroundColor={COLORS.woofBrown[500][500]} style="dark" />
+      <StatusBar backgroundColor={COLORS.woofBrown[500]} style="dark" />
 
       {/* Header */}
       <View className="items-center w-full h-[56px] flex-row py-4">
@@ -113,7 +113,7 @@ export default function ChangePassword() {
           <TouchableOpacity
             disabled={isDisabled}
             className={`rounded-2xl py-3 mt-[25px] items-center ${
-              isDisabled ? "bg-gray-300" : "bg-woofBrown"
+              isDisabled ? "bg-gray-300" : "bg-woofBrow-500"
             }`}
             onPress={() => {
               router.push("/changepasswordsuccess");

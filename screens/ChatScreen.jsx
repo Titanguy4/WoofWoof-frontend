@@ -32,11 +32,11 @@ export default function ChatScreen() {
 
   return (
     <SafeAreaView
-      style={{ backgroundColor: COLORS.woofBrown[500][500] }}
+      style={{ backgroundColor: COLORS.woofBrown[500] }}
       className="flex-1"
       edges={["top"]}
     >
-      <StatusBar backgroundColor={COLORS.woofBrown[500][500]} style="light" />
+      <StatusBar backgroundColor={COLORS.woofBrown[500]} style="light" />
 
       {/* Header */}
       <View className="items-center w-full h-[56px] bg-white flex-row py-4">
@@ -47,14 +47,14 @@ export default function ChatScreen() {
           <MaterialIcons
             name="chevron-left"
             size={30}
-            color={COLORS.woofBrown[500][500]}
+            color={COLORS.woofBrown[500]}
           />
         </TouchableOpacity>
         <Text className="text-lg font-manropeBold ml-[122.5px]">Chats</Text>
       </View>
 
       {/* 👇 Zone beige */}
-      <View className="flex-1 bg-woofCream px-4">
+      <View className="flex-1 bg-woofCream-500 px-4">
         {/* Barre de recherche */}
         <View className="flex-row items-center bg-white rounded-3xl h-[44px] w-full mt-4 px-3">
           <Ionicons name="search" size={20} color="black" />
@@ -81,7 +81,7 @@ export default function ChatScreen() {
               />
             ))
           ) : (
-            <Text className="text-center text-woofGrey mt-6">
+            <Text className="text-center text-woofGrey-500 mt-6">
               No conversations found
             </Text>
           )}

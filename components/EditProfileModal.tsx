@@ -141,7 +141,7 @@ export default function EditProfileModal({
               />
               <TouchableOpacity
                 onPress={handlePasswordSave}
-                className="rounded-2xl py-3 mt-4 items-center bg-woofBrown"
+                className="rounded-2xl py-3 mt-4 items-center bg-woofBrown-500"
               >
                 <Text className="text-white font-manropeBold text-base">
                   Save Password
@@ -173,7 +173,7 @@ export default function EditProfileModal({
 
               <TouchableOpacity
                 onPress={handleNumberSave}
-                className="rounded-2xl py-3 mt-6 items-center bg-woofBrown"
+                className="rounded-2xl py-3 mt-6 items-center bg-woofBrown-500"
               >
                 <Text className="text-white font-manropeBold text-base">
                   Save Number
@@ -209,7 +209,7 @@ export default function EditProfileModal({
               />
               <TouchableOpacity
                 onPress={handleDefaultSave}
-                className="rounded-2xl py-3 mt-6 items-center bg-woofBrown"
+                className="rounded-2xl py-3 mt-6 items-center bg-woofBrown-500"
               >
                 <Text className="text-white font-manropeBold text-base">
                   Save

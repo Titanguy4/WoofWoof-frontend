@@ -47,11 +47,11 @@ export default function Woofshare() {
 
   return (
     <SafeAreaView
-      style={{ backgroundColor: COLORS.woofBrown[500][500] }}
+      style={{ backgroundColor: COLORS.woofBrown[500] }}
       className="flex-1"
       edges={["top"]}
     >
-      <StatusBar backgroundColor={COLORS.woofBrown[500][500]} style="light" />
+      <StatusBar backgroundColor={COLORS.woofBrown[500]} style="light" />
 
       {/* Header */}
       <View className="items-center w-full h-[56px] bg-white flex-row py-4">
@@ -62,7 +62,7 @@ export default function Woofshare() {
           <MaterialIcons
             name="chevron-left"
             size={30}
-            color={COLORS.woofBrown[500][500]}
+            color={COLORS.woofBrown[500]}
           />
         </TouchableOpacity>
         <Text className="text-lg font-manropeBold ml-[106.5px]">Woofshare</Text>
@@ -74,10 +74,10 @@ export default function Woofshare() {
         <View className="flex-row items-center bg-white border border-woofGrey rounded-full h-[55px] px-4 flex-1">
           <TextInput
             placeholder="Search"
-            placeholderTextColor={COLORS.woofGrey[500][500]}
+            placeholderTextColor={COLORS.woofGrey[500]}
             className="flex-1 text-[15px] font-manropeMedium ml-2"
           />
-          <Ionicons name="search" size={20} color={COLORS.woofGrey[500][500]} />
+          <Ionicons name="search" size={20} color={COLORS.woofGrey[500]} />
         </View>
 
         {/* ✅ Filter */}
@@ -85,12 +85,12 @@ export default function Woofshare() {
           onPress={() => setFiltersOpen(!filtersOpen)}
           className="flex-row items-center bg-white border border-woofGrey rounded-full px-4 h-[55px]"
         >
-          <Ionicons name="filter" size={20} color={COLORS.woofGrey[500][500]} />
+          <Ionicons name="filter" size={20} color={COLORS.woofGrey[500]} />
           <Text className="ml-2 font-manropeMedium">Filter</Text>
 
           {/* ✅ Badge dynamic */}
           {selectedFilters.length > 0 && (
-            <View className="ml-2 bg-woofBrown px-2 rounded-full">
+            <View className="ml-2 bg-woofBrow-500 px-2 rounded-full">
               <Text className="text-white text-[12px] font-manropeBold">
                 {selectedFilters.length}
               </Text>
@@ -112,7 +112,9 @@ export default function Woofshare() {
                   key={label}
                   onPress={() => toggleFilter(label)}
                   className={`px-3 py-1 rounded-full border ${
-                    active ? "bg-woofBrown border-woofBrown" : "border-woofGrey"
+                    active
+                      ? "bg-woofBrow-500 border-woofBrow-500"
+                      : "border-woofGrey"
                   }`}
                 >
                   <Text
@@ -130,7 +132,7 @@ export default function Woofshare() {
           {/* ✅ Apply Button */}
           <TouchableOpacity
             onPress={() => setFiltersOpen(false)}
-            className="bg-woofBrown px-4 py-2 rounded-full mt-4 items-center"
+            className="bg-woofBrow-500 px-4 py-2 rounded-full mt-4 items-center"
           >
             <Text className="text-white font-manropeBold text-[13px]">
               Apply
@@ -155,7 +157,7 @@ export default function Woofshare() {
                   key={label}
                   onPress={() => toggleFilter(label)}
                   className={`flex-row items-center rounded-full px-2 border
-    ${active ? "bg-woofBrown border-woofBrown" : "bg-white border-woofBrown"}
+    ${active ? "bg-woofBrow-500 border-woofBrow-500" : "bg-white border-woofBrow-500"}
   `}
                   style={{ width: 135, height: 36 }}
                   activeOpacity={1}

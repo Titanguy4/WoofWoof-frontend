@@ -3,6 +3,7 @@ import dogheader from "@/assets/images/dogheader.png";
 import { Section } from "@/components/Section";
 import { SectionButton } from "@/components/SectionButton";
 import { useAuth } from "@/utils/auth/AuthContext";
+import { Router, useRouter } from "expo-router";
 import {
   Bell,
   Globe,
@@ -14,7 +15,9 @@ import {
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 export default function ProfileScreen() {
-  const { logout } = useAuth();
+  const router: Router = useRouter();
+  const { user, logout, openAccountPage, isWoofer } = useAuth();
+  console.log(isWoofer);
 
   return (
     <ScrollView
@@ -37,10 +40,10 @@ export default function ProfileScreen() {
             className="w-[40px] h-[40px] rounded-full"
           />
           <View className="flex-1">
-            <Text className="text-xl font-bold">Username</Text>
-            <Text className="text-woofGrey-500">brookedavis@gmail.com</Text>
+            <Text className="text-xl font-bold">{user.name}</Text>
+            <Text className="text-woofGrey-500">{user.email}</Text>
           </View>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={openAccountPage}>
             <SquarePen />
           </TouchableOpacity>
         </View>
@@ -48,7 +51,7 @@ export default function ProfileScreen() {
         <View className="flex-row rounded-lg items-center justify-between mt-4">
           <View className="flex-row items-center gap-x-3">
             <House size={25} />
-            <Text>Woofer</Text>
+            <Text>{isWoofer ? "Woofer" : "Backpacker"}</Text>
           </View>
 
           <Text className="font-manropeSemiBold text-base text-woofBrown-500">
@@ -59,14 +62,27 @@ export default function ProfileScreen() {
 
       <View className="bg-woofCream-50 p-4 gap-y-1 mt-10 rounded-t-3xl flex-1">
         <Section title="General">
-          <SectionButton icon={<Globe />} label={"Language"}></SectionButton>
-          <SectionButton icon={<Bell />} label={"Notifications"} />
+          <SectionButton
+            icon={<Globe />}
+            label={"Language"}
+            onPress={() => router.push("/profile/languages")}
+          ></SectionButton>
+          <SectionButton
+            icon={<Bell />}
+            label={"Notifications"}
+            onPress={() => router.push("/profile/notifications")}
+          />
         </Section>
         <Section title="Preferences">
-          <SectionButton icon={<ShieldCheck />} label={"Legal & Policies"} />
+          <SectionButton
+            icon={<ShieldCheck />}
+            label={"Legal & Policies"}
+            onPress={() => router.push("/profile/policies")}
+          />
           <SectionButton
             icon={<MessageCircleQuestionMark />}
             label={"Help & Support"}
+            onPress={() => router.push("/profile/help")}
           />
         </Section>
         <View className="mt-5">

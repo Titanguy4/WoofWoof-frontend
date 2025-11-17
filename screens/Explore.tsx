@@ -1,3 +1,4 @@
+import { COLORS } from "@/utils/constants/colors";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React from "react";
@@ -10,7 +11,6 @@ import {
   missionsFarm,
   missionsNearby,
 } from "../data/missions";
-import { COLORS } from "../utils/constants/colors";
 
 export default function ExploreScreen() {
   return (
@@ -47,7 +47,7 @@ export default function ExploreScreen() {
               className="flex-row items-center flex-1"
             >
               <Text
-                style={{ color: COLORS.woofGrey[500][500] }}
+                style={{ color: COLORS.woofGrey[500] }}
                 className="flex-1 text-[15px] font-manropeMedium ml-4"
               >
                 Where do you want to help?
@@ -57,7 +57,7 @@ export default function ExploreScreen() {
               className="mr-[14px]"
               name="search"
               size={20}
-              color={COLORS.woofGrey[500][500]}
+              color={COLORS.woofGrey[500]}
             />
           </View>
           <TouchableOpacity onPress={() => router.push("/map")}>
@@ -74,7 +74,7 @@ export default function ExploreScreen() {
       </View>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        className="bg-woofCream "
+        className="bg-woofCream-500 "
         contentContainerClassName=""
       >
         {/* Nearby */}

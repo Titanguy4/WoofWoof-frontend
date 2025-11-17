@@ -127,11 +127,11 @@ export default function DetailsScreen({ id }: Props) {
 
   return (
     <SafeAreaView
-      style={{ backgroundColor: COLORS.woofBrown[500][500] }}
+      style={{ backgroundColor: COLORS.woofBrown[500] }}
       className="flex-1"
       edges={["top"]}
     >
-      <StatusBar backgroundColor={COLORS.woofBrown[500][500]} style="light" />
+      <StatusBar backgroundColor={COLORS.woofBrown[500]} style="light" />
       <ScrollView className="flex-1 bg-white">
         <View className="flex-row mx-3 -mb-16 justify-between items-center">
           {/* Chevron gauche */}
@@ -269,7 +269,7 @@ export default function DetailsScreen({ id }: Props) {
         <View className="items-center mb-4">
           <TouchableOpacity
             onPress={() => router.push(`/missionrequest/${id}`)}
-            className="bg-woofBrown w-36 h-12 px-3 py-1 rounded-2xl items-center justify-center mb-6"
+            className="bg-woofBrow-500 w-36 h-12 px-3 py-1 rounded-2xl items-center justify-center mb-6"
           >
             <Text className="text-base font-manropeBold text-white">Apply</Text>
           </TouchableOpacity>

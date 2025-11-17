@@ -26,7 +26,7 @@ export default function NotifComponent({
   date,
 }: NotifComponentProps) {
   return (
-    <View className="w-full h-[120px] bg-white rounded-2xl flex-row overflow-hidden border border-woofBrown">
+    <View className="w-full h-[120px] bg-white rounded-2xl flex-row overflow-hidden border border-woofBrown-500">
       {/* Image */}
       <View className="pl-4 items-center justify-center">
         <Image

@@ -11,11 +11,11 @@ import { backpackers } from "../data/backpackers";
 export default function BackPackers() {
   return (
     <SafeAreaView
-      style={{ backgroundColor: COLORS.woofBrown[500][500] }}
+      style={{ backgroundColor: COLORS.woofBrown[500] }}
       className="flex-1"
       edges={["top"]}
     >
-      <StatusBar backgroundColor={COLORS.woofBrown[500][500]} style="light" />
+      <StatusBar backgroundColor={COLORS.woofBrown[500]} style="light" />
 
       {/* Header */}
       <View className="items-center w-full h-[56px] bg-white flex-row py-4">
@@ -26,7 +26,7 @@ export default function BackPackers() {
           <MaterialIcons
             name="chevron-left"
             size={30}
-            color={COLORS.woofBrown[500][500]}
+            color={COLORS.woofBrown[500]}
           />
         </TouchableOpacity>
         <Text className="text-lg font-manropeBold ml-[105px]">Backpackers</Text>

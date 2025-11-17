@@ -8,9 +8,13 @@ interface AuthProviderProps {
 const AuthContext = createContext<IAuthContext>({
   accessToken: null,
   isAuthenticated: false,
+  user: { "": "" },
   login: async () => {},
   logout: async () => {},
   isLoading: true,
+  openAccountPage: async () => {},
+  isWoofer: false,
+  isBackpacker: false,
 });
 
 export function useAuth(): IAuthContext {

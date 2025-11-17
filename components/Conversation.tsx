@@ -45,7 +45,7 @@ export default function Conversation({
         />
       ) : (
         <View className="w-12 h-12 rounded-full bg-[#F4E3D3] mr-3 items-center justify-center">
-          <Text className="text-lg font-manropeBold text-woofBrown">
+          <Text className="text-lg font-manropeBold text-woofBrown-500">
             {name.charAt(0)}
           </Text>
         </View>

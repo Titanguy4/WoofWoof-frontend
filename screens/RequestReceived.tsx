@@ -51,7 +51,7 @@ export default function RequestReceivedScreen() {
           <View className="w-full px-10 items-center">
             <TouchableOpacity
               onPress={() => router.push("/(tabs)/myoffer")}
-              className="bg-woofBrown w-full h-14 px-3 py-1 mt-7 rounded-2xl items-center justify-center mb-6"
+              className="bg-woofBrown-500 w-full h-14 px-3 py-1 mt-7 rounded-2xl items-center justify-center mb-6"
             >
               <Text className="text-base font-manropeBold text-white">
                 View Request

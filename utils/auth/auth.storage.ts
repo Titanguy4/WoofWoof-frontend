@@ -3,7 +3,7 @@ import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from "./auth.constants";
 
 export async function saveTokens(
   accessToken: string,
-  refreshToken: string | null,
+  refreshToken?: string | null,
 ) {
   await SecureStore.setItemAsync(ACCESS_TOKEN_KEY, accessToken);
   if (refreshToken) {

@@ -173,7 +173,7 @@ export default function Results() {
         >
           <Ionicons name="filter" size={20} color={COLORS.woofGrey[500]} />
           <Text className="ml-2 font-manropeMedium">Filter</Text>
-          <View className="ml-2 bg-woofBrown px-2 rounded-full">
+          <View className="ml-2 bg-woofBrow-500 px-2 rounded-full">
             <Text className="text-white text-[12px] font-manropeBold">
               {activeCount}
             </Text>

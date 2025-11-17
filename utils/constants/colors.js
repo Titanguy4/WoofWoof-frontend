@@ -5,7 +5,7 @@ export const COLORS = {
     200: "#e3b392",
     300: "#d59463",
     400: "#c97a3a",
-    500: "#c58048", // ancien woofBrown
+    500: "#c58048", // ancien woofBrow-500
     600: "#a86236",
     700: "#8a4826",
     800: "#6d3218",

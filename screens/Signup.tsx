@@ -45,20 +45,21 @@ export default function Signup() {
       {/* Contenu principal */}
       <View className="rounded-t-[40px] flex-1 bg-woofCream p-6">
         <View className="px-4 gap-y-1">
-          <Text className="text-2xl text-woofBrown font-manropeSemiBold">
+          <Text className="text-2xl text-woofBrown-500 font-manropeSemiBold">
             Welcome to us,
           </Text>
           <Text className="text-sm text-black font-manropeSemiBold">
             Hello there, create New account
           </Text>
-        </View>
-
-        <View className="mt-[39px] items-center">
-          <Image
-            source={require("../assets/images/woofwoof.png")}
-            className="w-[285px] h-[176px]"
-            resizeMode="contain"
-          />
+          <View
+            className={`w-6 h-6 rounded-md border border-gray-400 flex items-center justify-center ${checked ? "bg-woofBrown-500 border-woofBrown-500" : ""}`}
+          >
+            <Image
+              source={require("../assets/images/woofwoof.png")}
+              className="w-[285px] h-[176px]"
+              resizeMode="contain"
+            />
+          </View>
         </View>
 
         <View className="px-2 gap-y-5">
@@ -104,7 +105,7 @@ export default function Signup() {
           >
             <View
               className={`w-6 h-6 rounded-md border border-gray-400 flex items-center justify-center ${
-                checked ? "bg-woofBrown border-woofBrown" : ""
+                checked ? "bg-woofBrow-500 border-woofBrow-500" : ""
               }`}
             >
               {checked && <Check size={14} color="white" />}
@@ -113,16 +114,13 @@ export default function Signup() {
               <Text className="text-base text-black font-manrope">
                 By creating an account your agree to our{" "}
               </Text>
-              <Text className="text-base text-woofBrown font-manropeSemiBold">
+              <Text className="text-base text-woofBrown-500 font-manropeSemiBold">
                 Terms and conditions
               </Text>
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            //onPress={() => }
-            className="rounded-2xl py-3 mt-7 items-center bg-woofBrown text-white"
-          >
+          <TouchableOpacity className="rounded-2xl py-3 mt-7 items-center bg-woofBrown-500 text-white">
             <Text className="text-white font-manropeBold text-base">
               Sign up
             </Text>
@@ -134,7 +132,7 @@ export default function Signup() {
                 Have an account?{" "}
               </Text>
               <TouchableOpacity className="items-end">
-                <Text className="text-sm text-woofBrown font-manropeSemiBold">
+                <Text className="text-sm text-woofBrown-500 font-manropeSemiBold">
                   Sign In
                 </Text>
               </TouchableOpacity>

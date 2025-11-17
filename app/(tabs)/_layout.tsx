@@ -2,38 +2,33 @@ import { Tabs } from "expo-router";
 import React from "react";
 
 import { HapticTab } from "@/components/haptic-tab";
-import { IconSymbol } from "@/components/ui/icon-symbol";
-import { useColorScheme } from "@/hooks/use-color-scheme";
-import { Colors } from "@/utils/constants/theme";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { COLORS } from "@/utils/constants/colors";
+import {
+  CircleUserRound,
+  Compass,
+  Heart,
+  Image,
+  MapPinned,
+  MessageCircleWarning,
+  Users,
+} from "lucide-react-native";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+        tabBarActiveTintColor: COLORS.woofBrown[600],
         headerShown: false,
-        tabBarInactiveTintColor: "#8e8e93",
+        tabBarInactiveTintColor: COLORS.woofGrey[300],
         tabBarButton: HapticTab,
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
-          tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="house.fill" color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
           title: "Explore",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="compass" size={size} color={color} />
+            <Compass color={color} size={size} />
           ),
         }}
       />
@@ -42,9 +37,7 @@ export default function TabLayout() {
         name="woofshare"
         options={{
           title: "WoofShare",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="images" size={size} color={color} />
-          ),
+          tabBarIcon: ({ color, size }) => <Image size={size} color={color} />,
         }}
       />
 
@@ -52,9 +45,7 @@ export default function TabLayout() {
         name="saved"
         options={{
           title: "Saved",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="heart-outline" size={size} color={color} />
-          ),
+          tabBarIcon: ({ color, size }) => <Heart size={size} color={color} />,
         }}
       />
 
@@ -63,7 +54,7 @@ export default function TabLayout() {
         options={{
           title: "Missions",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="clipboard" size={size} color={color} />
+            <MapPinned size={size} color={color} />
           ),
         }}
       />
@@ -71,9 +62,9 @@ export default function TabLayout() {
       <Tabs.Screen
         name="myoffer"
         options={{
-          title: "My offer",
+          title: "Offers",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="clipboard" size={size} color={color} />
+            <MessageCircleWarning size={size} color={color} />
           ),
         }}
       />
@@ -81,14 +72,8 @@ export default function TabLayout() {
       <Tabs.Screen
         name="backpackers"
         options={{
-          title: "Backpackers",
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons
-              name="bag-personal-outline"
-              size={size}
-              color={color}
-            />
-          ),
+          title: "Backpacks",
+          tabBarIcon: ({ color, size }) => <Users size={size} color={color} />,
         }}
       />
 
@@ -97,7 +82,7 @@ export default function TabLayout() {
         options={{
           title: "Profile",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person" size={size} color={color} />
+            <CircleUserRound size={size} color={color} />
           ),
         }}
       />

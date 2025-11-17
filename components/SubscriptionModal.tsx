@@ -6,13 +6,10 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import { RadioButton } from "react-native-paper";
-import Animated, {
-  Layout,
-  SlideOutDown
-} from "react-native-reanimated";
+import Animated, { Layout, SlideOutDown } from "react-native-reanimated";
 
 type Props = {
   visible: boolean;
@@ -27,9 +24,8 @@ export default function SubscriptionModal({
   onClose,
   selectedType,
   setSelectedType,
-  onApply
+  onApply,
 }: Props) {
-
   const subscriptions = [
     {
       key: "monthly",
@@ -44,7 +40,6 @@ export default function SubscriptionModal({
       price: "39,99",
     },
   ];
-
 
   return (
     <Modal
@@ -86,10 +81,11 @@ export default function SubscriptionModal({
                   key={item.key}
                   onPress={() => setSelectedType(item.key)}
                   activeOpacity={0.8}
-                  className={`flex-row h-[70px] items-center border rounded-xl p-3 mb-3 ${selectedType === item.key
-                    ? "border-woofBrown bg-woofBrown/5"
-                    : "border-gray-300"
-                    }`}
+                  className={`flex-row h-[70px] items-center border rounded-xl p-3 mb-3 ${
+                    selectedType === item.key
+                      ? "border-woofBrown-500 bg-woofBrown-500/5"
+                      : "border-gray-300"
+                  }`}
                 >
                   <View className="flex-1">
                     <Text className="font-manropeSemiBold text-[16px]">
@@ -114,7 +110,7 @@ export default function SubscriptionModal({
               ))}
             </RadioButton.Group>
 
-            <View className="items-center justify-center mt-4 mb-4"> 
+            <View className="items-center justify-center mt-4 mb-4">
               <Image
                 source={require("../assets/images/WoofWoof2.png")}
                 className="w-[285px] h-[176px]"
@@ -126,16 +122,15 @@ export default function SubscriptionModal({
             <TouchableOpacity
               onPress={onApply}
               disabled={!selectedType}
-              className={`rounded-2xl py-3 items-center ${selectedType ? "bg-woofBrown" : "bg-gray-400"
-                }`}
+              className={`rounded-2xl py-3 items-center ${
+                selectedType ? "bg-woofBrown-500" : "bg-gray-400"
+              }`}
             >
               <Text className="text-white font-manropeBold text-base">
                 Apply
               </Text>
             </TouchableOpacity>
           </ScrollView>
-
-
         </Animated.View>
       </View>
     </Modal>

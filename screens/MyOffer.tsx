@@ -37,11 +37,11 @@ export default function MyOffer() {
 
   return (
     <SafeAreaView
-      style={{ backgroundColor: COLORS.woofBrown[500][500] }}
+      style={{ backgroundColor: COLORS.woofBrown[500] }}
       className="flex-1"
       edges={["top"]}
     >
-      <StatusBar backgroundColor={COLORS.woofBrown[500][500]} style="light" />
+      <StatusBar backgroundColor={COLORS.woofBrown[500]} style="light" />
 
       {/* Header */}
       <View className="items-center w-full h-[56px] bg-white flex-row py-4">
@@ -52,7 +52,7 @@ export default function MyOffer() {
           <MaterialIcons
             name="chevron-left"
             size={30}
-            color={COLORS.woofBrown[500][500]}
+            color={COLORS.woofBrown[500]}
           />
         </TouchableOpacity>
         <Text className="text-lg font-manropeBold ml-[114px]">My offer</Text>
@@ -73,7 +73,7 @@ export default function MyOffer() {
         <View className="mt-96 items-center">
           <TouchableOpacity
             onPress={() => setIsActivityModalVisible(true)}
-            className="bg-woofBrown w-36 h-12 px-3 py-1 rounded-2xl items-center justify-center mb-6 flex-row gap-2"
+            className="bg-woofBrow-500 w-36 h-12 px-3 py-1 rounded-2xl items-center justify-center mb-6 flex-row gap-2"
           >
             <Text className="text-base font-manropeBold text-white">
               Add now

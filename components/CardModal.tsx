@@ -121,7 +121,7 @@ export default function CardModal({ visible, onClose }: Props) {
                 cardNumber.trim() !== "" &&
                 expirationDate.trim() !== "" &&
                 cvv.trim() !== ""
-                  ? "bg-woofBrown"
+                  ? "bg-woofBrown-500"
                   : "bg-gray-400"
               }`}
             >

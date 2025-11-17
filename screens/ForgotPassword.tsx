@@ -59,9 +59,7 @@ export default function ForgotPassword() {
           {/* ✅ Bouton "Send" désactivé si email invalide */}
           <TouchableOpacity
             disabled={isDisabled}
-            className={`rounded-2xl py-3 mt-[45px] items-center ${
-              isDisabled ? "bg-gray-200" : "bg-woofBrown"
-            }`}
+            className={`rounded-2xl py-3 mt-[45px] items-center ${isDisabled ? "bg-gray-200" : "bg-woofBrown-500"}`}
             onPress={() => {
               console.log("Email envoyé à :", email);
             }}

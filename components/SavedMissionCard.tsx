@@ -22,7 +22,7 @@ export default function SavedMissionCard({
   advantages,
 }: SavedMissionCardProps) {
   return (
-    <View className="w-full h-[180px] bg-white rounded-2xl flex-row overflow-hidden border border-woofBrown relative">
+    <View className="w-full h-[180px] bg-white rounded-2xl flex-row overflow-hidden border border-woofBrown-500 relative">
       {/* ✅ Heart positioned absolutely */}
       <View className="absolute mt-2 mr-2 top-2 right-2 z-10">
         <Ionicons name="heart" size={22} color={COLORS.woofHeart} />

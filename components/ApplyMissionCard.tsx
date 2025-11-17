@@ -25,7 +25,7 @@ export default function ApplyMissionCard({
   heart = false,
 }: ApplyMissionCardProps) {
   return (
-    <View className="w-full h-[144px] bg-white rounded-2xl flex-row overflow-hidden border border-woofBrown">
+    <View className="w-full h-[144px] bg-white rounded-2xl flex-row overflow-hidden border border-woofBrown-500">
       {/* Image */}
       <View className="relative">
         <Image source={image} className="h-full w-[115px]" resizeMode="cover" />

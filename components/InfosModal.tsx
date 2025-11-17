@@ -131,7 +131,7 @@ export default function InfosModal({
                     activeOpacity={0.8}
                     className={`flex-row items-center border rounded-xl p-3 mb-3 ${
                       isSelected
-                        ? "border-woofBrown bg-woofBrown/5"
+                        ? "border-woofBrown-500 bg-woofBrown-500/5"
                         : "border-gray-300"
                     }`}
                   >
@@ -181,7 +181,7 @@ export default function InfosModal({
                 location.trim() !== "" &&
                 dailyHours.trim() !== "" &&
                 selectedAdvantages.length > 0
-                  ? "bg-woofBrown"
+                  ? "bg-woofBrow-500"
                   : "bg-gray-400"
               }`}
             >

@@ -41,9 +41,9 @@ export default function SignIn() {
       </View>
 
       {/* Contenu principal */}
-      <View className="rounded-t-[40px] flex-1 bg-woofCream p-6">
+      <View className="rounded-t-[40px] flex-1 bg-woofCream-500 p-6">
         <View className="px-4 gap-y-1">
-          <Text className="text-2xl text-woofBrown font-manropeSemiBold">
+          <Text className="text-2xl text-woofBrown-500 font-manropeSemiBold">
             Welcome back !
           </Text>
           <Text className="text-sm text-black font-manropeSemiBold">
@@ -61,7 +61,7 @@ export default function SignIn() {
 
         <View className="px-2 gap-y-5">
           <TextInput
-            className="mt-[52px] border border-woofGrey rounded-xl px-4 py-3 text-base text-black font-manrope"
+            className="mt-[52px] border border-woofGrey-500 rounded-xl px-4 py-3 text-base text-black font-manrope"
             value={email}
             onChangeText={setEmail}
             placeholder={"Email"}
@@ -69,7 +69,7 @@ export default function SignIn() {
 
           <View className="relative mb-6">
             <TextInput
-              className="border border-woofGrey rounded-xl px-4 py-3 text-base text-black font-manrope pr-10"
+              className="border border-woofGrey-500 rounded-xl px-4 py-3 text-base text-black font-manrope pr-10"
               value={password}
               onChangeText={setPassword}
               placeholder="Password"
@@ -92,12 +92,12 @@ export default function SignIn() {
             onPress={() => router.push("/forgotpassword")}
             className="items-end"
           >
-            <Text className="text-sm text-woofGrey font-manropeSemiBold">
+            <Text className="text-sm text-woofGrey-500 font-manropeSemiBold">
               Forgot your password ?
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity className="rounded-2xl py-3 mt-[58px] items-center bg-woofBrown text-white">
+          <TouchableOpacity className="rounded-2xl py-3 mt-[58px] items-center bg-woofBrown-500 text-white">
             <Text className="text-white font-manropeBold text-base">
               Sign in
             </Text>
@@ -112,7 +112,7 @@ export default function SignIn() {
                 onPress={() => router.push("/signup")}
                 className="items-end"
               >
-                <Text className="text-sm text-woofBrown font-manropeSemiBold">
+                <Text className="text-sm text-woofBrown-500 font-manropeSemiBold">
                   Sign Up
                 </Text>
               </TouchableOpacity>
