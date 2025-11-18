@@ -1,6 +1,7 @@
 import { Stack } from "expo-router";
 import { ExternalLink } from "lucide-react-native";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import {
   Alert,
   Linking,
@@ -10,87 +11,81 @@ import {
   View,
 } from "react-native";
 
-const openUrl = async (url: string) => {
-  try {
-    const supported = await Linking.canOpenURL(url);
-    if (!supported) {
-      Alert.alert("Impossible d'ouvrir le lien", url);
-      return;
-    }
-    await Linking.openURL(url);
-  } catch {
-    Alert.alert("Erreur", "Impossible d'ouvrir le lien");
-  }
-};
-
 export default function PoliciesStack() {
+  const { t } = useTranslation("profil");
+
+  const openUrl = async (url: string) => {
+    try {
+      const supported = await Linking.canOpenURL(url);
+      if (!supported) {
+        Alert.alert(t("helpPage.cannotOpenLink"), url);
+        return;
+      }
+      await Linking.openURL(url);
+    } catch {
+      Alert.alert(t("helpPage.error"), t("helpPage.cannotOpenLink"));
+    }
+  };
+
   return (
     <ScrollView
       className="min-h-screen bg-woofCream-500 p-6"
       showsVerticalScrollIndicator={false}
     >
-      <Stack.Screen options={{ title: "Legal & Policies" }} />
+      <Stack.Screen options={{ title: t("legalPage.title") }} />
 
       <View className="mb-6">
         <Text className="text-lg font-manropeBold mb-2">
-          Conditions d&apos;utilisation
+          {t("legalPage.termsTitle")}
         </Text>
         <Text className="text-sm text-woofBrown-700">
-          En utilisant WoofWoof, vous acceptez nos conditions
-          d&apos;utilisation. L&apos;application fournit une plateforme de mise
-          en relation et n&apos;est pas responsable des actions des
-          utilisateurs.
+          {t("legalPage.termsDescription")}
         </Text>
       </View>
 
       <View className="mb-6">
         <Text className="text-lg font-manropeBold mb-2">
-          Politique de confidentialité
+          {t("legalPage.privacyTitle")}
         </Text>
         <Text className="text-sm text-woofBrown-700 mb-2">
-          Nous collectons uniquement les données nécessaires pour faire
-          fonctionner le service (profil, préférences, etc.). Les données ne
-          sont pas vendues à des tiers.
+          {t("legalPage.privacyDescription")}
         </Text>
         <TouchableOpacity
           onPress={() => openUrl("https://example.com/privacy")}
           className="flex-row items-center gap-x-3 p-3 bg-white rounded-lg"
         >
           <ExternalLink size={18} />
-          <Text className="text-base">
-            Voir la politique de confidentialité complète
-          </Text>
+          <Text className="text-base">{t("legalPage.fullPrivacyPolicy")}</Text>
         </TouchableOpacity>
       </View>
 
       <View className="mb-6">
         <Text className="text-lg font-manropeBold mb-2">
-          Cookies & tracking
+          {t("legalPage.cookiesTitle")}
         </Text>
         <Text className="text-sm text-woofBrown-700">
-          Nous utilisons des cookies et des outils d&apos;analyse pour améliorer
-          l&apos;application. Vous pouvez désactiver certains tracking via les
-          paramètres de votre appareil.
+          {t("legalPage.cookiesDescription")}
         </Text>
       </View>
 
       <View className="mb-6">
-        <Text className="text-lg font-manropeBold mb-2">Droits & demandes</Text>
+        <Text className="text-lg font-manropeBold mb-2">
+          {t("legalPage.rightsTitle")}
+        </Text>
         <Text className="text-sm text-woofBrown-700 mb-2">
-          Pour demander la suppression ou l&apos;export de vos données,
-          contactez-nous :
+          {t("legalPage.rightsDescription")}
         </Text>
         <TouchableOpacity
           onPress={() => openUrl("mailto:support@woofwoof.app")}
           className="flex-row items-center gap-x-3 p-3 bg-white rounded-lg"
         >
-          <Text className="text-base">support@woofwoof.app</Text>
+          <Text className="text-base">{t("legalPage.supportEmail")}</Text>
         </TouchableOpacity>
       </View>
 
       <View className="mb-12">
         <Text className="text-sm text-woofBrown-700">
-          Version de l&apos;application : 1.0.0 — Dernière mise à jour : 2025
+          {t("legalPage.version")}
         </Text>
       </View>
     </ScrollView>

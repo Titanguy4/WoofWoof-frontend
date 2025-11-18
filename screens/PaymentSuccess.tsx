@@ -2,10 +2,12 @@ import { COLORS } from "@/utils/constants/colors";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function PaymentSuccess() {
+  const { t } = useTranslation();
   return (
     <SafeAreaView
       style={{ backgroundColor: COLORS.woofCream[500] }}
@@ -25,20 +27,20 @@ export default function PaymentSuccess() {
             />
 
             <Text className="text-woofBrown-500 font-manropeBold text-lg mb-12">
-              Payment Successful
+              {t("payment.successTitle")}
             </Text>
 
             <Text
               numberOfLines={2}
               className="text-black font-manropeSemiBold text-base mb-2 text-center"
             >
-              Your subscription is now active  🎉
+              {t("payment.successMessageLine1")}
             </Text>
             <Text
               numberOfLines={2}
               className="text-woofDarkGrey font-manrope text-sm mb-10 text-center"
             >
-              You can now enjoy all premium features !
+              {t("payment.successMessageLine2")}
             </Text>
           </View>
 
@@ -49,7 +51,7 @@ export default function PaymentSuccess() {
             }}
           >
             <Text className="font-manropeBold text-base text-white">
-              Back to profile
+              {t("payment.backToProfile")}
             </Text>
           </TouchableOpacity>
         </View>

@@ -1,29 +1,30 @@
 import { Stack } from "expo-router";
 import { ExternalLink } from "lucide-react-native";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Alert, Linking, Text, TouchableOpacity, View } from "react-native";
 
-const openUrl = async (url: string) => {
-  try {
-    const supported = await Linking.canOpenURL(url);
-    if (!supported) {
-      Alert.alert("Impossible d'ouvrir le lien", url);
-      return;
-    }
-    await Linking.openURL(url);
-  } catch {
-    Alert.alert("Erreur", "Impossible d'ouvrir le lien");
-  }
-};
-
 export default function HelpAndSupport() {
+  const { t } = useTranslation("profil");
+
+  const openUrl = async (url: string) => {
+    try {
+      const supported = await Linking.canOpenURL(url);
+      if (!supported) {
+        Alert.alert(t("helpPage.cannotOpenLink"), url);
+        return;
+      }
+      await Linking.openURL(url);
+    } catch {
+      Alert.alert(t("helpPage.error"), t("helpPage.cannotOpenLink"));
+    }
+  };
+
   return (
     <View className="min-h-screen bg-woofCream-500 p-6 gap-y-5">
-      <Stack.Screen options={{ title: "Help & Support" }} />
+      <Stack.Screen options={{ title: t("helpPage.title") }} />
 
-      <Text className="text-base mb-6">
-        Nous n&apos;aiderons pas. Voici quelques ressources externes :
-      </Text>
+      <Text className="text-base mb-6">{t("helpPage.description")}</Text>
 
       <TouchableOpacity
         onPress={() => openUrl("https://www.google.com")}
@@ -31,7 +32,7 @@ export default function HelpAndSupport() {
       >
         <View className="flex-row items-center gap-x-4">
           <ExternalLink size={20} />
-          <Text className="text-base">Google</Text>
+          <Text className="text-base">{t("helpPage.google")}</Text>
         </View>
       </TouchableOpacity>
 
@@ -41,7 +42,7 @@ export default function HelpAndSupport() {
       >
         <View className="flex-row items-center gap-x-4">
           <ExternalLink size={20} />
-          <Text className="text-base">ChatGPT</Text>
+          <Text className="text-base">{t("helpPage.chatgpt")}</Text>
         </View>
       </TouchableOpacity>
 
@@ -51,7 +52,7 @@ export default function HelpAndSupport() {
       >
         <View className="flex-row items-center gap-x-4">
           <ExternalLink size={20} />
-          <Text className="text-base">Gemini</Text>
+          <Text className="text-base">{t("helpPage.gemini")}</Text>
         </View>
       </TouchableOpacity>
 
@@ -61,7 +62,7 @@ export default function HelpAndSupport() {
       >
         <View className="flex-row items-center gap-x-4">
           <ExternalLink size={20} />
-          <Text className="text-base">Mon site (hugotanguy.fr)</Text>
+          <Text className="text-base">{t("helpPage.myWebsite")}</Text>
         </View>
       </TouchableOpacity>
 
@@ -71,7 +72,7 @@ export default function HelpAndSupport() {
       >
         <View className="flex-row items-center gap-x-4">
           <ExternalLink size={20} />
-          <Text className="text-base">Google Scholar</Text>
+          <Text className="text-base">{t("helpPage.googleScholar")}</Text>
         </View>
       </TouchableOpacity>
     </View>

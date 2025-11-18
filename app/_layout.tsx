@@ -1,6 +1,5 @@
+import "@/i18n";
 import { AuthProvider } from "@/utils/auth/AuthContext";
-import "../global.css";
-
 import {
   Manrope_400Regular,
   Manrope_500Medium,
@@ -15,6 +14,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect } from "react";
 import "react-native-reanimated";
+import "../global.css";
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({

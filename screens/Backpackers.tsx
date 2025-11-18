@@ -3,12 +3,14 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import BackpackerCard from "../components/BackpackerCard";
 import { backpackers } from "../data/backpackers";
 
 export default function BackPackers() {
+  const { t } = useTranslation("backpackers");
   return (
     <SafeAreaView
       style={{ backgroundColor: COLORS.woofBrown[500] }}
@@ -29,7 +31,9 @@ export default function BackPackers() {
             color={COLORS.woofBrown[500]}
           />
         </TouchableOpacity>
-        <Text className="text-lg font-manropeBold ml-[105px]">Backpackers</Text>
+        <Text className="text-lg font-manropeBold ml-[105px]">
+          {t("title")}
+        </Text>
       </View>
 
       {/* Contenu principal */}

@@ -27,6 +27,10 @@
         },
         "plugins": [
             "expo-router",
+            "expo-font",
+            "expo-secure-store",
+            "expo-web-browser",
+            "expo-localization",
             [
                 "expo-splash-screen",
                 {
@@ -39,9 +43,15 @@
                     }
                 }
             ],
-            "expo-font",
-            "expo-secure-store",
-            "expo-web-browser"
+            [
+                "expo-localization",
+                {
+                    "supportedLocales": {
+                        "ios": ["en", "fr"],
+                        "android": ["en", "fr"]
+                    }
+                }
+            ]
         ],
         "experiments": {
             "typedRoutes": true,

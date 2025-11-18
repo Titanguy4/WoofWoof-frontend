@@ -1,0 +1,18 @@
+{
+    "title": "Explore",
+    "header": {
+        "title": "Trouvez où apporter votre aide",
+        "subtitle": "WOOF WOOF !"
+    },
+    "search": {
+        "placeholder": "Où voulez-vous aider ?"
+    },
+    "sections": {
+        "nearby": "À proximité",
+        "farm": "Travail agricole",
+        "animal": "Soin des animaux",
+        "environment": "Projets environnementaux",
+        "community": "Soutien communautaire et culturel",
+        "showAll": "Voir tout"
+    }
+}

@@ -10,6 +10,14 @@ export default function Layout() {
           backgroundColor: COLORS.woofCream[500],
         },
       }}
-    />
+    >
+      <Stack.Screen name="index" />
+      <Stack.Screen
+        name="languages"
+        options={{
+          presentation: "modal",
+        }}
+      />
+    </Stack>
   );
 }

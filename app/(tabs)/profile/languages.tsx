@@ -1,67 +1,62 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Stack } from "expo-router";
+import * as SecureStore from "expo-secure-store";
+import { changeLanguage } from "i18next";
 import { Check, Globe } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Text, TouchableOpacity, View } from "react-native";
 
 const LANG_KEY = "app_language";
 
-/**
- * TODO: ajouter la langue
- */
 export default function LanguagesStack() {
-  const [language, setLanguage] = useState<"fr" | "en" | null>(null);
+  const { t, i18n } = useTranslation();
+  const [language, setLanguage] = useState<string>(i18n.language);
+  const languages = { en: "English", fr: "Français" };
 
   useEffect(() => {
     (async () => {
       try {
-        const stored = await AsyncStorage.getItem(LANG_KEY);
-        setLanguage((stored as "fr" | "en") ?? "fr");
+        const stored = await SecureStore.getItemAsync(LANG_KEY);
+        if (stored) {
+          setLanguage(stored as "fr" | "en");
+          await changeLanguage(stored);
+        } else {
+          setLanguage(i18n.language);
+        }
       } catch {
-        setLanguage("fr");
+        setLanguage(i18n.language);
       }
     })();
   }, []);
 
-  const select = async (lang: "fr" | "en") => {
+  const select = async (lang: string) => {
     try {
-      await AsyncStorage.setItem(LANG_KEY, lang);
+      await changeLanguage(lang);
+      await SecureStore.setItemAsync(LANG_KEY, lang);
       setLanguage(lang);
-    } catch {
-      setLanguage(lang);
+    } catch (error) {
+      console.error("Erreur lors du changement de langue:", error);
     }
   };
 
   return (
-    <>
-      <Stack.Screen options={{ title: "Languages" }} />
-      <View className="min-h-screen bg-woofCream-500 p-6">
-        <Text className="text-lg font-manropeBold mb-4">
-          Choose your language
-        </Text>
+    <View className="min-h-screen bg-woofCream-500 p-6">
+      <Text className="text-lg font-manropeBold mb-4">
+        {t("profil:languages.description")}
+      </Text>
 
+      {Object.entries(languages).map(([key, value]) => (
         <TouchableOpacity
-          onPress={() => select("fr")}
+          key={key}
+          onPress={() => select(key)}
           className="flex-row items-center justify-between p-4 bg-white rounded-lg mb-3"
         >
           <View className="flex-row items-center gap-x-4">
             <Globe size={28} />
-            <Text className="text-base">Français</Text>
+            <Text className="text-base">{value}</Text>
           </View>
-          {language === "fr" && <Check size={20} />}
+          {language === key && <Check size={20} />}
         </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() => select("en")}
-          className="flex-row items-center justify-between p-4 bg-white rounded-lg"
-        >
-          <View className="flex-row items-center gap-x-4">
-            <Globe size={28} />
-            <Text className="text-base">English</Text>
-          </View>
-          {language === "en" && <Check size={20} />}
-        </TouchableOpacity>
-      </View>
-    </>
+      ))}
+    </View>
   );
 }

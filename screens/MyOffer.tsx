@@ -6,11 +6,13 @@ import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { offers } from "../data/offers";
 
 export default function MyOffer() {
+  const { t } = useTranslation("myoffer");
   const [isActivityModalVisible, setIsActivityModalVisible] = useState(false);
   const [isInfosModalVisible, setIsInfosModalVisible] = useState(false);
   const [selectedType, setSelectedType] = useState<string | null>(null);
@@ -23,7 +25,7 @@ export default function MyOffer() {
   if (!offer) {
     return (
       <View className="flex-1 items-center justify-center bg-white">
-        <Text className="text-lg font-manropeBold">Offer not found</Text>
+        <Text className="text-lg font-manropeBold">{t("notFound")}</Text>
       </View>
     );
   }
@@ -55,7 +57,9 @@ export default function MyOffer() {
             color={COLORS.woofBrown[500]}
           />
         </TouchableOpacity>
-        <Text className="text-lg font-manropeBold ml-[114px]">My offer</Text>
+        <Text className="text-lg font-manropeBold ml-[114px]">
+          {t("title")}
+        </Text>
       </View>
 
       {/* Contenu principal */}
@@ -76,7 +80,7 @@ export default function MyOffer() {
             className="bg-woofBrow-500 w-36 h-12 px-3 py-1 rounded-2xl items-center justify-center mb-6 flex-row gap-2"
           >
             <Text className="text-base font-manropeBold text-white">
-              Add now
+              {t("addNow")}
             </Text>
             <Ionicons name="add-circle-outline" size={22} color="white" />
           </TouchableOpacity>
