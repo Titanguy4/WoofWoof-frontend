@@ -15,12 +15,9 @@ import {
 export default function ExploreScreen() {
   return (
     <>
-      <View className="bg-woofBrown-500 h-[128px] px-4  ">
+      <View className="bg-woofBrown-500 p-4 gap-y-3">
         <View className="flex-row pt-safe ">
           <View className="h-[48px] w-[267px] gap-2  ">
-            <Text className="text-base font-manrope text-white ">
-              Find your place to make an impact
-            </Text>
             <Text className="text-xl font-manropeBold text-black  ">
               WOOF WOOF !
             </Text>
@@ -40,7 +37,7 @@ export default function ExploreScreen() {
             </TouchableOpacity>
           </View>
         </View>
-        <View className="flex-row items-center mt-5">
+        <View className="flex-row items-center">
           <View className="flex-row items-center bg-white rounded-3xl h-[48px] flex-1 mr-[10px]">
             <TouchableOpacity
               onPress={() => router.push("/search")}
@@ -62,11 +59,7 @@ export default function ExploreScreen() {
           </View>
           <TouchableOpacity onPress={() => router.push("/map")}>
             <Image
-              source={require("../assets/icons/message.png")}
-              className="w-10 h-10  "
-            />
-            <Image
-              source={require("../assets/icons/notif.png")}
+              source={require("../assets/images/maps.png")}
               className="w-10 h-10  "
             />
           </TouchableOpacity>
