@@ -1,5 +1,6 @@
 import MyMissionsCard from "@/components/MyMissionsCard";
 import { myMissions } from "@/data/personalmissions";
+import { COLORS } from "@/utils/constants/colors";
 import { MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -7,7 +8,6 @@ import React, { useMemo, useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SegmentedControlTab from "react-native-segmented-control-tab";
-import { COLORS } from "../constants/colors";
 
 export default function Missions() {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
@@ -26,16 +26,18 @@ export default function Missions() {
   // 🧭 Filtrage des missions selon l’onglet
   const filteredMissions =
     selectedIndex === 0
-      ? sortedMissions.filter((m) => m.status === "accepted" || m.status === "pending")
+      ? sortedMissions.filter(
+          (m) => m.status === "accepted" || m.status === "pending",
+        )
       : sortedMissions; // 🔹 History contient TOUTES les missions
 
   return (
     <SafeAreaView
-      style={{ backgroundColor: COLORS.woofBrown }}
+      style={{ backgroundColor: COLORS.woofBrown[500] }}
       className="flex-1"
       edges={["top"]}
     >
-      <StatusBar backgroundColor={COLORS.woofBrown} style="light" />
+      <StatusBar backgroundColor={COLORS.woofBrown[500]} style="light" />
 
       {/* Header */}
       <View className="items-center w-full h-[56px] bg-white flex-row py-4">
@@ -43,7 +45,11 @@ export default function Missions() {
           onPress={() => router.back()}
           className="items-center justify-center ml-6 w-12 h-12"
         >
-          <MaterialIcons name="chevron-left" size={30} color={COLORS.woofBrown} />
+          <MaterialIcons
+            name="chevron-left"
+            size={30}
+            color={COLORS.woofBrown[500]}
+          />
         </TouchableOpacity>
         <Text className="text-lg font-manropeBold ml-[105px]">My missions</Text>
       </View>
@@ -59,14 +65,14 @@ export default function Missions() {
             backgroundColor: "white",
           }}
           tabStyle={{
-            borderColor: COLORS.woofBrown,
+            borderColor: COLORS.woofBrown[500],
             height: 48,
           }}
           activeTabStyle={{
-            backgroundColor: COLORS.woofBrown,
+            backgroundColor: COLORS.woofBrown[500],
           }}
           tabTextStyle={{
-            color: COLORS.woofBrown,
+            color: COLORS.woofBrown[500],
             fontWeight: "600",
             fontSize: 16,
           }}

@@ -1,5 +1,5 @@
-import { advantages } from "@/constants/advantages";
-import { COLORS } from "@/constants/colors";
+import { advantages } from "@/utils/constants/advantages";
+import { COLORS } from "@/utils/constants/colors";
 import { Ionicons } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
 import { router } from "expo-router";
@@ -82,7 +82,7 @@ export default function InfosModal({
               <View className="flex-row items-center mt-[6px] mb-5 border border-gray-300 rounded-2xl h-[52px]">
                 <TextInput
                   placeholder="Type a name for your activity..."
-                  placeholderTextColor={COLORS.woofGrey}
+                  placeholderTextColor={COLORS.woofGrey[500]}
                   value={name}
                   onChangeText={setName}
                   className="flex-1 text-[15px] font-manropeMedium ml-4"
@@ -95,7 +95,7 @@ export default function InfosModal({
               <View className="flex-row items-center mt-[6px] mb-5 border border-gray-300 rounded-2xl h-[52px]">
                 <TextInput
                   placeholder="Type an address..."
-                  placeholderTextColor={COLORS.woofGrey}
+                  placeholderTextColor={COLORS.woofGrey[500]}
                   value={location}
                   onChangeText={setLocation}
                   className="flex-1 text-[15px] font-manropeMedium ml-4"
@@ -109,7 +109,7 @@ export default function InfosModal({
               <View className="flex-row items-center mt-[6px] mb-5 border border-gray-300 rounded-2xl h-[52px]">
                 <TextInput
                   placeholder="0 - 8 hours..."
-                  placeholderTextColor={COLORS.woofGrey}
+                  placeholderTextColor={COLORS.woofGrey[500]}
                   value={dailyHours}
                   onChangeText={setDailyHours}
                   className="flex-1 text-[15px] font-manropeMedium ml-4"
@@ -129,16 +129,19 @@ export default function InfosModal({
                     key={item.key}
                     onPress={() => toggleAdvantage(item.key)}
                     activeOpacity={0.8}
-                    className={`flex-row items-center border rounded-xl p-3 mb-3 ${isSelected
-                      ? "border-woofBrown bg-woofBrown/5"
-                      : "border-gray-300"
-                      }`}
+                    className={`flex-row items-center border rounded-xl p-3 mb-3 ${
+                      isSelected
+                        ? "border-woofBrown-500 bg-woofBrown-500/5"
+                        : "border-gray-300"
+                    }`}
                   >
                     <Ionicons
                       name={item.icon as any}
                       size={24}
                       color={
-                        isSelected ? COLORS.woofBrown : COLORS.woofDarkGrey
+                        isSelected
+                          ? COLORS.woofBrown[500]
+                          : COLORS.woofGrey[900]
                       }
                       style={{ marginRight: 12 }}
                     />
@@ -149,7 +152,7 @@ export default function InfosModal({
                       value={item.key}
                       onPress={() => toggleAdvantage(item.key)}
                       status={isSelected ? "checked" : "unchecked"}
-                      color={COLORS.woofBrown}
+                      color={COLORS.woofBrown[500]}
                       uncheckedColor="#C9C9C9"
                     />
                   </TouchableOpacity>
@@ -165,7 +168,7 @@ export default function InfosModal({
                   pathname: "/requestreceived",
                   params: {
                     location,
-                    name
+                    name,
                   },
                 });
               }}
@@ -174,16 +177,15 @@ export default function InfosModal({
                 location.trim() === "" ||
                 dailyHours.trim() === ""
               }
-              className={`rounded-2xl py-3 mt-6 items-center ${location.trim() !== "" &&
+              className={`rounded-2xl py-3 mt-6 items-center ${
+                location.trim() !== "" &&
                 dailyHours.trim() !== "" &&
                 selectedAdvantages.length > 0
-                ? "bg-woofBrown"
-                : "bg-gray-400"
-                }`}
+                  ? "bg-woofBrow-500"
+                  : "bg-gray-400"
+              }`}
             >
-              <Text className="text-white font-manropeBold text-base">
-                Add
-              </Text>
+              <Text className="text-white font-manropeBold text-base">Add</Text>
             </TouchableOpacity>
           </ScrollView>
         </Animated.View>

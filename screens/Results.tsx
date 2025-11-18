@@ -1,17 +1,12 @@
 import ResultMissionCard from "@/components/ResultMissionCard";
 import { useSearchFilters } from "@/context/SearchFiltersContext";
+import { COLORS } from "@/utils/constants/colors";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import {
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View
-} from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS } from "../constants/colors";
 import {
   Mission,
   missionsAnimal,
@@ -100,7 +95,7 @@ export default function Results() {
       : displayedMissions.filter((mission) =>
           mission.location
             .toLowerCase()
-            .includes(selectedLocation.toLowerCase())
+            .includes(selectedLocation.toLowerCase()),
         );
 
   // ---------------------------------------
@@ -118,7 +113,7 @@ export default function Results() {
     const matchesProfile =
       filters.volunteerProfile.length === 0 ||
       filters.volunteerProfile.some((p: string) =>
-        mission.description.toLowerCase().includes(p.toLowerCase())
+        mission.description.toLowerCase().includes(p.toLowerCase()),
       );
 
     return matchesAdvantages && matchesActivity && matchesProfile;
@@ -126,11 +121,11 @@ export default function Results() {
 
   return (
     <SafeAreaView
-      style={{ backgroundColor: COLORS.woofBrown }}
+      style={{ backgroundColor: COLORS.woofBrown[500] }}
       className="flex-1"
       edges={["top"]}
     >
-      <StatusBar backgroundColor={COLORS.woofBrown} style="light" />
+      <StatusBar backgroundColor={COLORS.woofBrown[500]} style="light" />
 
       {/* --------------------------------------- */}
       {/* HEADER */}
@@ -140,7 +135,11 @@ export default function Results() {
           onPress={() => router.back()}
           className="items-center justify-center ml-6 w-12 h-12"
         >
-          <MaterialIcons name="chevron-left" size={30} color={COLORS.woofBrown} />
+          <MaterialIcons
+            name="chevron-left"
+            size={30}
+            color={COLORS.woofBrown[500]}
+          />
         </TouchableOpacity>
 
         <Text className="text-lg font-manropeBold ml-24">Results</Text>
@@ -159,7 +158,9 @@ export default function Results() {
       <View className="bg-white p-4 flex-row items-center justify-between border-b border-gray-200">
         {/* Location & Dates */}
         <View>
-          <Text className="font-manropeBold text-[16px]">{selectedLocation}</Text>
+          <Text className="font-manropeBold text-[16px]">
+            {selectedLocation}
+          </Text>
           <Text className="text-gray-500 text-[13px]">
             {formatDate(selectedStartDate)} - {formatDate(selectedEndDate)}
           </Text>
@@ -170,9 +171,9 @@ export default function Results() {
           onPress={() => router.push("/searchfilter")}
           className="flex-row items-center bg-white border border-woofGrey rounded-full px-4 h-[45px]"
         >
-          <Ionicons name="filter" size={20} color={COLORS.woofGrey} />
+          <Ionicons name="filter" size={20} color={COLORS.woofGrey[500]} />
           <Text className="ml-2 font-manropeMedium">Filter</Text>
-          <View className="ml-2 bg-woofBrown px-2 rounded-full">
+          <View className="ml-2 bg-woofBrow-500 px-2 rounded-full">
             <Text className="text-white text-[12px] font-manropeBold">
               {activeCount}
             </Text>

@@ -1,18 +1,13 @@
 import ActivityTypeModal from "@/components/ActivityTypeModal";
 import InfosModal from "@/components/InfosModal";
 import OfferMissionCard from "@/components/OfferMissionCard";
+import { COLORS } from "@/utils/constants/colors";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
-import {
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View
-} from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS } from "../constants/colors";
 import { offers } from "../data/offers";
 
 export default function MyOffer() {
@@ -20,7 +15,6 @@ export default function MyOffer() {
   const [isInfosModalVisible, setIsInfosModalVisible] = useState(false);
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const [selectedAdvantages, setSelectedAdvantages] = useState<string[]>([]);
-
 
   const id = 1;
   const backpackersNumber = 27;
@@ -43,11 +37,11 @@ export default function MyOffer() {
 
   return (
     <SafeAreaView
-      style={{ backgroundColor: COLORS.woofBrown }}
+      style={{ backgroundColor: COLORS.woofBrown[500] }}
       className="flex-1"
       edges={["top"]}
     >
-      <StatusBar backgroundColor={COLORS.woofBrown} style="light" />
+      <StatusBar backgroundColor={COLORS.woofBrown[500]} style="light" />
 
       {/* Header */}
       <View className="items-center w-full h-[56px] bg-white flex-row py-4">
@@ -55,7 +49,11 @@ export default function MyOffer() {
           onPress={() => router.back()}
           className="items-center justify-center ml-6 w-12 h-12"
         >
-          <MaterialIcons name="chevron-left" size={30} color={COLORS.woofBrown} />
+          <MaterialIcons
+            name="chevron-left"
+            size={30}
+            color={COLORS.woofBrown[500]}
+          />
         </TouchableOpacity>
         <Text className="text-lg font-manropeBold ml-[114px]">My offer</Text>
       </View>
@@ -75,9 +73,11 @@ export default function MyOffer() {
         <View className="mt-96 items-center">
           <TouchableOpacity
             onPress={() => setIsActivityModalVisible(true)}
-            className="bg-woofBrown w-36 h-12 px-3 py-1 rounded-2xl items-center justify-center mb-6 flex-row gap-2"
+            className="bg-woofBrow-500 w-36 h-12 px-3 py-1 rounded-2xl items-center justify-center mb-6 flex-row gap-2"
           >
-            <Text className="text-base font-manropeBold text-white">Add now</Text>
+            <Text className="text-base font-manropeBold text-white">
+              Add now
+            </Text>
             <Ionicons name="add-circle-outline" size={22} color="white" />
           </TouchableOpacity>
         </View>

@@ -1,23 +1,22 @@
-import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
-import { StatusBar } from "expo-status-bar";
+import { COLORS } from "@/utils/constants/colors";
+import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import React from "react";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import HomeMissionCard from "../components/HomeMissionCard";
-import { COLORS } from "../constants/colors";
-import { missionsAnimal, missionsCultural, missionsEnv, missionsFarm, missionsNearby } from "../data/missions";
+import {
+  missionsAnimal,
+  missionsCultural,
+  missionsEnv,
+  missionsFarm,
+  missionsNearby,
+} from "../data/missions";
 
 export default function ExploreScreen() {
   return (
-    <SafeAreaView
-      style={{ backgroundColor: COLORS.woofBrown }}
-      className="flex-1"
-      edges={["top"]}
-    >
-      <StatusBar backgroundColor={COLORS.woofBrown} style="light" />
-      <View className="bg-woofBrown h-[128px] px-4  ">
-        <View className="flex-row  ">
+    <>
+      <View className="bg-woofBrown-500 h-[128px] px-4  ">
+        <View className="flex-row pt-safe ">
           <View className="h-[48px] w-[267px] gap-2  ">
             <Text className="text-base font-manrope text-white ">
               Find your place to make an impact
@@ -44,37 +43,43 @@ export default function ExploreScreen() {
         <View className="flex-row items-center mt-5">
           <View className="flex-row items-center bg-white rounded-3xl h-[48px] flex-1 mr-[10px]">
             <TouchableOpacity
-              onPress={() => router.push('/search')}
+              onPress={() => router.push("/search")}
               className="flex-row items-center flex-1"
             >
               <Text
-                style={{ color: COLORS.woofGrey }}
+                style={{ color: COLORS.woofGrey[500] }}
                 className="flex-1 text-[15px] font-manropeMedium ml-4"
               >
                 Where do you want to help?
               </Text>
             </TouchableOpacity>
-            <Ionicons className="mr-[14px]" name="search" size={20} color={COLORS.woofGrey} />
+            <Ionicons
+              className="mr-[14px]"
+              name="search"
+              size={20}
+              color={COLORS.woofGrey[500]}
+            />
           </View>
           <TouchableOpacity onPress={() => router.push("/map")}>
             <Image
-              source={require("../assets/images/maps.png")}
-              className="w-[48px] h-[48px]"
-              resizeMode="contain"
+              source={require("../assets/icons/message.png")}
+              className="w-10 h-10  "
+            />
+            <Image
+              source={require("../assets/icons/notif.png")}
+              className="w-10 h-10  "
             />
           </TouchableOpacity>
         </View>
       </View>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        className="bg-woofCream "
+        className="bg-woofCream-500 "
         contentContainerClassName=""
       >
         {/* Nearby */}
         <View className="px-4 flex-row justify-between items-center  ">
-          <Text className="font-manropeBold text-lg mt-4  ">
-            Nearby
-          </Text>
+          <Text className="font-manropeBold text-lg mt-4  ">Nearby</Text>
           <Text className="font-manropeSemiBold underline text-xs mt-4  ">
             Show all
           </Text>
@@ -88,9 +93,7 @@ export default function ExploreScreen() {
         </View>
         {/* Farm work */}
         <View className="px-4 flex-row justify-between items-center  ">
-          <Text className="font-manropeBold text-lg mt-4  ">
-            Farm work
-          </Text>
+          <Text className="font-manropeBold text-lg mt-4  ">Farm work</Text>
           <Text className="font-manropeSemiBold underline text-xs mt-4  ">
             Show all
           </Text>
@@ -104,9 +107,7 @@ export default function ExploreScreen() {
         </View>
         {/* Animal care */}
         <View className="px-4 flex-row justify-between items-center  ">
-          <Text className="font-manropeBold text-lg mt-4  ">
-            Animal care
-          </Text>
+          <Text className="font-manropeBold text-lg mt-4  ">Animal care</Text>
           <Text className="font-manropeSemiBold underline text-xs mt-4  ">
             Show all
           </Text>
@@ -151,6 +152,6 @@ export default function ExploreScreen() {
           </ScrollView>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </>
   );
 }

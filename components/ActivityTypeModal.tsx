@@ -9,10 +9,7 @@ import {
   View,
 } from "react-native";
 import { RadioButton } from "react-native-paper";
-import Animated, {
-  Layout,
-  SlideOutDown
-} from "react-native-reanimated";
+import Animated, { Layout, SlideOutDown } from "react-native-reanimated";
 
 type Props = {
   visible: boolean;
@@ -96,10 +93,11 @@ export default function ActivityTypeModal({
                   key={item.key}
                   onPress={() => setSelectedType(item.key)}
                   activeOpacity={0.8}
-                  className={`flex-row h-[108px] items-center border rounded-xl p-3 mb-3 ${selectedType === item.key
-                    ? "border-woofBrown bg-woofBrown/5"
-                    : "border-gray-300"
-                    }`}
+                  className={`flex-row h-[108px] items-center border rounded-xl p-3 mb-3 ${
+                    selectedType === item.key
+                      ? "border-woofBrown-500 bg-woofBrown-500/5"
+                      : "border-gray-300"
+                  }`}
                 >
                   <Image
                     source={item.img}
@@ -123,21 +121,19 @@ export default function ActivityTypeModal({
                 </TouchableOpacity>
               ))}
             </RadioButton.Group>
-            
             {/* Bouton Apply */}
             <TouchableOpacity
               onPress={onApply}
               disabled={!selectedType}
-              className={`rounded-2xl py-3 mt-20 items-center ${selectedType ? "bg-woofBrown" : "bg-gray-400"
-                }`}
+              className={`rounded-2xl py-3 mt-20 items-center ${
+                selectedType ? "bg-woofBrown-500" : "bg-gray-400"
+              }`}
             >
               <Text className="text-white font-manropeBold text-base">
                 Apply
               </Text>
             </TouchableOpacity>
           </ScrollView>
-
-
         </Animated.View>
       </View>
     </Modal>

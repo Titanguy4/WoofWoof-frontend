@@ -25,14 +25,14 @@ export default function Map() {
         ...missionsAnimal,
         ...missionsEnv,
         ...missionsCultural,
-      ].map((m) => [m.id, m])
-    ).values()
+      ].map((m) => [m.id, m]),
+    ).values(),
   );
 
   const [selectedMission, setSelectedMission] = useState<Mission | null>(null);
 
   return (
-    <SafeAreaView edges={["top"]} className="flex-1 bg-woofBrown">
+    <SafeAreaView edges={["top"]} className="flex-1 bg-woofBrown-500">
       {/* Top bar */}
       <View className="absolute top-24 left-4 z-20">
         <TouchableOpacity
@@ -65,12 +65,14 @@ export default function Map() {
               coordinate={m.coords}
               onPress={() => setSelectedMission(m)}
             >
-              <View className={`px-3 py-1 rounded-md shadow ${
-                    isSelected ? "bg-woofCream" : "bg-white"
-                  }`}>
-                <Text 
+              <View
+                className={`px-3 py-1 rounded-md shadow ${
+                  isSelected ? "bg-woofCream" : "bg-white"
+                }`}
+              >
+                <Text
                   className={`text-[12px] font-manropeSemiBold ${
-                    isSelected ? "text-woofBrown" : "text-black"
+                    isSelected ? "text-woofBrown-500" : "text-black"
                   }`}
                 >
                   {m.title}

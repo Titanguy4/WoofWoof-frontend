@@ -1,6 +1,5 @@
-// app/(tabs)/index.tsx
-import { Redirect } from 'expo-router';
+import { Explore } from "@/screens";
 
-export default function Index() {
-  return <Redirect href="/explore" />; // ou "/woofshare" ou autre
+export default function ExploreTab() {
+  return <Explore />;
 }

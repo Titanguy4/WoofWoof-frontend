@@ -23,14 +23,14 @@ export type Mission = {
   advantages?: string[];
   reviews?: Review[];
   locationDetails?: string;
-  status: 'pending' | 'accepted' | 'rejected' | 'completed';
+  status: "pending" | "accepted" | "rejected" | "completed";
   startDate: string;
   endDate: string;
 };
 
 export const myMissions: Mission[] = [
   {
-    id: 3,
+    id: 1,
     image: require("../assets/images/winefarm.png"),
     image2x: require("../assets/images/winefarm_x2.png"),
     title: "Wine farm",
@@ -57,8 +57,7 @@ export const myMissions: Mission[] = [
         country: "France",
         date: "2024-01-10",
         rating: "4",
-        comment:
-          "Overall, it was a very good experience...",
+        comment: "Overall, it was a very good experience...",
       },
       {
         id: 2,
@@ -66,8 +65,7 @@ export const myMissions: Mission[] = [
         name: "John D.",
         date: "2024-09-10",
         rating: "4.5",
-        comment:
-          "Great opportunity to learn about wine farming...",
+        comment: "Great opportunity to learn about wine farming...",
       },
     ],
     locationDetails: "Domaine de la Vigne, 46000 Cahors, Occitanie, France",
@@ -77,7 +75,7 @@ export const myMissions: Mission[] = [
   },
 
   {
-    id: 5,
+    id: 2,
     image: require("../assets/images/dogshelter.png"),
     image2x: require("../assets/images/dogshelter_x2.png"),
     title: "Animal shelter",
@@ -106,7 +104,7 @@ export const myMissions: Mission[] = [
   },
 
   {
-    id: 4,
+    id: 3,
     image: require("../assets/images/animalfarm.png"),
     image2x: require("../assets/images/animalfarm_x2.png"),
     title: "Animal farm",
@@ -134,7 +132,7 @@ export const myMissions: Mission[] = [
   },
 
   {
-    id: 10,
+    id: 4,
     image: require("../assets/images/kidsart.png"),
     image2x: require("../assets/images/kidsart_x2.png"),
     title: "Children’s workshop",
@@ -152,8 +150,7 @@ export const myMissions: Mission[] = [
         country: "UK",
         date: "2024-03-20",
         rating: "5",
-        comment:
-          "Loved working with the kids! Very positive environment.",
+        comment: "Loved working with the kids! Very positive environment.",
       },
     ],
     locationDetails: "Centre Loisirs Soleil, Lyon, France",

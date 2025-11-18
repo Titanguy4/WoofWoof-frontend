@@ -1,4 +1,4 @@
-import { SearchFiltersProvider } from "@/context/SearchFiltersContext";
+import { AuthProvider } from "@/utils/auth/AuthContext";
 import "../global.css";
 
 import {
@@ -11,10 +11,10 @@ import {
 } from "@expo-google-fonts/manrope";
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { Stack } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
-import React from "react";
-
-
+import React, { useEffect } from "react";
+import "react-native-reanimated";
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
@@ -25,19 +25,20 @@ export default function RootLayout() {
     Manrope_800ExtraBold,
   });
 
+  useEffect(() => {
+    if (fontsLoaded) SplashScreen.hideAsync();
+  }, [fontsLoaded]);
+
   if (!fontsLoaded) return null;
 
-
   return (
-    <SearchFiltersProvider>
+    <AuthProvider>
       <ThemeProvider value={DefaultTheme}>
         <Stack>
-          {/* Layout principal avec les onglets */}
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         </Stack>
-
         <StatusBar style="auto" />
       </ThemeProvider>
-    </SearchFiltersProvider>
+    </AuthProvider>
   );
 }
