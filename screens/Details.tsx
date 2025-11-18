@@ -42,7 +42,7 @@ export default function DetailsScreen({ id }: Props) {
     label: string;
   }) => {
     return (
-      <View className="w-[78px] h-[78px] bg-white rounded-2xl border border-gray-300 items-center justify-center mx-2 mb-4">
+      <View className="w-[78px] h-[78px] bg-white rounded-2xl border border-gray-300 items-center justify-center mx-[6px] mb-4">
         {icon}
         <Text className="text-xs text-gray-700 mt-2 text-center">{label}</Text>
       </View>

@@ -30,7 +30,7 @@ export type Mission = {
 
 export const myMissions: Mission[] = [
   {
-    id: 1,
+    id: 3,
     image: require("../assets/images/winefarm.png"),
     image2x: require("../assets/images/winefarm_x2.png"),
     title: "Wine farm",
@@ -77,7 +77,7 @@ export const myMissions: Mission[] = [
   },
 
   {
-    id: 2,
+    id: 5,
     image: require("../assets/images/dogshelter.png"),
     image2x: require("../assets/images/dogshelter_x2.png"),
     title: "Animal shelter",
@@ -106,7 +106,7 @@ export const myMissions: Mission[] = [
   },
 
   {
-    id: 3,
+    id: 4,
     image: require("../assets/images/animalfarm.png"),
     image2x: require("../assets/images/animalfarm_x2.png"),
     title: "Animal farm",
@@ -134,7 +134,7 @@ export const myMissions: Mission[] = [
   },
 
   {
-    id: 4,
+    id: 10,
     image: require("../assets/images/kidsart.png"),
     image2x: require("../assets/images/kidsart_x2.png"),
     title: "Children’s workshop",

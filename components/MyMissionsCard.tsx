@@ -1,5 +1,6 @@
+import { router } from "expo-router";
 import React from "react";
-import { Image, ImageSourcePropType, Text, View } from "react-native";
+import { Image, ImageSourcePropType, Text, TouchableOpacity, View } from "react-native";
 
 type MyMissionsCardProps = {
     id: number;
@@ -62,7 +63,7 @@ export default function MyMissionsCard({
 
 
     return (
-        <View className="w-full h-[122px] bg-white rounded-2xl flex-row overflow-hidden border border-woofBrown">
+        <TouchableOpacity onPress={() => router.push(`/details/${id}`)} className="w-full h-[122px] bg-white rounded-2xl flex-row overflow-hidden border border-woofBrown">
 
             {/* Image */}
             <View className="relative">
@@ -89,6 +90,6 @@ export default function MyMissionsCard({
                 </Text>
 
             </View>
-        </View>
+        </TouchableOpacity>
     );
 }

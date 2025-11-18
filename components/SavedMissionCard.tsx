@@ -1,7 +1,8 @@
 import { COLORS } from "@/constants/colors";
 import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import React from "react";
-import { Image, ImageSourcePropType, Text, View } from "react-native";
+import { Image, ImageSourcePropType, Text, TouchableOpacity, View } from "react-native";
 
 type SavedMissionCardProps = {
     id: number;
@@ -22,7 +23,7 @@ export default function SavedMissionCard({
     advantages,
 }: SavedMissionCardProps) {
     return (
-        <View className="w-full h-[180px] bg-white rounded-2xl flex-row overflow-hidden border border-woofBrown relative">
+        <TouchableOpacity onPress={() => router.push(`/details/${id}`)} className="w-full h-[180px] bg-white rounded-2xl flex-row overflow-hidden border border-woofBrown relative">
             
             {/* ✅ Heart positioned absolutely */}
             <View className="absolute mt-2 mr-2 top-2 right-2 z-10">
@@ -56,6 +57,6 @@ export default function SavedMissionCard({
                     ))}
                 </View>
             </View>
-        </View>
+        </TouchableOpacity>
     );
 }

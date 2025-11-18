@@ -99,7 +99,7 @@ export default function Discussion({ id, name, image, messages }: Props) {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         className="bg-woofCream px-4 pb-4 pt-2"
       >
-        <View className="flex-row items-center bg-white rounded-3xl px-3 py-2">
+        <View className="flex-row items-center bg-white rounded-3xl px-3 py-2 mb-7">
           <TouchableOpacity className="mr-2">
             <Ionicons name="add" size={24} color={COLORS.woofBrown} />
           </TouchableOpacity>
