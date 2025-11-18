@@ -42,7 +42,8 @@ export const advantages = [
   },
 ];
 
-export const getIconForAdvantage = (key: string): string => {
-  const advantage = advantages.find((item) => item.key === key);
+export const getIconForAdvantage = (label: string): string => {
+  const advantage = advantages.find((item) => item.title === label);
   return advantage ? advantage.icon : "checkmark-circle-outline";
 };
+

@@ -1,3 +1,4 @@
+import { SearchFiltersProvider } from "@/context/SearchFiltersContext";
 import "../global.css";
 
 import {
@@ -28,13 +29,15 @@ export default function RootLayout() {
 
 
   return (
-    <ThemeProvider value={DefaultTheme}>
-      <Stack>
-        {/* Layout principal avec les onglets */}
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      </Stack>
+    <SearchFiltersProvider>
+      <ThemeProvider value={DefaultTheme}>
+        <Stack>
+          {/* Layout principal avec les onglets */}
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        </Stack>
 
-      <StatusBar style="auto" />
-    </ThemeProvider>
+        <StatusBar style="auto" />
+      </ThemeProvider>
+    </SearchFiltersProvider>
   );
 }

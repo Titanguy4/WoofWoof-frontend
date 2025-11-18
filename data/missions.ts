@@ -18,13 +18,35 @@ export type Mission = {
   rating: string;
   distance: string;
   housing: string;
-  heart?: boolean;
-  description? : string;
-  advantages? : string[];
-  reviews? : Review[];
-  locationDetails? : string;
+  heart: boolean;
+  description: string;
+  advantages: string[];
+  reviews: Review[];
+  locationDetails: string;
+  coords: {
+    latitude: number;
+    longitude: number;
+  };
 };
 
+// Helpers
+const defaultDescription =
+  "Join this mission to contribute to local development, help the community and enjoy an enriching volunteer experience.";
+
+const defaultAdvantages = [
+  "Shared housing",
+  "Wifi",
+  "Flexible schedule",
+  "All meals",
+];
+
+const defaultReviews: Review[] = [];
+
+const defaultLocationDetails = "France";
+
+// --------------------
+// Missions Nearby
+// --------------------
 export const missionsNearby: Mission[] = [
   {
     id: 1,
@@ -35,6 +57,11 @@ export const missionsNearby: Mission[] = [
     distance: "25km away",
     housing: "All meals included",
     heart: true,
+    description: defaultDescription,
+    advantages: defaultAdvantages,
+    reviews: defaultReviews,
+    locationDetails: defaultLocationDetails,
+    coords: { latitude: 45.1445, longitude: 1.1540 }, // Dordogne
   },
   {
     id: 2,
@@ -45,6 +72,11 @@ export const missionsNearby: Mission[] = [
     distance: "37km away",
     housing: "Shared housing",
     heart: true,
+    description: defaultDescription,
+    advantages: defaultAdvantages,
+    reviews: defaultReviews,
+    locationDetails: defaultLocationDetails,
+    coords: { latitude: 43.9352, longitude: 5.7800 }, // Provence
   },
   {
     id: 3,
@@ -55,7 +87,9 @@ export const missionsNearby: Mission[] = [
     rating: "3.3",
     distance: "25km away",
     housing: "🍽 All meals included",
-    description: "Our Cahors wine farm offers a unique volunteering experience in the heart of Occitanie. Volunteers can help with grape harvesting, vineyard maintenance, and animal care, while enjoying the peaceful countryside and traditional French farm life. Accommodation is shared on-site, and all meals are included, giving you the chance to experience local cuisine. This is an ideal opportunity for those looking to connect with nature, learn about sustainable farming, and immerse themselves in rural French culture.",
+    heart: false,
+    description:
+      "Our Cahors wine farm offers a unique volunteering experience in the heart of Occitanie...",
     advantages: [
       "Shared housing",
       "AC",
@@ -64,7 +98,6 @@ export const missionsNearby: Mission[] = [
       "All meals",
       "TV",
       "Hot water",
-      "View all",
     ],
     reviews: [
       {
@@ -73,7 +106,8 @@ export const missionsNearby: Mission[] = [
         country: "France",
         date: "2024-01-10",
         rating: "4",
-        comment: "Overall, it was a very good experience. I liked that it was private room because I am too shy to live with some other people",
+        comment:
+          "Overall, it was a very good experience. I liked that it was private room because I am too shy to live with some other people",
       },
       {
         id: 2,
@@ -81,13 +115,18 @@ export const missionsNearby: Mission[] = [
         name: "John D.",
         date: "2024-09-10",
         rating: "4.5",
-        comment: "Great opportunity to learn about wine farming and sustainable practices. The hosts were very welcoming and accommodating.",
+        comment:
+          "Great opportunity to learn about wine farming and sustainable practices.",
       },
     ],
     locationDetails: "Domaine de la Vigne, 46000 Cahors, Occitanie, France",
+    coords: { latitude: 44.4490, longitude: 1.4400 }, // Cahors
   },
 ];
 
+// --------------------
+// Missions Farm
+// --------------------
 export const missionsFarm: Mission[] = [
   {
     id: 3,
@@ -98,36 +137,12 @@ export const missionsFarm: Mission[] = [
     rating: "3.3",
     distance: "25km away",
     housing: "All meals included",
-    description: "Our Cahors wine farm offers a unique volunteering experience in the heart of Occitanie. Volunteers can help with grape harvesting, vineyard maintenance, and animal care, while enjoying the peaceful countryside and traditional French farm life. Accommodation is shared on-site, and all meals are included, giving you the chance to experience local cuisine. This is an ideal opportunity for those looking to connect with nature, learn about sustainable farming, and immerse themselves in rural French culture.",
-    advantages: [
-      "Shared housing",
-      "AC",
-      "Wifi",
-      "Flexible schedule",
-      "All meals",
-      "TV",
-      "Hot water",
-      "View all",
-    ],
-    reviews: [
-      {
-        id: 1,
-        name: "Amanda",
-        country: "France",
-        date: "2024-01-10",
-        rating: "4",
-        comment: "Overall, it was a very good experience. I liked that it was private room because I am too shy to live with some other people",
-      },
-      {
-        id: 2,
-        name: "John D.",
-        country: "USA",
-        date: "2024-09-10",
-        rating: "4.5",
-        comment: "Great opportunity to learn about wine farming and sustainable practices. The hosts were very welcoming and accommodating.",
-      },
-    ],
-    locationDetails: "Domaine de la Vigne, 46000 Cahors, Occitanie, France",
+    heart: false,
+    description: defaultDescription,
+    advantages: defaultAdvantages,
+    reviews: defaultReviews,
+    locationDetails: defaultLocationDetails,
+    coords: { latitude: 44.4490, longitude: 1.4400 },
   },
   {
     id: 4,
@@ -138,11 +153,16 @@ export const missionsFarm: Mission[] = [
     distance: "25km away",
     housing: "Shared housing",
     heart: true,
+    description: defaultDescription,
+    advantages: defaultAdvantages,
+    reviews: defaultReviews,
+    locationDetails: defaultLocationDetails,
+    coords: { latitude: 49.1829, longitude: -0.3707 }, // Caen, Normandy
   },
 ];
 
 // --------------------
-// 🐶 Animal care
+// Missions Animal
 // --------------------
 export const missionsAnimal: Mission[] = [
   {
@@ -153,6 +173,12 @@ export const missionsAnimal: Mission[] = [
     rating: "3.7",
     distance: "453km away",
     housing: "All meals included",
+    heart: false,
+    description: defaultDescription,
+    advantages: defaultAdvantages,
+    reviews: defaultReviews,
+    locationDetails: defaultLocationDetails,
+    coords: { latitude: 43.2965, longitude: 5.3698 }, // Marseille
   },
   {
     id: 6,
@@ -163,11 +189,16 @@ export const missionsAnimal: Mission[] = [
     distance: "376km away",
     housing: "All meals included",
     heart: true,
+    description: defaultDescription,
+    advantages: defaultAdvantages,
+    reviews: defaultReviews,
+    locationDetails: defaultLocationDetails,
+    coords: { latitude: 42.8263, longitude: -0.0064 }, // Pyrenees
   },
 ];
 
 // --------------------
-// 🌿 Environmental Projects
+// Missions Env
 // --------------------
 export const missionsEnv: Mission[] = [
   {
@@ -178,6 +209,12 @@ export const missionsEnv: Mission[] = [
     rating: "4.8",
     distance: "222km away",
     housing: "All meals included",
+    heart: false,
+    description: defaultDescription,
+    advantages: defaultAdvantages,
+    reviews: defaultReviews,
+    locationDetails: defaultLocationDetails,
+    coords: { latitude: 48.1173, longitude: -1.6778 }, // Bretagne
   },
   {
     id: 8,
@@ -187,11 +224,17 @@ export const missionsEnv: Mission[] = [
     rating: "3.5",
     distance: "190km away",
     housing: "All meals included",
+    heart: false,
+    description: defaultDescription,
+    advantages: defaultAdvantages,
+    reviews: defaultReviews,
+    locationDetails: defaultLocationDetails,
+    coords: { latitude: 45.9237, longitude: 6.8694 }, // Alpes
   },
 ];
 
 // --------------------
-// 🎭 Community & Cultural Support
+// Missions Cultural
 // --------------------
 export const missionsCultural: Mission[] = [
   {
@@ -202,6 +245,12 @@ export const missionsCultural: Mission[] = [
     rating: "4.6",
     distance: "310km away",
     housing: "Shared housing",
+    heart: false,
+    description: defaultDescription,
+    advantages: defaultAdvantages,
+    reviews: defaultReviews,
+    locationDetails: defaultLocationDetails,
+    coords: { latitude: 43.7102, longitude: 7.2620 }, // Nice
   },
   {
     id: 10,
@@ -212,32 +261,19 @@ export const missionsCultural: Mission[] = [
     distance: "285km away",
     housing: "All meals included",
     heart: true,
+    description: defaultDescription,
+    advantages: defaultAdvantages,
+    reviews: defaultReviews,
+    locationDetails: defaultLocationDetails,
+    coords: { latitude: 43.6045, longitude: 1.4442 }, // Toulouse
   },
 ];
 
-
-// --------------------
-// 🔧 Icon mapping for advantages
-// --------------------
-export const getIconForAdvantage = (advantage: string): string => {
-  switch (advantage.toLowerCase()) {
-    case "shared housing":
-      return "home";
-    case "ac":
-      return "snow";
-    case "wifi":
-      return "wifi";
-    case "flexible schedule":
-      return "time-outline";
-    case "all meals":
-      return "restaurant";
-    case "tv":
-      return "tv-outline";
-    case "hot water":
-      return "water-outline";
-    case "view all":
-      return "grid";
-    default:
-      return "checkmark-circle-outline"; // fallback icône
-  }
-};
+// Favorites
+export const missionsFavorited: Mission[] = [
+  ...missionsNearby,
+  ...missionsFarm,
+  ...missionsAnimal,
+  ...missionsEnv,
+  ...missionsCultural,
+].filter((m) => m.heart);

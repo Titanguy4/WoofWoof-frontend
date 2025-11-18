@@ -1,14 +1,22 @@
+import NotifComponent from "@/components/NotifComponent";
+import { notifications } from "@/data/notifications";
 import { MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import BackpackerCard from "../components/BackpackerCard";
 import { COLORS } from "../constants/colors";
-import { backpackers } from "../data/backpackers";
 
-export default function BackPackers() {
+
+export default function Notifications() {
+
+
   return (
     <SafeAreaView
       style={{ backgroundColor: COLORS.woofBrown }}
@@ -25,20 +33,19 @@ export default function BackPackers() {
         >
           <MaterialIcons name="chevron-left" size={30} color={COLORS.woofBrown} />
         </TouchableOpacity>
-        <Text className="text-lg font-manropeBold ml-[105px]">Backpackers</Text>
+        <Text className="text-lg font-manropeBold ml-[99.5px]">Notifications</Text>
       </View>
 
       {/* Contenu principal */}
       <ScrollView className="flex-1 bg-woofCream px-4">
-        <View className="mt-4">
-          {backpackers.map((b) => (
-            <BackpackerCard
-              key={b.id}
-              {...b}
-            />
+        <View className="items-center gap-y-6 mt-4">
+          {notifications.map((n) => (
+            <NotifComponent key={n.id} {...n} />
           ))}
         </View>
+
       </ScrollView>
+
     </SafeAreaView>
   );
 }
