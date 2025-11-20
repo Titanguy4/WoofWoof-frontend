@@ -76,7 +76,7 @@ export default function Woofshare() {
       {/* Search + Filter */}
       <View className="bg-white px-6 py-2 flex-row items-center gap-3">
         {/* ✅ Search */}
-        <View className="flex-row items-center bg-white border border-woofGrey rounded-full h-[55px] px-4 flex-1">
+        <View className="flex-row items-center bg-white border border-woofGrey-500 rounded-full h-[55px] px-4 flex-1">
           <TextInput
             placeholder={t("search.placeholder")}
             placeholderTextColor={COLORS.woofGrey[500]}
@@ -88,19 +88,17 @@ export default function Woofshare() {
         {/* ✅ Filter */}
         <TouchableOpacity
           onPress={() => setFiltersOpen(!filtersOpen)}
-          className="flex-row items-center bg-white border border-woofGrey rounded-full px-4 h-[55px]"
+          className="flex-row items-center bg-white border border-woofGrey-500 rounded-full px-4 h-[55px]"
         >
           <Ionicons name="filter" size={20} color={COLORS.woofGrey[500]} />
           <Text className="ml-2 font-manropeMedium">{t("filters")}</Text>
 
-          {/* ✅ Badge dynamic */}
-          {selectedFilters.length > 0 && (
-            <View className="ml-2 bg-woofBrow-500 px-2 rounded-full">
-              <Text className="text-white text-[12px] font-manropeBold">
-                {selectedFilters.length}
-              </Text>
-            </View>
-          )}
+          <View className="ml-2 bg-woofBrown-500 px-2 rounded-full">
+            <Text className="text-white text-[12px] font-manropeBold">
+              {selectedFilters.length}
+            </Text>
+          </View>
+
         </TouchableOpacity>
       </View>
 
@@ -118,16 +116,14 @@ export default function Woofshare() {
                 <TouchableOpacity
                   key={label}
                   onPress={() => toggleFilter(label)}
-                  className={`px-3 py-1 rounded-full border ${
-                    active
-                      ? "bg-woofBrow-500 border-woofBrow-500"
+                  className={`px-3 py-1 rounded-full border ${active
+                      ? "bg-woofBrown-500 border-woofBrown-500"
                       : "border-woofGrey"
-                  }`}
+                    }`}
                 >
                   <Text
-                    className={`text-[12px] ${
-                      active ? "text-white" : "text-black"
-                    }`}
+                    className={`text-[12px] ${active ? "text-white" : "text-black"
+                      }`}
                   >
                     {t(`categories.${label}`)}
                   </Text>
@@ -139,7 +135,7 @@ export default function Woofshare() {
           {/* ✅ Apply Button */}
           <TouchableOpacity
             onPress={() => setFiltersOpen(false)}
-            className="bg-woofBrow-500 px-4 py-2 rounded-full mt-4 items-center"
+            className="bg-woofBrown-500 px-4 py-2 rounded-full mt-4 items-center"
           >
             <Text className="text-white font-manropeBold text-[13px]">
               Apply
@@ -164,7 +160,7 @@ export default function Woofshare() {
                   key={label}
                   onPress={() => toggleFilter(label)}
                   className={`flex-row items-center rounded-full px-2 border
-    ${active ? "bg-woofBrow-500 border-woofBrow-500" : "bg-white border-woofBrow-500"}
+    ${active ? "bg-woofBrown-500 border-woofBrown-500" : "bg-white border-woofBrown-500"}
   `}
                   style={{ width: 135, height: 36 }}
                   activeOpacity={1}
@@ -179,9 +175,8 @@ export default function Woofshare() {
                   />
 
                   <Text
-                    className={`ml-2 text-[12px] ${
-                      active ? "text-white font-manropeBold" : "text-black"
-                    }`}
+                    className={`ml-2 text-[12px] ${active ? "text-white font-manropeBold" : "text-black"
+                      }`}
                     numberOfLines={1}
                   >
                     {t(`categories.${label}`)}
@@ -194,7 +189,7 @@ export default function Woofshare() {
       </View>
 
       {/* Images Grid */}
-      <ScrollView className="flex-1 bg-woofCream px-4 pt-2">
+      <ScrollView className="flex-1 bg-woofCream-500 px-4 pt-2">
         <View className="flex-row justify-between">
           {/* Left Column */}
           <View className="w-[48%] gap-y-5">

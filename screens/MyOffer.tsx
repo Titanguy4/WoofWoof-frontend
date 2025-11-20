@@ -63,7 +63,7 @@ export default function MyOffer() {
       </View>
 
       {/* Contenu principal */}
-      <ScrollView className="flex-1 bg-woofCream px-4">
+      <ScrollView className="flex-1 bg-woofCream-500 px-4">
         {/* Mission card */}
         <View className="items-center mt-4">
           <OfferMissionCard

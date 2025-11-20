@@ -85,7 +85,7 @@ export default function Missions() {
       </View>
 
       {/* ScrollView */}
-      <ScrollView className="flex-1 bg-woofCream px-4">
+      <ScrollView className="flex-1 bg-woofCream-500 px-4">
         <View className="items-center mt-4 gap-y-6">
           {filteredMissions.length > 0 ? (
             filteredMissions.map((mission) => (

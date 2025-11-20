@@ -155,7 +155,7 @@ export default function Search() {
         </TouchableOpacity>
 
         {/* SEARCH BAR */}
-        <View className="ml-6 flex-row items-center bg-white border border-woofGrey rounded-full h-[55px] px-4 flex-1">
+        <View className="ml-6 flex-row items-center bg-white border border-woofGrey-500 rounded-full h-[55px] px-4 flex-1">
           <TextInput
             placeholder="Where do you want to help?"
             placeholderTextColor={COLORS.woofGrey[500]}
@@ -171,31 +171,31 @@ export default function Search() {
       <View className="bg-white p-4 flex-row items-center gap-3 border-b border-gray-200">
         <TouchableOpacity
           onPress={() => setShowDateModal(true)}
-          className="flex-1 border border-woofGrey rounded-full px-4 h-[45px] justify-center"
+          className="flex-1 border border-woofGrey-500 rounded-full px-4 h-[45px] justify-center"
         >
-          <Text className="font-manropeMedium text-[13px] text-woofBrow-500">
-            Tonight
+          <Text className="font-manropeMedium text-[13px] text-gray-500">
+            Start
           </Text>
-          <Text className="text-[12px] text-gray-500">{startDate}</Text>
+          <Text className="text-[12px] text-woofBrown-500">{startDate}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={() => setShowDateModal(true)}
-          className="flex-1 border border-woofGrey rounded-full px-4 h-[45px] justify-center"
+          className="flex-1 border border-woofGrey-500 rounded-full px-4 h-[45px] justify-center"
         >
-          <Text className="font-manropeMedium text-[13px] text-woofBrow-500">
-            Tomorrow
+          <Text className="font-manropeMedium text-[13px] text-gray-500">
+            End
           </Text>
-          <Text className="text-[12px] text-gray-500">{endDate}</Text>
+          <Text className="text-[12px] text-woofBrown-500 ">{endDate}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={() => router.push("/searchfilter")}
-          className="flex-row items-center bg-white border border-woofGrey rounded-full px-4 h-[45px]"
+          className="flex-row items-center bg-white border border-woofGrey-500 rounded-2xl px-4 h-[45px]"
         >
           <Ionicons name="filter" size={20} color={COLORS.woofGrey[500]} />
           <Text className="ml-2 font-manropeMedium">Filter</Text>
-          <View className="ml-2 bg-woofBrow-500 px-2 rounded-full">
+          <View className="ml-2 bg-woofBrown-500 px-2 rounded-full">
             <Text className="text-white text-[12px] font-manropeBold">
               {activeCount}
             </Text>
@@ -329,12 +329,12 @@ export default function Search() {
 
             {/* Tabs */}
             <View className="flex-row mt-6 mb-4">
-              <View className="flex-1 bg-woofBrow-500 rounded-full py-2 px-3">
-                <Text className="text-white font-manropeBold">Start</Text>
-                <Text className="text-white opacity-80">{startDate}</Text>
+              <View className="flex-1 bg-gray-200 rounded-full py-2 px-3">
+                <Text className="text-black font-manrope">Start</Text>
+                <Text className="text-gray-500">{startDate}</Text>
               </View>
               <View className="flex-1 bg-gray-200 rounded-full py-2 px-3 ml-3">
-                <Text className="font-manropeBold text-gray-600">End</Text>
+                <Text className="font-manrope text-black">End</Text>
                 <Text className="text-gray-500">{endDate || "-"}</Text>
               </View>
             </View>
@@ -371,7 +371,7 @@ export default function Search() {
 
               <TouchableOpacity
                 onPress={() => setShowDateModal(false)}
-                className="bg-woofBrow-500 w-[48%] rounded-xl py-3 items-center"
+                className="bg-woofBrown-500 w-[48%] rounded-xl py-3 items-center"
               >
                 <Text className="text-white font-manropeMedium">Done</Text>
               </TouchableOpacity>

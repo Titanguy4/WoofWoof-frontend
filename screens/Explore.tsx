@@ -20,8 +20,11 @@ export default function ExploreScreen() {
       <View className="bg-woofBrown-500 p-4 gap-y-3">
         <View className="flex-row pt-safe ">
           <View className="h-[48px] w-[267px] gap-2  ">
-            <Text className="text-xl font-manropeBold text-black  ">
-              {t("header.subtitle")}
+            <Text className="text-base font-manrope text-white ">
+              Find your place to make an impact
+            </Text>
+            <Text className="text-xl font-manropeBold">
+              WOOF WOOF !
             </Text>
           </View>
           <View className="flex-row justify-end items-center gap-2 flex-1">

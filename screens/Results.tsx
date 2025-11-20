@@ -146,7 +146,7 @@ export default function Results() {
 
         <TouchableOpacity
           onPress={() => router.push("/search")}
-          className="flex-row items-center bg-white border border-woofGrey rounded-full px-4 h-[45px] ml-auto mr-4"
+          className="flex-row items-center bg-white border border-woofGrey-500 rounded-full px-4 h-[45px] ml-auto mr-4"
         >
           <Text className="font-manropeMedium">Change</Text>
         </TouchableOpacity>
@@ -169,11 +169,11 @@ export default function Results() {
         {/* Filter button */}
         <TouchableOpacity
           onPress={() => router.push("/searchfilter")}
-          className="flex-row items-center bg-white border border-woofGrey rounded-full px-4 h-[45px]"
+          className="flex-row items-center bg-white border border-woofGrey-500 rounded-full px-4 h-[45px]"
         >
           <Ionicons name="filter" size={20} color={COLORS.woofGrey[500]} />
           <Text className="ml-2 font-manropeMedium">Filter</Text>
-          <View className="ml-2 bg-woofBrow-500 px-2 rounded-full">
+          <View className="ml-2 bg-woofBrown-500 px-2 rounded-full">
             <Text className="text-white text-[12px] font-manropeBold">
               {activeCount}
             </Text>
@@ -184,7 +184,7 @@ export default function Results() {
       {/* --------------------------------------- */}
       {/* LISTE DES MISSIONS */}
       {/* --------------------------------------- */}
-      <ScrollView className="flex-1 bg-woofCream px-4">
+      <ScrollView className="flex-1 bg-woofCream-500 px-4">
         <View className="items-center gap-y-6 mt-4">
           {fullyFiltered.length === 0 ? (
             <Text className="text-gray-500 mt-10 text-[16px]">
