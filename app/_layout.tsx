@@ -1,3 +1,4 @@
+import { SearchFiltersProvider } from "@/context/SearchFiltersContext";
 import "@/i18n";
 import { AuthProvider } from "@/utils/auth/AuthContext";
 import {
@@ -33,12 +34,14 @@ export default function RootLayout() {
 
   return (
     <AuthProvider>
-      <ThemeProvider value={DefaultTheme}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        </Stack>
-        <StatusBar style="auto" />
-      </ThemeProvider>
+      <SearchFiltersProvider>
+        <ThemeProvider value={DefaultTheme}>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          </Stack>
+          <StatusBar style="auto" />
+        </ThemeProvider>
+      </SearchFiltersProvider>
     </AuthProvider>
   );
 }
