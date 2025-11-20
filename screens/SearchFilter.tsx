@@ -2,6 +2,7 @@ import { COLORS } from "@/utils/constants/colors";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Pressable,
   ScrollView,
@@ -20,6 +21,7 @@ import {
 } from "../data/missions";
 
 export default function SearchFilter() {
+  const { t } = useTranslation();
   const { filters, toggleFilter, clearFilters } = useSearchFilters();
 
   // -------------------------------
@@ -72,15 +74,17 @@ export default function SearchFilter() {
       <View className="items-center w-full h-[56px] bg-white flex-row px-6 justify-between">
         <TouchableOpacity onPress={() => router.back()}>
           <Text className="text-sm text-woofBrown-500 font-manropeSemiBold">
-            Cancel
+            {t("searchFilter.cancel")}
           </Text>
         </TouchableOpacity>
 
-        <Text className="text-lg font-manropeBold">Filter</Text>
+        <Text className="text-lg font-manropeBold">
+          {t("searchFilter.title")}
+        </Text>
 
         <TouchableOpacity onPress={clearFilters}>
           <Text className="text-sm text-woofBrown-500 font-manropeSemiBold">
-            Clear all
+            {t("searchFilter.clearAll")}
           </Text>
         </TouchableOpacity>
       </View>
@@ -92,7 +96,9 @@ export default function SearchFilter() {
         {/* --------------------- */}
         <View className="mt-6">
           <View className="flex-row justify-between items-center mb-3">
-            <Text className="text-[17px] font-manropeBold">Advantages</Text>
+            <Text className="text-[17px] font-manropeBold">
+              {t("searchFilter.advantages")}
+            </Text>
           </View>
 
           <View className="flex-row flex-wrap gap-2">
@@ -125,7 +131,9 @@ export default function SearchFilter() {
         {/* --------------------- */}
         <View>
           <View className="flex-row justify-between mb-3">
-            <Text className="text-[17px] font-manropeBold">Activity type</Text>
+            <Text className="text-[17px] font-manropeBold">
+              {t("searchFilter.activityType")}
+            </Text>
           </View>
 
           <View className="flex-row flex-wrap gap-2">
@@ -158,7 +166,7 @@ export default function SearchFilter() {
         {/* --------------------- */}
         <View>
           <Text className="text-[17px] font-manropeBold mb-3">
-            Volunteer profile
+            {t("searchFilter.volunteerProfile")}
           </Text>
 
           <View className="flex-row flex-wrap gap-2">
@@ -189,7 +197,7 @@ export default function SearchFilter() {
           className="bg-woofBrown-500 mt-12 mb-10 py-4 rounded-xl items-center"
         >
           <Text className="text-white font-manropeBold text-[16px]">
-            Apply Filters
+            {t("searchFilter.applyFilters")}
           </Text>
         </TouchableOpacity>
       </ScrollView>

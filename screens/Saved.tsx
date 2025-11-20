@@ -4,11 +4,13 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { missionsFavorited } from "../data/missions";
 
 export default function Saved() {
+  const { t } = useTranslation("saved");
   return (
     <SafeAreaView
       style={{ backgroundColor: COLORS.woofBrown[500] }}
@@ -29,7 +31,9 @@ export default function Saved() {
             color={COLORS.woofBrown[500]}
           />
         </TouchableOpacity>
-        <Text className="text-lg font-manropeBold ml-[122.5px]">Saved</Text>
+        <Text className="text-lg font-manropeBold ml-[122.5px]">
+          {t("title")}
+        </Text>
       </View>
 
       {/* Contenu principal */}

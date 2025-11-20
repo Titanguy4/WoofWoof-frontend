@@ -1,0 +1,18 @@
+{
+    "title": "WoofShare",
+    "search": {
+        "placeholder": "Search"
+    },
+    "filters": "Filters",
+    "filter": {
+        "by": "Filter by",
+        "apply": "Apply"
+    },
+    "categories": {
+        "farm": "Farm work",
+        "animal": "Animal care",
+        "cultural": "Cultural",
+        "environment": "Environment"
+    },
+    "noResults": "No results found"
+}

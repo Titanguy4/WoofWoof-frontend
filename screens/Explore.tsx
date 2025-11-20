@@ -2,6 +2,7 @@ import { COLORS } from "@/utils/constants/colors";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import HomeMissionCard from "../components/HomeMissionCard";
 import {
@@ -13,13 +14,14 @@ import {
 } from "../data/missions";
 
 export default function ExploreScreen() {
+  const { t } = useTranslation("explore");
   return (
     <>
       <View className="bg-woofBrown-500 p-4 gap-y-3">
         <View className="flex-row pt-safe ">
           <View className="h-[48px] w-[267px] gap-2  ">
             <Text className="text-xl font-manropeBold text-black  ">
-              WOOF WOOF !
+              {t("header.subtitle")}
             </Text>
           </View>
           <View className="flex-row justify-end items-center gap-2 flex-1">
@@ -47,7 +49,7 @@ export default function ExploreScreen() {
                 style={{ color: COLORS.woofGrey[500] }}
                 className="flex-1 text-[15px] font-manropeMedium ml-4"
               >
-                Where do you want to help?
+                {t("search.placeholder")}
               </Text>
             </TouchableOpacity>
             <Ionicons
@@ -72,9 +74,11 @@ export default function ExploreScreen() {
       >
         {/* Nearby */}
         <View className="px-4 flex-row justify-between items-center  ">
-          <Text className="font-manropeBold text-lg mt-4  ">Nearby</Text>
+          <Text className="font-manropeBold text-lg mt-4  ">
+            {t("sections.nearby")}
+          </Text>
           <Text className="font-manropeSemiBold underline text-xs mt-4  ">
-            Show all
+            {t("sections.showAll")}
           </Text>
         </View>
         <View className="px-4 mt-3">
@@ -86,9 +90,11 @@ export default function ExploreScreen() {
         </View>
         {/* Farm work */}
         <View className="px-4 flex-row justify-between items-center  ">
-          <Text className="font-manropeBold text-lg mt-4  ">Farm work</Text>
+          <Text className="font-manropeBold text-lg mt-4  ">
+            {t("sections.farm")}
+          </Text>
           <Text className="font-manropeSemiBold underline text-xs mt-4  ">
-            Show all
+            {t("sections.showAll")}
           </Text>
         </View>
         <View className="px-4 mt-3">
@@ -100,9 +106,11 @@ export default function ExploreScreen() {
         </View>
         {/* Animal care */}
         <View className="px-4 flex-row justify-between items-center  ">
-          <Text className="font-manropeBold text-lg mt-4  ">Animal care</Text>
+          <Text className="font-manropeBold text-lg mt-4  ">
+            {t("sections.animal")}
+          </Text>
           <Text className="font-manropeSemiBold underline text-xs mt-4  ">
-            Show all
+            {t("sections.showAll")}
           </Text>
         </View>
         <View className="px-4 mt-3">
@@ -115,10 +123,10 @@ export default function ExploreScreen() {
         {/* Environmental Projects */}
         <View className="px-4 flex-row justify-between items-center  ">
           <Text className="font-manropeBold text-lg mt-4  ">
-            Environmental Projects
+            {t("sections.environment")}
           </Text>
           <Text className="font-manropeSemiBold underline text-xs mt-4  ">
-            Show all
+            {t("sections.showAll")}
           </Text>
         </View>
         <View className="px-4 mt-3">
@@ -131,10 +139,10 @@ export default function ExploreScreen() {
         {/* Community & Cultural Support */}
         <View className="px-4 flex-row justify-between items-center  ">
           <Text className="font-manropeBold text-lg mt-4  ">
-            Community & Cultural Support
+            {t("sections.community")}
           </Text>
           <Text className="font-manropeSemiBold underline text-xs mt-4  ">
-            Show all
+            {t("sections.showAll")}
           </Text>
         </View>
         <View className="px-4 mt-3">

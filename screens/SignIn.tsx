@@ -4,6 +4,7 @@ import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { Eye, EyeOff } from "lucide-react-native";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Image,
   Pressable,
@@ -15,6 +16,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SignIn() {
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -36,7 +38,7 @@ export default function SignIn() {
           <MaterialIcons name="chevron-left" size={30} color="white" />
         </TouchableOpacity>
         <Text className="text-xl text-white font-manropeBold ml-4">
-          Sign in
+          {t("auth.signInTitle")}
         </Text>
       </View>
 
@@ -44,10 +46,10 @@ export default function SignIn() {
       <View className="rounded-t-[40px] flex-1 bg-woofCream-500 p-6">
         <View className="px-4 gap-y-1">
           <Text className="text-2xl text-woofBrown-500 font-manropeSemiBold">
-            Welcome back !
+            {t("auth.welcomeBack")}
           </Text>
           <Text className="text-sm text-black font-manropeSemiBold">
-            Hello there, sign in to continue
+            {t("auth.welcomeSubtitle")}
           </Text>
         </View>
 
@@ -64,7 +66,7 @@ export default function SignIn() {
             className="mt-[52px] border border-woofGrey-500 rounded-xl px-4 py-3 text-base text-black font-manrope"
             value={email}
             onChangeText={setEmail}
-            placeholder={"Email"}
+            placeholder={t("auth.emailPlaceholder")}
           />
 
           <View className="relative mb-6">
@@ -72,7 +74,7 @@ export default function SignIn() {
               className="border border-woofGrey-500 rounded-xl px-4 py-3 text-base text-black font-manrope pr-10"
               value={password}
               onChangeText={setPassword}
-              placeholder="Password"
+              placeholder={t("auth.passwordPlaceholder")}
               secureTextEntry={!showPassword}
               autoCapitalize="none"
             />
@@ -93,27 +95,27 @@ export default function SignIn() {
             className="items-end"
           >
             <Text className="text-sm text-woofGrey-500 font-manropeSemiBold">
-              Forgot your password ?
+              {t("auth.forgotPassword")}
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity className="rounded-2xl py-3 mt-[58px] items-center bg-woofBrown-500 text-white">
             <Text className="text-white font-manropeBold text-base">
-              Sign in
+              {t("auth.signInButton")}
             </Text>
           </TouchableOpacity>
 
           <View className="items-center mt-11">
             <View className="flex-row gap-x-2">
               <Text className="text-sm text-black font-manrope">
-                Don&apos;t have an account?{" "}
+                {t("auth.dontHaveAccount")}{" "}
               </Text>
               <TouchableOpacity
                 onPress={() => router.push("/signup")}
                 className="items-end"
               >
                 <Text className="text-sm text-woofBrown-500 font-manropeSemiBold">
-                  Sign Up
+                  {t("auth.signUp")}
                 </Text>
               </TouchableOpacity>
             </View>

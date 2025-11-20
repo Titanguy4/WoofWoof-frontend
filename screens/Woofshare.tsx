@@ -3,6 +3,7 @@ import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Image,
   ScrollView,
@@ -15,11 +16,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { mockImages } from "../data/woofshare";
 
 export default function Woofshare() {
+  const { t } = useTranslation("woofshare");
+
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   const [selectedFilters, setSelectedFilters] = useState<string[]>([
-    "Farm work",
-    "Animal care",
+    "farm",
+    "animal",
   ]);
 
   const toggleFilter = (label: string) => {
@@ -29,20 +32,20 @@ export default function Woofshare() {
         : [...prev, label],
     );
   };
-  type CategoryLabel = "Farm work" | "Animal care" | "Cultural" | "Environment";
+  type CategoryKey = "farm" | "animal" | "cultural" | "environment";
 
-  const categoryLabels: CategoryLabel[] = [
-    "Farm work",
-    "Animal care",
-    "Cultural",
-    "Environment",
+  const categoryLabels: CategoryKey[] = [
+    "farm",
+    "animal",
+    "cultural",
+    "environment",
   ];
 
-  const categoryIcons: Record<CategoryLabel, any> = {
-    "Farm work": require("../assets/images/farmType.png"),
-    "Animal care": require("../assets/images/animalType.png"),
-    Cultural: require("../assets/images/culturalType.png"),
-    Environment: require("../assets/images/environmentalType.png"),
+  const categoryIcons: Record<CategoryKey, any> = {
+    farm: require("../assets/images/farmType.png"),
+    animal: require("../assets/images/animalType.png"),
+    cultural: require("../assets/images/culturalType.png"),
+    environment: require("../assets/images/environmentalType.png"),
   };
 
   return (
@@ -65,7 +68,9 @@ export default function Woofshare() {
             color={COLORS.woofBrown[500]}
           />
         </TouchableOpacity>
-        <Text className="text-lg font-manropeBold ml-[106.5px]">Woofshare</Text>
+        <Text className="text-lg font-manropeBold ml-[106.5px]">
+          {t("title")}
+        </Text>
       </View>
 
       {/* Search + Filter */}
@@ -73,7 +78,7 @@ export default function Woofshare() {
         {/* ✅ Search */}
         <View className="flex-row items-center bg-white border border-woofGrey rounded-full h-[55px] px-4 flex-1">
           <TextInput
-            placeholder="Search"
+            placeholder={t("search.placeholder")}
             placeholderTextColor={COLORS.woofGrey[500]}
             className="flex-1 text-[15px] font-manropeMedium ml-2"
           />
@@ -86,7 +91,7 @@ export default function Woofshare() {
           className="flex-row items-center bg-white border border-woofGrey rounded-full px-4 h-[55px]"
         >
           <Ionicons name="filter" size={20} color={COLORS.woofGrey[500]} />
-          <Text className="ml-2 font-manropeMedium">Filter</Text>
+          <Text className="ml-2 font-manropeMedium">{t("filters")}</Text>
 
           {/* ✅ Badge dynamic */}
           {selectedFilters.length > 0 && (
@@ -102,7 +107,9 @@ export default function Woofshare() {
       {/* ✅ FILTER POPOVER */}
       {filtersOpen && (
         <View className="absolute top-[150px] right-6 bg-white p-4 rounded-2xl shadow-lg z-50 w-[210px]">
-          <Text className="font-manropeBold mb-2 text-[15px]">Filter by</Text>
+          <Text className="font-manropeBold mb-2 text-[15px]">
+            {t("filter.by")}
+          </Text>
 
           <View className="flex-row flex-wrap gap-2">
             {categoryLabels.map((label) => {
@@ -122,7 +129,7 @@ export default function Woofshare() {
                       active ? "text-white" : "text-black"
                     }`}
                   >
-                    {label}
+                    {t(`categories.${label}`)}
                   </Text>
                 </TouchableOpacity>
               );
@@ -177,7 +184,7 @@ export default function Woofshare() {
                     }`}
                     numberOfLines={1}
                   >
-                    {label}
+                    {t(`categories.${label}`)}
                   </Text>
                 </TouchableOpacity>
               );

@@ -5,12 +5,14 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SegmentedControlTab from "react-native-segmented-control-tab";
 
 export default function Missions() {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
+  const { t } = useTranslation("missions");
 
   const handleTabChange = (index: number) => setSelectedIndex(index);
 
@@ -57,7 +59,7 @@ export default function Missions() {
       {/* Segmented Control */}
       <View className="bg-white px-4 py-3">
         <SegmentedControlTab
-          values={["Ongoing", "History"]}
+          values={[t("tabs.ongoing"), t("tabs.history")]}
           selectedIndex={selectedIndex}
           onTabPress={handleTabChange}
           borderRadius={20}
@@ -90,7 +92,7 @@ export default function Missions() {
               <MyMissionsCard key={mission.id} {...mission} />
             ))
           ) : (
-            <Text className="text-gray-500 mt-8">No missions found</Text>
+            <Text className="text-gray-500 mt-8">{t("noMissionsFound")}</Text>
           )}
         </View>
       </ScrollView>

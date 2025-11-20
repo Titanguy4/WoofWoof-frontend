@@ -3,10 +3,12 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ForgotPassword() {
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
 
   // 🔍 Vérifie si l'email est valide
@@ -34,7 +36,7 @@ export default function ForgotPassword() {
           <MaterialIcons name="chevron-left" size={30} color="black" />
         </TouchableOpacity>
         <Text className="text-xl text-black font-manropeBold ml-4">
-          Forgot password
+          {t("forgotPassword.title")}
         </Text>
       </View>
 
@@ -42,7 +44,7 @@ export default function ForgotPassword() {
       <View className="px-6 mt-6">
         <View className="rounded-2xl bg-white p-6">
           <Text className="text-woofDarkGrey font-manropeSemiBold text-sm mb-4">
-            Type your email
+            {t("forgotPassword.instructions")}
           </Text>
           <TextInput
             className="border border-woofGrey rounded-xl px-4 py-3 text-base text-black font-manrope mb-6"
@@ -53,7 +55,7 @@ export default function ForgotPassword() {
             autoCapitalize="none"
           />
           <Text className="text-black font-manropeSemiBold text-base">
-            We’ll text you a code by mail!
+            {t("forgotPassword.sentMessage")}
           </Text>
 
           {/* ✅ Bouton "Send" désactivé si email invalide */}
@@ -69,7 +71,7 @@ export default function ForgotPassword() {
                 isDisabled ? "text-white" : "text-white"
               }`}
             >
-              Send
+              {t("forgotPassword.send")}
             </Text>
           </TouchableOpacity>
         </View>

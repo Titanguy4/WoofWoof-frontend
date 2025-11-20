@@ -12,12 +12,13 @@ import {
   ShieldCheck,
   SquarePen,
 } from "lucide-react-native";
+import { useTranslation } from "react-i18next";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 export default function ProfileScreen() {
   const router: Router = useRouter();
   const { user, logout, openAccountPage, isWoofer } = useAuth();
-  console.log(isWoofer);
+  const { t } = useTranslation("profil");
 
   return (
     <ScrollView
@@ -55,38 +56,38 @@ export default function ProfileScreen() {
           </View>
 
           <Text className="font-manropeSemiBold text-base text-woofBrown-500">
-            27 Volunteers hosted
+            27 {t("numHostVolunteers")}
           </Text>
         </View>
       </View>
 
       <View className="bg-woofCream-50 p-4 gap-y-1 mt-10 rounded-t-3xl flex-1">
-        <Section title="General">
+        <Section title={t("general")}>
           <SectionButton
             icon={<Globe />}
-            label={"Language"}
+            label={t("languages.title")}
             onPress={() => router.push("/profile/languages")}
           ></SectionButton>
           <SectionButton
             icon={<Bell />}
-            label={"Notifications"}
+            label={t("notifications")}
             onPress={() => router.push("/profile/notifications")}
           />
         </Section>
-        <Section title="Preferences">
+        <Section title={t("general")}>
           <SectionButton
             icon={<ShieldCheck />}
-            label={"Legal & Policies"}
+            label={t("legal")}
             onPress={() => router.push("/profile/policies")}
           />
           <SectionButton
             icon={<MessageCircleQuestionMark />}
-            label={"Help & Support"}
+            label={t("help")}
             onPress={() => router.push("/profile/help")}
           />
         </Section>
         <View className="mt-5">
-          <SectionButton label={"Sign out"} onPress={logout} />
+          <SectionButton label={t("signout")} onPress={logout} />
         </View>
       </View>
     </ScrollView>
