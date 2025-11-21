@@ -36,7 +36,7 @@ export default function Conversation({
   return (
     <TouchableOpacity
       onPress={handlePress}
-      className="flex-row items-center py-4 border-b border-woofCream"
+      className="flex-row items-center py-4 border-b border-gray-300"
     >
       {image ? (
         <Image

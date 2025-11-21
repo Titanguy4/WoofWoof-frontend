@@ -40,7 +40,7 @@ export default function RequestSuccessScreen() {
     >
       <StatusBar backgroundColor={COLORS.woofBrown[500]} style="light" />
 
-      <ScrollView className="flex-1 bg-woofCream px-4">
+      <ScrollView className="flex-1 bg-woofCream-500 px-4">
         <View className="rounded-2xl items-center mt-12 px-4 bg-white">
           <View className="p-4 border-b border-gray-300 w-full items-center">
             <Image
@@ -78,7 +78,7 @@ export default function RequestSuccessScreen() {
           <View className="w-full px-10 items-center">
             <TouchableOpacity
               onPress={() => router.push("/(tabs)/missions")}
-              className="bg-woofBrow-500 w-full h-14 px-3 py-1 mt-7 rounded-2xl items-center justify-center mb-6"
+              className="bg-woofBrown-500 w-full h-14 px-3 py-1 mt-7 rounded-2xl items-center justify-center mb-6"
             >
               <Text className="text-base font-manropeBold text-white">
                 View Request
@@ -86,7 +86,7 @@ export default function RequestSuccessScreen() {
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => router.push("/(tabs)/explore")}
+              onPress={() => router.push("/(tabs)")}
               className="bg-white border border-gray-300 w-full h-14 px-3 py-1 rounded-2xl items-center justify-center mb-6"
             >
               <Text className="text-base font-manropeBold text-black">
