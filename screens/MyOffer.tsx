@@ -77,7 +77,7 @@ export default function MyOffer() {
         <View className="mt-96 items-center">
           <TouchableOpacity
             onPress={() => setIsActivityModalVisible(true)}
-            className="bg-woofBrow-500 w-36 h-12 px-3 py-1 rounded-2xl items-center justify-center mb-6 flex-row gap-2"
+            className="bg-woofBrown-500 w-36 h-12 px-3 py-1 rounded-2xl items-center justify-center mb-6 flex-row gap-2"
           >
             <Text className="text-base font-manropeBold text-white">
               {t("addNow")}

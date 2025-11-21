@@ -35,7 +35,7 @@ export default function Notifications() {
       </View>
 
       {/* Contenu principal */}
-      <ScrollView className="flex-1 bg-woofCream px-4">
+      <ScrollView className="flex-1 bg-woofCream-500 px-4">
         <View className="items-center gap-y-6 mt-4">
           {notifications.map((n) => (
             <NotifComponent key={n.id} {...n} />
