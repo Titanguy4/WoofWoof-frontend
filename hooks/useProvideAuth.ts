@@ -18,14 +18,16 @@ export interface IAuthContext {
 }
 
 interface KeycloakTokenPayload {
+  sub: string;
   realm_access?: { roles: string[] };
   resource_access?: { [clientName: string]: { roles: string[] } };
 }
 
 export function useProvideAuth(): IAuthContext {
   const [accessToken, setAccessToken] = useState<string | null>(null);
-  const [discovery, setDiscovery] =
-    useState<AuthSession.DiscoveryDocument | null>(null);
+  const [discovery, setDiscovery] = useState<
+    AuthSession.DiscoveryDocument | null
+  >(null);
   const [user, setUser] = useState<Record<string, any>>({ name: "Username " });
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [userRoles, setUserRoles] = useState<string[]>([]);
@@ -40,8 +42,8 @@ export function useProvideAuth(): IAuthContext {
     async function initAuth() {
       try {
         const discoveryUrl: string = `${process.env.EXPO_PUBLIC_KEYCLOAK_BASE}`;
-        const result: AuthSession.DiscoveryDocument =
-          await AuthSession.fetchDiscoveryAsync(discoveryUrl);
+        const result: AuthSession.DiscoveryDocument = await AuthSession
+          .fetchDiscoveryAsync(discoveryUrl);
         setDiscovery(result);
 
         // Check if the accessToken doesn't already exist (if user already connect)
@@ -51,9 +53,9 @@ export function useProvideAuth(): IAuthContext {
         }
       } catch (error) {
         const initAuthErrMessage: string = "Erreur d'initialisation de l'Auth:";
-        if (error instanceof Error)
+        if (error instanceof Error) {
           console.error(initAuthErrMessage, error.message);
-        else console.log(initAuthErrMessage, error);
+        } else console.log(initAuthErrMessage, error);
       } finally {
         setIsLoading(false);
       }
@@ -83,22 +85,22 @@ export function useProvideAuth(): IAuthContext {
             },
           };
 
-          const tokenResult: AuthSession.TokenResponse =
-            await AuthSession.exchangeCodeAsync(config, discovery);
+          const tokenResult: AuthSession.TokenResponse = await AuthSession
+            .exchangeCodeAsync(config, discovery);
 
           setAccessToken(tokenResult.accessToken);
           decodeAndSetRoles(tokenResult.accessToken);
           await AuthStorage.saveTokens(tokenResult.accessToken);
 
-          const userInfo: Record<string, any> =
-            await AuthSession.fetchUserInfoAsync(tokenResult, discovery);
+          const userInfo: Record<string, any> = await AuthSession
+            .fetchUserInfoAsync(tokenResult, discovery);
           if (userInfo) setUser(userInfo);
         }
       } catch (e) {
         const exchangeCodeErrorMessage = "Erreur d'échange de code :";
-        if (e instanceof Error)
+        if (e instanceof Error) {
           console.error(exchangeCodeErrorMessage, e.message);
-        else console.error(exchangeCodeErrorMessage, e);
+        } else console.error(exchangeCodeErrorMessage, e);
       }
     }
 
@@ -123,7 +125,6 @@ export function useProvideAuth(): IAuthContext {
   }
 
   /**
-   *
    * @returns Promise<void>
    */
   async function refreshUserData(): Promise<void> {
@@ -135,15 +136,16 @@ export function useProvideAuth(): IAuthContext {
     try {
       const tokenResponse = new AuthSession.TokenResponse({ accessToken });
 
-      const userInfo: Record<string, any> =
-        await AuthSession.fetchUserInfoAsync(tokenResponse, discovery);
+      const userInfo: Record<string, any> = await AuthSession
+        .fetchUserInfoAsync(tokenResponse, discovery);
 
       if (userInfo) {
         setUser(userInfo);
       }
     } catch (e) {
-      if (e instanceof Error)
+      if (e instanceof Error) {
         console.error("Erreur lors du refreshUserData:", e.message);
+      }
       console.error("Erreur lors du refreshUserData:", e);
     }
   }
@@ -152,7 +154,8 @@ export function useProvideAuth(): IAuthContext {
    * Using for edit the account of a user in keycloak
    */
   async function openAccountPage(): Promise<void> {
-    const keycloakAccountUrl: string = `${process.env.EXPO_PUBLIC_KEYCLOAK_BASE}/account/`;
+    const keycloakAccountUrl: string =
+      `${process.env.EXPO_PUBLIC_KEYCLOAK_BASE}/account/`;
 
     try {
       // Ouvre le navigateur et ATTEND que l'utilisateur le ferme
@@ -181,8 +184,7 @@ export function useProvideAuth(): IAuthContext {
 
     if (discovery?.endSessionEndpoint) {
       try {
-        const logoutUrl =
-          `${discovery.endSessionEndpoint}` +
+        const logoutUrl = `${discovery.endSessionEndpoint}` +
           `?client_id=${authRequestConfig.clientId}`;
         await WebBrowser.openBrowserAsync(logoutUrl);
       } catch (error) {
@@ -201,7 +203,12 @@ export function useProvideAuth(): IAuthContext {
       return;
     }
     try {
+      console.log(token);
       const decodedToken = jwtDecode<KeycloakTokenPayload>(token);
+      // 📌 Récupération de l'id utilisateur
+      const keycloakUserId = decodedToken.sub;
+      console.log("User ID Keycloak:", keycloakUserId);
+      setUser((prev) => ({ ...prev, id: keycloakUserId }));
       const realmRoles = decodedToken.realm_access?.roles || [];
       setUserRoles(realmRoles);
     } catch (e) {
