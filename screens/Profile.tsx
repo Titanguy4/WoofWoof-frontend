@@ -25,7 +25,7 @@ export default function ProfileScreen() {
   // --- Fetch profile photo when user.id is available ---
   useEffect(() => {
     if (user.id) {
-      fetchProfilePhoto(user.id);
+      fetchProfilePhoto(String(user.id));
     }
   }, [user.id]);
 

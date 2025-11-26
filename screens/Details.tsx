@@ -6,12 +6,13 @@ import {
   missionsFarm,
   missionsNearby,
 } from "@/data/missions";
+import { useMedia } from "@/hooks/useMedia";
 import { getIconForAdvantage } from "@/utils/constants/advantages";
 import { COLORS } from "@/utils/constants/colors";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Image,
   Pressable,
@@ -23,10 +24,12 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 type Props = {
-  id: string | string[] | undefined;
+  id: string;
 };
 
 export default function DetailsScreen({ id }: Props) {
+
+
   // Combine toutes les missions
   const allMissions = [
     ...missionsNearby,
@@ -125,6 +128,19 @@ export default function DetailsScreen({ id }: Props) {
     );
   };
 
+  const { medias, fetchStayPhotos, loading } = useMedia();
+    const [imageUrl, setImageUrl] = useState<string | null>(null);
+
+    useEffect(() => {
+      const loadImage = async () => {
+        await fetchStayPhotos(Number(id)); // fetch photos pour ce stayId
+        if (medias.length > 0) {
+          setImageUrl(medias[0].url); // on prend la première photo si disponible
+        }
+      };
+      loadImage();
+    }, [id, medias.length]);
+
   return (
     <SafeAreaView
       style={{ backgroundColor: COLORS.woofBrown[500] }}
@@ -153,11 +169,17 @@ export default function DetailsScreen({ id }: Props) {
             </TouchableOpacity>
           </View>
         </View>
-        <Image
-          source={mission.image2x ? mission.image2x : mission.image}
-          className="w-full h-[275] "
-          resizeMode="cover"
-        />
+        {imageUrl ? (
+          <Image
+            source={{ uri: imageUrl }}
+            className="w-full h-[275] "
+            resizeMode="cover"
+          />
+        ) : (
+          <View className="w-full h-[275px] bg-gray-200 flex items-center justify-center">
+            <Text className="text-gray-400">Loading...</Text>
+          </View>
+        )}
         <View className="p-4">
           <Text className="text-2xl font-manropeBold mb-2">
             {mission.title}
