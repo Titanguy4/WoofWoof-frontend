@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Media } from "../types/Media";
 
-const API_URL = "http://localhost:8080/medias";
+const API_URL = "http://localhost:8083/medias";
 
 export function useMedia() {
   const [medias, setMedias] = useState<Media[]>([]);
@@ -26,13 +26,13 @@ export function useMedia() {
   };
 
   // --- Fetch profile photo by userId ---
-  const fetchProfilePhoto = async (userId: number) => {
+  const fetchProfilePhoto = async (userId: string) => {
     setLoading(true);
     try {
       const response = await fetch(`${API_URL}/profile/${userId}`);
       if (!response.ok) throw new Error("Failed to fetch profile photo");
       const data: Media = await response.json();
-      setProfilePhoto(data || null); // directement un objet
+      setProfilePhoto(data || null);
       setError(null);
     } catch (err: any) {
       setError(err.message || "Unknown error");
@@ -73,7 +73,7 @@ export function useMedia() {
   };
 
   // --- Fetch all WoofShare photos ---
-  const fetchAllWoofSharePhotos = async () => {
+  const fetchAllWoofSharePhotos = async (): Promise<Media[]> => {
     setLoading(true);
     try {
       const response = await fetch(`${API_URL}/woofshare`);
@@ -81,8 +81,10 @@ export function useMedia() {
       const data: Media[] = await response.json();
       setMedias(data);
       setError(null);
+      return data; // <- retourner les données
     } catch (err: any) {
       setError(err.message || "Unknown error");
+      return [];
     } finally {
       setLoading(false);
     }
