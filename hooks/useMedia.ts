@@ -7,6 +7,7 @@ export function useMedia() {
   const [medias, setMedias] = useState<Media[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [profilePhoto, setProfilePhoto] = useState<Media | null>(null);
 
   // --- Fetch all medias ---
   const fetchAllMedias = async () => {
@@ -24,14 +25,14 @@ export function useMedia() {
     }
   };
 
-  // --- Fetch profile photos by username ---
-  const fetchProfilePhotos = async (username: string) => {
+  // --- Fetch profile photo by userId ---
+  const fetchProfilePhoto = async (userId: number) => {
     setLoading(true);
     try {
-      const response = await fetch(`${API_URL}/profile/${username}`);
-      if (!response.ok) throw new Error("Failed to fetch profile photos");
-      const data: Media[] = await response.json();
-      setMedias(data);
+      const response = await fetch(`${API_URL}/profile/${userId}`);
+      if (!response.ok) throw new Error("Failed to fetch profile photo");
+      const data: Media = await response.json();
+      setProfilePhoto(data || null); // directement un objet
       setError(null);
     } catch (err: any) {
       setError(err.message || "Unknown error");
@@ -57,7 +58,9 @@ export function useMedia() {
   };
 
   // --- Fetch stayId from WoofShare photo ---
-  const fetchStayIdFromWoofShare = async (mediaId: number): Promise<number | null> => {
+  const fetchStayIdFromWoofShare = async (
+    mediaId: number,
+  ): Promise<number | null> => {
     try {
       const response = await fetch(`${API_URL}/woofshare/${mediaId}`);
       if (!response.ok) throw new Error("Failed to fetch stayId");
@@ -69,13 +72,50 @@ export function useMedia() {
     }
   };
 
+  // --- Fetch all WoofShare photos ---
+  const fetchAllWoofSharePhotos = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(`${API_URL}/woofshare`);
+      if (!response.ok) throw new Error("Failed to fetch WoofShare photos");
+      const data: Media[] = await response.json();
+      setMedias(data);
+      setError(null);
+    } catch (err: any) {
+      setError(err.message || "Unknown error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // --- Fetch WoofShare photos by stayId ---
+  const fetchWoofSharePhotosByStay = async (stayId: number) => {
+    setLoading(true);
+    try {
+      const response = await fetch(`${API_URL}/woofshare/stay/${stayId}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch WoofShare photos for stay");
+      }
+      const data: Media[] = await response.json();
+      setMedias(data);
+      setError(null);
+    } catch (err: any) {
+      setError(err.message || "Unknown error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     medias,
     loading,
     error,
+    profilePhoto,
     fetchAllMedias,
-    fetchProfilePhotos,
+    fetchProfilePhoto,
     fetchStayPhotos,
     fetchStayIdFromWoofShare,
+    fetchAllWoofSharePhotos,
+    fetchWoofSharePhotosByStay,
   };
 }
