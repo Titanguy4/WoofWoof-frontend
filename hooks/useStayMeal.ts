@@ -5,7 +5,7 @@ export const useMeal = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const API_URL = "http://localhost:8080/meals";
+  const API_URL = process.env.EXPO_PUBLIC_API_BASE_URL + "/meals";
 
   // Pour POST → pas d'id_meal
   type MealInput = Omit<Meal, "id_meal">;
@@ -72,7 +72,7 @@ export const useMeal = () => {
   /** PUT update meal */
   const updateMeal = async (
     id: number,
-    updated: Partial<Meal>
+    updated: Partial<Meal>,
   ): Promise<Meal | undefined> => {
     try {
       setLoading(true);

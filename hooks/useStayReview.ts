@@ -5,7 +5,7 @@ export const useReview = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const API_URL = "http://localhost:8080/reviews";
+  const API_URL = process.env.EXPO_PUBLIC_API_BASE_URL + "/reviews";
 
   // Input pour POST → pas d'id_review
   type ReviewInput = Omit<Review, "id_review">;
@@ -49,7 +49,9 @@ export const useReview = () => {
   };
 
   /** GET reviews for a stay */
-  const getReviewsByStayId = async (stayId: number): Promise<Review[] | undefined> => {
+  const getReviewsByStayId = async (
+    stayId: number,
+  ): Promise<Review[] | undefined> => {
     try {
       setLoading(true);
       setError(null);
@@ -67,7 +69,9 @@ export const useReview = () => {
   };
 
   /** POST create review */
-  const createReview = async (review: ReviewInput): Promise<Review | undefined> => {
+  const createReview = async (
+    review: ReviewInput,
+  ): Promise<Review | undefined> => {
     try {
       setLoading(true);
       setError(null);
@@ -92,7 +96,7 @@ export const useReview = () => {
   /** PUT update review */
   const updateReview = async (
     id: number,
-    updated: Partial<Review>
+    updated: Partial<Review>,
   ): Promise<Review | undefined> => {
     try {
       setLoading(true);

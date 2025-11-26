@@ -5,25 +5,18 @@ import { Meal } from "./Meal";
 import { Review } from "./Review";
 
 export interface Stay {
-  id_stay: number;
+  id: number;
   title: string;
   description: string;
-
-  // Geographic coordinates [latitude, longitude]
-  localisation: number[];
-
-  startDate: string; // ISO date string (e.g. "2025-11-03T00:00:00Z")
-  endDate: string;
-
+  localisation: [number, number]; // [latitude, longitude]
+  department: string | null;
+  region: string | null;
   status: boolean;
-
+  wooferId: number;
+  bookingId: number | null;
   activities: Activity[];
   learningSkills: LearningSkill[];
   meals: Meal[];
   accomodations: Accomodation[];
   reviews: Review[];
-
-  // Only storing IDs, no relation objects here
-  photoId: number[];
-  wooferId: number;
 }
