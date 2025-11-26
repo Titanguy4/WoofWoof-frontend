@@ -2,7 +2,7 @@ import { COLORS } from "@/utils/constants/colors";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Image,
@@ -13,17 +13,22 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { mockImages } from "../data/woofshare";
+import { useMedia } from "../hooks/useMedia";
+import { Media } from "../types/Media";
 
 export default function Woofshare() {
   const { t } = useTranslation("woofshare");
-
+  const { medias, fetchAllWoofSharePhotos, loading } = useMedia(); // Hook
   const [filtersOpen, setFiltersOpen] = useState(false);
-
   const [selectedFilters, setSelectedFilters] = useState<string[]>([
     "farm",
     "animal",
   ]);
+
+  // --- Fetch WoofShare photos when component mounts ---
+  useEffect(() => {
+    fetchAllWoofSharePhotos();
+  }, []);
 
   const toggleFilter = (label: string) => {
     setSelectedFilters((prev) =>
@@ -32,6 +37,7 @@ export default function Woofshare() {
         : [...prev, label],
     );
   };
+
   type CategoryKey = "farm" | "animal" | "cultural" | "environment";
 
   const categoryLabels: CategoryKey[] = [
@@ -47,6 +53,12 @@ export default function Woofshare() {
     cultural: require("../assets/images/culturalType.png"),
     environment: require("../assets/images/environmentalType.png"),
   };
+
+  // --- Optional: filter images based on selected filters ---
+  const filteredMedias: Media[] = medias.filter((media) => {
+    // Ici tu peux filtrer selon ton propre champ si tu as des tags/filtres
+    return true; // Pour l'instant, on prend tout
+  });
 
   return (
     <SafeAreaView
@@ -75,7 +87,7 @@ export default function Woofshare() {
 
       {/* Search + Filter */}
       <View className="bg-white px-6 py-2 flex-row items-center gap-3">
-        {/* ✅ Search */}
+        {/* Search */}
         <View className="flex-row items-center bg-white border border-woofGrey-500 rounded-full h-[55px] px-4 flex-1">
           <TextInput
             placeholder={t("search.placeholder")}
@@ -85,7 +97,7 @@ export default function Woofshare() {
           <Ionicons name="search" size={20} color={COLORS.woofGrey[500]} />
         </View>
 
-        {/* ✅ Filter */}
+        {/* Filter */}
         <TouchableOpacity
           onPress={() => setFiltersOpen(!filtersOpen)}
           className="flex-row items-center bg-white border border-woofGrey-500 rounded-full px-4 h-[55px]"
@@ -98,11 +110,10 @@ export default function Woofshare() {
               {selectedFilters.length}
             </Text>
           </View>
-
         </TouchableOpacity>
       </View>
 
-      {/* ✅ FILTER POPOVER */}
+      {/* FILTER POPOVER */}
       {filtersOpen && (
         <View className="absolute top-[150px] right-6 bg-white p-4 rounded-2xl shadow-lg z-50 w-[210px]">
           <Text className="font-manropeBold mb-2 text-[15px]">
@@ -132,7 +143,7 @@ export default function Woofshare() {
             })}
           </View>
 
-          {/* ✅ Apply Button */}
+          {/* Apply Button */}
           <TouchableOpacity
             onPress={() => setFiltersOpen(false)}
             className="bg-woofBrown-500 px-4 py-2 rounded-full mt-4 items-center"
@@ -193,12 +204,12 @@ export default function Woofshare() {
         <View className="flex-row justify-between">
           {/* Left Column */}
           <View className="w-[48%] gap-y-5">
-            {mockImages
+            {filteredMedias
               .filter((_, i) => i % 2 === 0)
-              .map((img, index) => (
+              .map((media, index) => (
                 <Image
                   key={index}
-                  source={img}
+                  source={{ uri: media.url }}
                   className="w-full rounded-xl"
                   resizeMode="cover"
                 />
@@ -207,12 +218,12 @@ export default function Woofshare() {
 
           {/* Right Column */}
           <View className="w-[48%] gap-y-5">
-            {mockImages
+            {filteredMedias
               .filter((_, i) => i % 2 !== 0)
-              .map((img, index) => (
+              .map((media, index) => (
                 <Image
                   key={index}
-                  source={img}
+                  source={{ uri: media.url }}
                   className="w-full rounded-xl"
                   resizeMode="cover"
                 />

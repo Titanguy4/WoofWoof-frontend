@@ -1,18 +1,12 @@
 import { COLORS } from "@/utils/constants/colors";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import React from "react";
-import {
-  Image,
-  ImageSourcePropType,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import React, { useEffect, useState } from "react";
+import { Image, Text, TouchableOpacity, View } from "react-native";
+import { useMedia } from "../hooks/useMedia"; // adapte le chemin si besoin
 
 type HomeMissionCardProps = {
   id: number;
-  image: ImageSourcePropType;
   title: string;
   location: string;
   rating: string;
@@ -23,7 +17,6 @@ type HomeMissionCardProps = {
 
 export default function HomeMissionCard({
   id,
-  image,
   title,
   location,
   rating,
@@ -31,6 +24,19 @@ export default function HomeMissionCard({
   housing,
   heart = false,
 }: Readonly<HomeMissionCardProps>) {
+  const { medias, fetchStayPhotos, loading } = useMedia();
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadImage = async () => {
+      await fetchStayPhotos(id); // fetch photos pour ce stayId
+      if (medias.length > 0) {
+        setImageUrl(medias[0].url); // on prend la première photo si disponible
+      }
+    };
+    loadImage();
+  }, [id, medias.length]);
+
   return (
     <TouchableOpacity
       onPress={() =>
@@ -43,7 +49,17 @@ export default function HomeMissionCard({
     >
       {/* Image */}
       <View className="relative">
-        <Image source={image} className="w-full h-[148px]" resizeMode="cover" />
+        {imageUrl ? (
+          <Image
+            source={{ uri: imageUrl }}
+            className="w-full h-[148px]"
+            resizeMode="cover"
+          />
+        ) : (
+          <View className="w-full h-[148px] bg-gray-200 flex items-center justify-center">
+            <Text className="text-gray-400">Loading...</Text>
+          </View>
+        )}
         {heart && (
           <Ionicons
             className="absolute top-2 right-2"

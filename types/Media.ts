@@ -8,5 +8,5 @@ export interface Media {
 
   // Champs dépendants du type de média
   stayId?: number;    // Pour WOOFSHARE_PHOTO et STAY_PHOTO
-  username?: string;  // Pour PROFILE_PHOTO
+  userId?: number;  // Pour PROFILE_PHOTO
 }

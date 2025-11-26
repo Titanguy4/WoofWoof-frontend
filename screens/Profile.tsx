@@ -1,7 +1,7 @@
-import brookeprofile from "@/assets/images/brookeprofile.png";
 import dogheader from "@/assets/images/dogheader.png";
 import { Section } from "@/components/Section";
 import { SectionButton } from "@/components/SectionButton";
+import { useMedia } from "@/hooks/useMedia";
 import { useAuth } from "@/utils/auth/AuthContext";
 import { Router, useRouter } from "expo-router";
 import {
@@ -12,13 +12,22 @@ import {
   ShieldCheck,
   SquarePen,
 } from "lucide-react-native";
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 export default function ProfileScreen() {
   const router: Router = useRouter();
   const { user, logout, openAccountPage, isWoofer } = useAuth();
   const { t } = useTranslation("profil");
+  const { profilePhoto, fetchProfilePhoto, loading } = useMedia();
+
+  // --- Fetch profile photo when user.id is available ---
+  useEffect(() => {
+    if (user.id) {
+      fetchProfilePhoto(user.id);
+    }
+  }, [user.id]);
 
   return (
     <ScrollView
@@ -36,10 +45,14 @@ export default function ProfileScreen() {
 
       <View className="w-5/6 -mt-[120px] z-1 self-center bg-woofCream-50 rounded-2xl shadow p-8 gap-y-5">
         <View className="flex-row items-center gap-x-3">
-          <Image
-            source={brookeprofile}
-            className="w-[40px] h-[40px] rounded-full"
-          />
+          {loading ? (
+            <ActivityIndicator size="small" color="#000" className="w-[40px] h-[40px]" />
+          ) : (
+            <Image
+              source={profilePhoto ? { uri: profilePhoto.url } : undefined}
+              className="w-[40px] h-[40px] rounded-full bg-woofGrey-200"
+            />
+          )}
           <View className="flex-1">
             <Text className="text-xl font-bold">{user.name}</Text>
             <Text className="text-woofGrey-500">{user.email}</Text>
