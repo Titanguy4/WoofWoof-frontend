@@ -9,7 +9,7 @@ export default function MissionDetailsPage() {
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
-      <Details id={id} />
+      <Details id={id as string} />
     </>
   );
 }

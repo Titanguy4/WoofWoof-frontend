@@ -4,16 +4,17 @@ import { LearningSkill } from "./LearningSkill";
 import { Meal } from "./Meal";
 import { Review } from "./Review";
 
+export type StayType = "FARM" | "ANIMAL" | "CULTURAL" | "ENVIRONMENTAL";
+
 export interface Stay {
-  id_stay: number;
+  id: number;
   title: string;
   description: string;
+  type: StayType;
 
   // Geographic coordinates [latitude, longitude]
   localisation: number[];
 
-  startDate: string; // ISO date string (e.g. "2025-11-03T00:00:00Z")
-  endDate: string;
 
   status: boolean;
 
@@ -24,6 +25,6 @@ export interface Stay {
   reviews: Review[];
 
   // Only storing IDs, no relation objects here
-  photoId: number[];
+  photoId?: number[];
   wooferId: number;
 }

@@ -8,6 +8,7 @@ export function useMedia() {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [profilePhoto, setProfilePhoto] = useState<Media | null>(null);
+  const [mediasByStay, setMediasByStay] = useState<{ [stayId: number]: Media[] }>({});
 
   // --- Fetch all medias ---
   const fetchAllMedias = async () => {
@@ -48,14 +49,23 @@ export function useMedia() {
       const response = await fetch(`${API_URL}/stay/${stayId}`);
       if (!response.ok) throw new Error("Failed to fetch stay photos");
       const data: Media[] = await response.json();
-      setMedias(data);
+
+      // Stocke les médias dans le dictionnaire par stayId
+      setMediasByStay((prev) => ({
+        ...prev,
+        [stayId]: data,
+      }));
+
       setError(null);
+      return data;
     } catch (err: any) {
       setError(err.message || "Unknown error");
+      return [];
     } finally {
       setLoading(false);
     }
   };
+
 
   // --- Fetch stayId from WoofShare photo ---
   const fetchStayIdFromWoofShare = async (
@@ -110,6 +120,7 @@ export function useMedia() {
 
   return {
     medias,
+    mediasByStay,
     loading,
     error,
     profilePhoto,

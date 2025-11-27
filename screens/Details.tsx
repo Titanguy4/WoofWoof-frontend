@@ -1,54 +1,81 @@
 // screens/DetailsScreen.tsx
-import {
-  missionsAnimal,
-  missionsCultural,
-  missionsEnv,
-  missionsFarm,
-  missionsNearby,
-} from "@/data/missions";
+import { getIconForAdvantage } from "@/constants/advantages";
 import { useMedia } from "@/hooks/useMedia";
-import { getIconForAdvantage } from "@/utils/constants/advantages";
-import { COLORS } from "@/utils/constants/colors";
+import { useStay } from "@/hooks/useStay";
+import { Stay } from "@/types/stayservice/Stay";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
-import {
-  Image,
-  Pressable,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Image, Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { COLORS } from "../constants/colors";
 
 type Props = {
-  id: string;
+  id: string | string[] | undefined;
 };
 
 export default function DetailsScreen({ id }: Props) {
+  const { medias, fetchStayPhotos } = useMedia();
+  const { getStayById, loading: stayLoading, error: stayError } = useStay();
+  const [stay, setStay] = useState<Stay | null>(null);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+
+  //recuperation du stay avec l'id
+  useEffect(() => {
+    const loadStay = async () => {
+      const stayData = await getStayById(Number(id));
+      if (stayData) setStay(stayData);
+    };
+    loadStay();
+  }, [id]);
+
+  // Chargement des images après récupération du stay
+  useEffect(() => {
+    const loadImage = async () => {
+      if (!stay) {
+        return;
+      }
 
 
-  // Combine toutes les missions
-  const allMissions = [
-    ...missionsNearby,
-    ...missionsFarm,
-    ...missionsAnimal,
-    ...missionsEnv,
-    ...missionsCultural,
-  ];
+      // On fetch TOUJOURS les photos, même si stay.photoId est vide
+      const photos = await fetchStayPhotos(stay.id);
 
-  // Trouve la mission correspondant à l'id
-  const mission = allMissions.find((m) => m.id.toString() === id);
+      if (photos && photos.length > 0) {
+        setImageUrl(photos[0].url);
+      } else {
+        console.log("⚠️ Aucune photo trouvée pour ce stay");
+      }
+    };
 
-  if (!mission) {
+    loadImage();
+  }, [stay]);
+
+
+  if (stayLoading || !stay) {
     return (
-      <View className="flex-1 items-center justify-center bg-white">
-        <Text className="text-lg font-manropeBold">Mission not found</Text>
-      </View>
+      <SafeAreaView className="flex-1 items-center justify-center bg-white">
+        <Text>Loading stay...</Text>
+      </SafeAreaView>
     );
   }
+
+  if (stayError) {
+    return (
+      <SafeAreaView className="flex-1 items-center justify-center bg-white">
+        <Text>Error: {stayError}</Text>
+      </SafeAreaView>
+    );
+  }
+
+  // ⭐ Calcul du rating
+  const rating =
+    stay.reviews && stay.reviews.length > 0
+      ? (
+        stay.reviews.reduce((sum, r) => sum + r.rating, 0) /
+        stay.reviews.length
+      ).toFixed(1)
+      : "0.0";
 
   const FeatureCard = ({
     icon,
@@ -66,19 +93,15 @@ export default function DetailsScreen({ id }: Props) {
   };
 
   const ReviewCard = ({
-    name,
-    country,
-    date,
+    id,
     rating,
-    comment,
-    image,
+    content,
+    date,
   }: {
-    name: string;
-    country: string;
-    date: string;
+    id: number;
     rating: string;
-    comment: string;
-    image?: any;
+    content: string;
+    date: string;
   }) => {
     const [expanded, setExpanded] = useState(false);
 
@@ -87,14 +110,12 @@ export default function DetailsScreen({ id }: Props) {
         {/* Header */}
         <View className="flex-row items-center mb-3">
           <Image
-            source={image || require("../assets/icons/default_profile.png")}
+            source={require("../assets/icons/default_profile.png")}
             className="w-[42px] h-[42px] rounded-full mr-3"
           />
           <View>
-            <Text className="font-manropeBold text-base text-black">
-              {name}
-            </Text>
-            <Text className="text-xs text-gray-500">{country}</Text>
+            <Text className="font-manropeBold text-base text-black">Name</Text>
+            <Text className="text-xs text-gray-500">Country</Text>
           </View>
         </View>
 
@@ -116,7 +137,7 @@ export default function DetailsScreen({ id }: Props) {
           className="text-sm text-gray-700 leading-5"
           numberOfLines={expanded ? undefined : 3}
         >
-          {comment}
+          {content}
         </Text>
 
         <Pressable onPress={() => setExpanded(!expanded)}>
@@ -128,26 +149,13 @@ export default function DetailsScreen({ id }: Props) {
     );
   };
 
-  const { medias, fetchStayPhotos, loading } = useMedia();
-    const [imageUrl, setImageUrl] = useState<string | null>(null);
-
-    useEffect(() => {
-      const loadImage = async () => {
-        await fetchStayPhotos(Number(id)); // fetch photos pour ce stayId
-        if (medias.length > 0) {
-          setImageUrl(medias[0].url); // on prend la première photo si disponible
-        }
-      };
-      loadImage();
-    }, [id, medias.length]);
-
   return (
     <SafeAreaView
-      style={{ backgroundColor: COLORS.woofBrown[500] }}
+      style={{ backgroundColor: COLORS.woofBrown }}
       className="flex-1"
       edges={["top"]}
     >
-      <StatusBar backgroundColor={COLORS.woofBrown[500]} style="light" />
+      <StatusBar backgroundColor={COLORS.woofBrown} style="light" />
       <ScrollView className="flex-1 bg-white">
         <View className="flex-row mx-3 -mb-16 justify-between items-center">
           {/* Chevron gauche */}
@@ -160,42 +168,35 @@ export default function DetailsScreen({ id }: Props) {
 
           {/* Conteneur des 2 chevrons droits */}
           <View className="flex-row items-center">
-            <TouchableOpacity className="items-center justify-center z-10 ml-3 mt-4 w-12 h-12 bg-white rounded-full shadow-md">
+            <TouchableOpacity
+              className="items-center justify-center z-10 ml-3 mt-4 w-12 h-12 bg-white rounded-full shadow-md"
+            >
               <Ionicons name="share-outline" size={20} color="black" />
             </TouchableOpacity>
 
-            <TouchableOpacity className="items-center justify-center z-10 ml-3 mt-4 w-12 h-12 bg-white rounded-full shadow-md">
+            <TouchableOpacity
+              className="items-center justify-center z-10 ml-3 mt-4 w-12 h-12 bg-white rounded-full shadow-md"
+            >
               <Ionicons name="heart-outline" size={20} color="black" />
             </TouchableOpacity>
           </View>
         </View>
         {imageUrl ? (
-          <Image
-            source={{ uri: imageUrl }}
-            className="w-full h-[275] "
-            resizeMode="cover"
-          />
+          <Image source={{ uri: imageUrl }} className="w-full h-[275] " resizeMode="cover" />
         ) : (
           <View className="w-full h-[275px] bg-gray-200 flex items-center justify-center">
             <Text className="text-gray-400">Loading...</Text>
           </View>
         )}
         <View className="p-4">
-          <Text className="text-2xl font-manropeBold mb-2">
-            {mission.title}
-          </Text>
+          <Text className="text-2xl font-manropeBold mb-2">{stay.title}</Text>
           <View className="flex-row items-center justify-between mb-4">
-            <Text className="text-base text-gray-700">
-              📍 {mission.location}
-            </Text>
+            <Text className="text-base text-gray-700">📍 {stay.localisation}</Text>
             <Text className="text-sm text-gray-500">
-              ⭐ {mission.rating} (
-              {mission.reviews ? mission.reviews.length : 0} reviews)
+              ⭐ {rating} ({stay.reviews ? stay.reviews.length : 0} reviews)
             </Text>
           </View>
-          <Text className="text-base text-gray-700 mb-4">
-            {mission.housing}
-          </Text>
+          <Text className="text-base text-gray-700 mb-4">{stay.activities[0]?.label}</Text>
           <View className="py-5 border-t border-b border-t-gray-300 border-b-gray-300 flex-row items-center">
             <Image
               source={require("../assets/images/brookeprofile.png")}
@@ -220,27 +221,23 @@ export default function DetailsScreen({ id }: Props) {
               className="w-[28px] h-[28px] mr-4"
             />
           </View>
-          <Text className="text-xl mt-4 font-manropeBold mb-2">
-            Description
-          </Text>
-          <Text className="text-base text-gray-700">{mission.description}</Text>
-          <Text className="text-xl mt-4 font-manropeBold mb-2">
-            What this missions offers
-          </Text>
-          {mission.advantages && mission.advantages.length > 0 && (
+          <Text className="text-xl mt-4 font-manropeBold mb-2">Description</Text>
+          <Text className="text-base text-gray-700">{stay.description}</Text>
+          <Text className="text-xl mt-4 font-manropeBold mb-2">What this missions offers</Text>
+          {stay.accomodations && stay.accomodations.length > 0 && (
             <View className="mt-3 items-center justify-center border-b border-b-gray-300 mb-4">
               <View className="flex-row flex-wrap justify-start">
-                {mission.advantages.map((adv, index) => (
+                {stay.accomodations.map((adv, index) => (
                   <FeatureCard
                     key={index}
                     icon={
                       <Ionicons
-                        name={getIconForAdvantage(adv) as any}
+                        name={getIconForAdvantage(adv.label) as any}
                         size={24}
-                        color={COLORS.woofGrey[900]}
+                        color={COLORS.woofDarkGrey}
                       />
                     }
-                    label={adv}
+                    label={adv.label}
                   />
                 ))}
               </View>
@@ -249,14 +246,13 @@ export default function DetailsScreen({ id }: Props) {
         </View>
         <View className="px-4 flex-row items-center justify-between mb-4">
           <Text className="text-xl font-manropeBold mb-2">
-            ⭐ {mission.rating} ({mission.reviews ? mission.reviews.length : 0}{" "}
-            reviews)
+            ⭐ {rating} ({stay.reviews ? stay.reviews.length : 0} reviews)
           </Text>
           <Text className="text-lg text-black underline font-manrope mb-2">
             Show all
           </Text>
         </View>
-        {mission.reviews && mission.reviews.length > 0 && (
+        {stay.reviews && stay.reviews.length > 0 && (
           <View className="px-4 pb-4">
             <Text className="text-xl font-manropeBold mb-3">Reviews</Text>
             <ScrollView
@@ -264,14 +260,13 @@ export default function DetailsScreen({ id }: Props) {
               showsHorizontalScrollIndicator={false}
               className="flex-row"
             >
-              {mission.reviews.map((review) => (
+              {stay.reviews.map((review) => (
                 <ReviewCard
                   key={review.id}
-                  name={review.name}
-                  country={review.country}
-                  date={review.date}
-                  rating={review.rating}
-                  comment={review.comment}
+                  id={review.id}
+                  rating={String(review.rating)}
+                  date={review.date ?? ""}
+                  content={review.content ?? ""}
                 />
               ))}
             </ScrollView>
@@ -279,9 +274,11 @@ export default function DetailsScreen({ id }: Props) {
         )}
         <View className="mx-4 border-b border-b-gray-300 "></View>
         <View className="px-4 mt-4 mb-4">
-          <Text className="text-xl font-manropeBold mb-2">Location</Text>
+          <Text className="text-xl font-manropeBold mb-2">
+            Location
+          </Text>
           <Text className="text-lg text-woofDarkGrey font-manrope mb-2">
-            {mission.locationDetails}
+            {stay.localisation}
           </Text>
           <Text className="self-end text-lg text-black underline font-manrope mb-4">
             Go to maps
@@ -289,14 +286,14 @@ export default function DetailsScreen({ id }: Props) {
         </View>
         <View className="mx-4 border-b border-b-gray-300 mb-4"></View>
         <View className="items-center mb-4">
-          <TouchableOpacity
-            onPress={() => router.push(`/missionrequest/${id}`)}
-            className="bg-woofBrow-500 w-36 h-12 px-3 py-1 rounded-2xl items-center justify-center mb-6"
-          >
-            <Text className="text-base font-manropeBold text-white">Apply</Text>
+          <TouchableOpacity onPress={() => router.push(`/missionrequest/${id}`)} className="bg-woofBrown-500 w-36 h-12 px-3 py-1 rounded-2xl items-center justify-center mb-6">
+            <Text className="text-base font-manropeBold text-white">
+              Apply
+            </Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>
+
   );
 }
