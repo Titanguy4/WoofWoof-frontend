@@ -8,6 +8,7 @@ export type StayType = "FARM" | "ANIMAL" | "CULTURAL" | "ENVIRONMENTAL";
 
 export interface Stay {
   id: number;
+  type: StayType;
   title: string;
   description: string;
   localisation: [number, number]; // [latitude, longitude]
@@ -21,8 +22,6 @@ export interface Stay {
   meals: Meal[];
   accomodations: Accomodation[];
   reviews: Review[];
-
-  // Only storing IDs, no relation objects here
+  // optionnal
   photoId?: number[];
-  wooferId: number;
 }
