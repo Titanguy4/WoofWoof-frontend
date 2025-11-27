@@ -10,14 +10,12 @@ export interface Stay {
   id: number;
   title: string;
   description: string;
-  type: StayType;
-
-  // Geographic coordinates [latitude, longitude]
-  localisation: number[];
-
-
+  localisation: [number, number]; // [latitude, longitude]
+  department: string | null;
+  region: string | null;
   status: boolean;
-
+  wooferId: number;
+  bookingId: number | null;
   activities: Activity[];
   learningSkills: LearningSkill[];
   meals: Meal[];

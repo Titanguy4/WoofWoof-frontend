@@ -4,8 +4,9 @@ import { useState } from "react";
 export const useStay = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [stays, setStays] = useState<Stay[]>([]);
 
-  const API_URL = "http://localhost:8080/stays";
+  const API_URL = process.env.EXPO_PUBLIC_API_BASE_URL + "/stays";
 
   // Création : pas d'id_stay
   type StayInput = Omit<Stay, "id_stay">;
@@ -19,7 +20,9 @@ export const useStay = () => {
       const res = await fetch(API_URL);
       if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
 
-      return (await res.json()) as Stay[];
+      const stays = await res.json();
+      setStays(stays);
+      return stays as Stay[];
     } catch (err: any) {
       setError(err.message);
       console.error("GetAllStays error:", err);
@@ -114,6 +117,7 @@ export const useStay = () => {
   };
 
   return {
+    stays,
     getAllStays,
     getStayById,
     createStay,
