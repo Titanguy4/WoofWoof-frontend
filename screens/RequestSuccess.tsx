@@ -1,30 +1,27 @@
-import {
-  missionsAnimal,
-  missionsCultural,
-  missionsEnv,
-  missionsFarm,
-  missionsNearby,
-} from "@/data/missions";
+import { useStay } from "@/hooks/useStay";
+import { Stay } from "@/types/stayservice/Stay";
 import { COLORS } from "@/utils/constants/colors";
 import { router, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { useEffect, useState } from "react";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function RequestSuccessScreen() {
   const { id, start, end, email, number } = useLocalSearchParams();
+  const { getStayById, loading: stayLoading, error: stayError } = useStay();
+  const [stay, setStay] = useState<Stay | null>(null);
 
-  const allMissions = [
-    ...missionsNearby,
-    ...missionsFarm,
-    ...missionsAnimal,
-    ...missionsEnv,
-    ...missionsCultural,
-  ];
 
-  const mission = allMissions.find((m) => m.id.toString() === id);
+  useEffect(() => {
+    const loadStay = async () => {
+      const stayData = await getStayById(Number(id));
+      if (stayData) setStay(stayData);
+    };
+    loadStay();
+  }, [id]);
 
-  if (!mission) {
+  if (!stay) {
     return (
       <View className="flex-1 items-center justify-center bg-white">
         <Text className="text-lg font-manropeBold">Mission not found</Text>
@@ -53,10 +50,10 @@ export default function RequestSuccessScreen() {
           {/* --- Mission details --- */}
           <View className="px-4 py-7 border-b border-gray-300 w-full">
             <Text className="text-lg font-manropeBold mb-2">
-              {mission.title}
+              {stay.title}
             </Text>
             <Text className="text-sm font-manrope mb-6 text-woofDarkGrey">
-              {mission.locationDetails}
+              {stay.localisation}
             </Text>
 
             {/* 🕓 Dates */}

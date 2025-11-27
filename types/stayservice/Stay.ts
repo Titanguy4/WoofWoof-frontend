@@ -4,6 +4,8 @@ import { LearningSkill } from "./LearningSkill";
 import { Meal } from "./Meal";
 import { Review } from "./Review";
 
+export type StayType = "FARM" | "ANIMAL" | "CULTURAL" | "ENVIRONMENTAL";
+
 export interface Stay {
   id: number;
   title: string;
@@ -19,4 +21,8 @@ export interface Stay {
   meals: Meal[];
   accomodations: Accomodation[];
   reviews: Review[];
+
+  // Only storing IDs, no relation objects here
+  photoId?: number[];
+  wooferId: number;
 }

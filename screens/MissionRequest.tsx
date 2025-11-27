@@ -1,13 +1,9 @@
 import ApplyMissionCard from "@/components/ApplyMissionCard";
-import {
-  missionsAnimal,
-  missionsCultural,
-  missionsEnv,
-  missionsFarm,
-  missionsNearby,
-} from "@/data/missions";
 import { useBooking } from "@/hooks/useBooking";
+import { useStay } from "@/hooks/useStay";
 import { Booking } from "@/types/Booking";
+import { Stay } from "@/types/stayservice/Stay";
+import { useAuth } from "@/utils/auth/AuthContext";
 import { COLORS } from "@/utils/constants/colors";
 import { isValidEmail, isValidPhone } from "@/utils/constants/validation";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -15,7 +11,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import dayjs from "dayjs";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -41,18 +37,41 @@ export default function MissionRequest({ id }: Props) {
 
   const { createBooking, loading } = useBooking();
 
-  // Combine toutes les missions
-  const allMissions = [
-    ...missionsNearby,
-    ...missionsFarm,
-    ...missionsAnimal,
-    ...missionsEnv,
-    ...missionsCultural,
-  ];
+  const { getStayById, loading: stayLoading, error: stayError } = useStay();
+  const [stay, setStay] = useState<Stay | null>(null);
 
-  const mission = allMissions.find((m) => m.id.toString() === id);
+  //user
+  const { user } = useAuth();
 
-  if (!mission) {
+  //recuperation du stay avec l'id
+  useEffect(() => {
+    const loadStay = async () => {
+      const stayData = await getStayById(Number(id));
+      if (stayData) setStay(stayData);
+    };
+    loadStay();
+  }, [id]);
+
+
+
+  if (stayLoading || !stay) {
+    return (
+      <SafeAreaView className="flex-1 items-center justify-center bg-white">
+        <Text>Loading stay...</Text>
+      </SafeAreaView>
+    );
+  }
+
+  if (stayError) {
+    return (
+      <SafeAreaView className="flex-1 items-center justify-center bg-white">
+        <Text>Error: {stayError}</Text>
+      </SafeAreaView>
+    );
+  }
+
+
+  if (!stay) {
     return (
       <View className="flex-1 items-center justify-center bg-white">
         <Text className="text-lg font-manropeBold">Mission not found</Text>
@@ -64,20 +83,20 @@ export default function MissionRequest({ id }: Props) {
     isValidEmail(email) && isValidPhone(number) && startDate && endDate;
 
   const handleApply = async () => {
-    if (!mission || !startDate || !endDate) return;
+    if (!stay || !startDate || !endDate) return;
 
-    // ✅ correspond au type Omit<Booking, "id_booking">
-    const booking: Omit<Booking, "id_booking"> = {
-      stayId: mission.id,
-      backpackerId: 999, // temporaire
-      short_description: "Mission request",
-      request_date_start: startDate,
-      request_date_end: endDate,
+    // ✅ correspond au type Omit<Booking, "id">
+    const booking: Omit<Booking, "id"> = {
+      missionId: stay.id,
+      userId: 888, // temporaire
+      startRequestedDate: startDate,
+      endRequestedDate: endDate,
       status: "pending",
       email,
       number,
     };
 
+    console.log("Creating booking:", booking);
     const result = await createBooking(booking);
 
     if (result) {
@@ -123,10 +142,10 @@ export default function MissionRequest({ id }: Props) {
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         style={{ flex: 1 }}
       >
-        <ScrollView className="flex-1 bg-woofCream px-4">
+        <ScrollView className="flex-1 bg-woofCream-500 px-4">
           {/* --- Mission card --- */}
           <View className="items-center mt-4">
-            <ApplyMissionCard key={mission.id} {...mission} />
+            <ApplyMissionCard key={stay.id} stay={stay} />
           </View>
 
           {/* --- Mission info --- */}
@@ -186,12 +205,12 @@ export default function MissionRequest({ id }: Props) {
               </Text>
             </View>
             <View className="mt-4 px-4 mb-4">
-              {mission.advantages?.map((advantage, index) => (
+              {stay.accomodations?.map((adv, index) => (
                 <View
                   key={index}
                   className="flex-row justify-between items-center py-2"
                 >
-                  <Text className="text-[14px] text-gray-700">{advantage}</Text>
+                  <Text className="text-[14px] text-gray-700">{adv.label}</Text>
                   <Text className="text-[14px] text-green-600">✔</Text>
                 </View>
               ))}
@@ -238,9 +257,8 @@ export default function MissionRequest({ id }: Props) {
             <TouchableOpacity
               disabled={!isFormValid || loading}
               onPress={handleApply}
-              className={`w-36 h-12 px-3 py-1 rounded-2xl items-center justify-center ${
-                isFormValid ? "bg-woofBrow-500" : "bg-gray-400"
-              }`}
+              className={`w-36 h-12 px-3 py-1 rounded-2xl items-center justify-center ${isFormValid ? "bg-woofBrown-500" : "bg-gray-400"
+                }`}
             >
               <Text className="text-base font-manropeBold text-white">
                 {loading ? "Submitting..." : "Apply now"}

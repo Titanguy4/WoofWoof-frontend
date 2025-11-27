@@ -6,14 +6,14 @@ export const useBooking = () => {
   const [error, setError] = useState<string | null>(null);
 
   // On retire "id_booking" car il sera généré par le backend
-  type BookingInput = Omit<Booking, "id_booking">;
+  type BookingInput = Omit<Booking, "id">;
 
   const createBooking = async (booking: BookingInput) => {
     try {
       setLoading(true);
       setError(null);
 
-      const response = await fetch("http://localhost:8080/bookings", {
+      const response = await fetch("http://localhost:8082/bookings", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
