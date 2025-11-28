@@ -9,9 +9,10 @@ import { useMedia } from "../hooks/useMedia";
 type HomeMissionCardProps = {
   stay: Stay;
   heart?: boolean;
+  testID?: string;
 };
 
-export default function HomeMissionCard({ stay, heart = false }: Readonly<HomeMissionCardProps>) {
+export default function HomeMissionCard({ testID, stay, heart = false }: Readonly<HomeMissionCardProps>) {
   const { mediasByStay, fetchStayPhotos } = useMedia();
   const [imageUrl, setImageUrl] = useState<string | null>(null);
 
@@ -64,6 +65,7 @@ export default function HomeMissionCard({ stay, heart = false }: Readonly<HomeMi
           params: { id: String(stay.id) },
         })
       }
+      testID={testID}
       className="w-[165px] h-[250px] bg-white rounded-2xl mr-4 overflow-hidden"
     >
       {/* Image */}

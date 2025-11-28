@@ -105,6 +105,7 @@ export default function ExploreScreen() {
         </View>
       </View>
       <ScrollView
+        testID="missionRequestPage"
         showsVerticalScrollIndicator={false}
         className="bg-woofCream-500 "
         contentContainerClassName=""
@@ -121,7 +122,7 @@ export default function ExploreScreen() {
         <View className="px-4 mt-3">
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             {missionsNearby.map((stay) => (
-              <HomeMissionCard key={stay.id} stay={stay} />
+              <HomeMissionCard testID="HomeMissionCard" key={stay.id} stay={stay} />
             ))}
           </ScrollView>
         </View>

@@ -154,6 +154,7 @@ export default function DetailsScreen({ id }: Props) {
       style={{ backgroundColor: COLORS.woofBrown }}
       className="flex-1"
       edges={["top"]}
+      testID="DETAILS_SCREEN"
     >
       <StatusBar backgroundColor={COLORS.woofBrown} style="light" />
       <ScrollView className="flex-1 bg-white">
@@ -286,7 +287,7 @@ export default function DetailsScreen({ id }: Props) {
         </View>
         <View className="mx-4 border-b border-b-gray-300 mb-4"></View>
         <View className="items-center mb-4">
-          <TouchableOpacity onPress={() => router.push(`/missionrequest/${id}`)} className="bg-woofBrown-500 w-36 h-12 px-3 py-1 rounded-2xl items-center justify-center mb-6">
+          <TouchableOpacity testID="DETAILS_SCREEN_APPLY_BUTTON" onPress={() => router.push(`/missionrequest/${id}`)} className="bg-woofBrown-500 w-36 h-12 px-3 py-1 rounded-2xl items-center justify-center mb-6">
             <Text className="text-base font-manropeBold text-white">
               Apply
             </Text>
