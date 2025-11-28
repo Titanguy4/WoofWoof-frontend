@@ -15,7 +15,7 @@ export interface Stay {
   department: string | null;
   region: string | null;
   status: boolean;
-  wooferId: number;
+  wooferId: string;
   bookingId: number | null;
   activities: Activity[];
   learningSkills: LearningSkill[];

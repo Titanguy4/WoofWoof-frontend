@@ -1,9 +1,9 @@
 export interface Booking {
   id: number;
 
-  missionId: number;
+  stayId: number;
 
-  userId: number;
+  userId: string;
 
   startRequestedDate: Date;
 

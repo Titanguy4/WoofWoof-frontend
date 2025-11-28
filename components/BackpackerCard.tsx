@@ -1,19 +1,22 @@
 import React from "react";
 import {
   Image,
-  ImageSourcePropType,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
+import profileImage from "../assets/icons/avatar2.png";
 
 type BackpackerCardProps = {
   id: number;
-  profileImage: ImageSourcePropType;
-  name: string;
-  age: number;
-  missionId: number;
-  missionTitle: string;
+  // pour l'instant profileimage name et age optionnels car on a pas utilisé encore keycloak
+  //profileImage?: ImageSourcePropType;
+  //name?: string;
+  //age?: number;
+  email: string;
+  number: string;
+  stayId: number;
+  stayTitle: string;
   startDate: string;
   endDate: string;
 };
@@ -35,14 +38,15 @@ const formatEndDate = (dateStr: string) => {
 
 export default function BackpackerCard({
   id,
-  profileImage,
-  name,
-  age,
-  missionId,
-  missionTitle,
+  email,
+  number,
+  stayId,
+  stayTitle,
   startDate,
   endDate,
 }: BackpackerCardProps) {
+
+
   return (
     <View className="bg-white flex-row h-[108px] border-woofBrown-500 items-center border rounded-xl px-4 py-5 mb-3">
       <Image
@@ -51,16 +55,16 @@ export default function BackpackerCard({
         resizeMode="cover"
       />
       <View className="flex-1">
-        <Text className="font-manropeBold text-[14px] mb-1">{name}</Text>
+        <Text className="font-manropeBold text-[14px] mb-1">{email}</Text>
 
         <Text className="text-woofGrey-900 text-[12px]">
-          <Text className="font-manropeBold">Age: </Text>
-          {age}
+          <Text className="font-manropeBold">Number: </Text>
+          {number}
         </Text>
 
         <Text className="text-woofGrey-900 text-[12px]">
           <Text className="font-manropeBold">Mission: </Text>
-          {missionTitle}
+          {stayTitle}
         </Text>
 
         <Text className="text-woofGrey-900 text-[12px]">

@@ -49,6 +49,24 @@ export const useStay = () => {
     }
   };
 
+  /** GET stay IDs by wooferId */
+  const getStayIdsByWoofer = async (wooferId: string): Promise<number[] | undefined> => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const res = await fetch(`${API_URL}/woofer/${wooferId}/ids`);
+      if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
+
+      return (await res.json()) as number[];
+    } catch (err: any) {
+      setError(err.message);
+      console.error("GetStayIdsByWoofer error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   /** POST create stay */
   const createStay = async (stay: StayInput): Promise<Stay | undefined> => {
     try {
@@ -119,6 +137,7 @@ export const useStay = () => {
   return {
     stays,
     getAllStays,
+    getStayIdsByWoofer,
     getStayById,
     createStay,
     updateStay,
