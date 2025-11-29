@@ -12,42 +12,42 @@ export const useStay = () => {
   type StayInput = Omit<Stay, "id_stay">;
 
   /** GET all stays */
-  const getAllStays = async (): Promise<Stay[] | undefined> => {
-    try {
-      setLoading(true);
-      setError(null);
+const getAllStays = async (): Promise<Stay[] | undefined> => {
+  try {
+    const res = await fetch(API_URL);
+    if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
 
-      const res = await fetch(API_URL);
-      if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
+    const stays = await res.json();
+    setStays(stays);
+    return stays;
+  } catch (err) {
+    console.error("GetAllStays error:", err);
+  }
+};
 
-      const stays = await res.json();
-      setStays(stays);
-      return stays as Stay[];
-    } catch (err: any) {
-      setError(err.message);
-      console.error("GetAllStays error:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+/** GET stay by ID */
+const getStayById = async (id: number): Promise<Stay | undefined> => {
+  try {
+    const res = await fetch(`${API_URL}/${id}`);
+    if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
 
-  /** GET stay by ID */
-  const getStayById = async (id: number): Promise<Stay | undefined> => {
-    try {
-      setLoading(true);
-      setError(null);
+    return await res.json();
+  } catch (err) {
+    console.error("GetStayById error:", err);
+  }
+};
 
-      const res = await fetch(`${API_URL}/${id}`);
-      if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
+/** GET stay IDs by wooferId */
+const getStayIdsByWoofer = async (wooferId: string): Promise<number[] | undefined> => {
+  try {
+    const res = await fetch(`${API_URL}/woofer/${wooferId}/ids`);
+    if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
 
-      return (await res.json()) as Stay;
-    } catch (err: any) {
-      setError(err.message);
-      console.error("GetStayById error:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+    return await res.json();
+  } catch (err) {
+    console.error("GetStayIdsByWoofer error:", err);
+  }
+};
 
   /** POST create stay */
   const createStay = async (stay: StayInput): Promise<Stay | undefined> => {
@@ -119,6 +119,7 @@ export const useStay = () => {
   return {
     stays,
     getAllStays,
+    getStayIdsByWoofer,
     getStayById,
     createStay,
     updateStay,

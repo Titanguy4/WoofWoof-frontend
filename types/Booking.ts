@@ -1,15 +1,15 @@
 export interface Booking {
   id: number;
 
-  missionId: number;
+  stayId: number;
 
-  userId: number;
+  userId: string;
 
   startRequestedDate: Date;
 
   endRequestedDate: Date;
 
-  status: "pending" | "accepted" | "rejected" | "cancelled";
+  status: "PENDING" | "ACCEPTED" | "REJECTED" | "CANCELLED";
 
   email: string;
 

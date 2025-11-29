@@ -131,11 +131,10 @@ export default function Woofshare() {
                 <TouchableOpacity
                   key={label}
                   onPress={() => toggleFilter(label)}
-                  className={`px-3 py-1 rounded-full border ${
-                    active
-                      ? "bg-woofBrown-500 border-woofBrown-500"
-                      : "border-woofGrey"
-                  }`}
+                  className={`px-3 py-1 rounded-full border ${active
+                    ? "bg-woofBrown-500 border-woofBrown-500"
+                    : "border-woofGrey"
+                    }`}
                 >
                   <Text className={`text-[12px] ${active ? "text-white" : "text-black"}`}>
                     {t(`categories.${label}`)}
@@ -164,9 +163,8 @@ export default function Woofshare() {
                 <TouchableOpacity
                   key={label}
                   onPress={() => toggleFilter(label)}
-                  className={`flex-row items-center rounded-full px-2 border ${
-                    active ? "bg-woofBrown-500 border-woofBrown-500" : "bg-white border-woofBrown-500"
-                  }`}
+                  className={`flex-row items-center rounded-full px-2 border ${active ? "bg-woofBrown-500 border-woofBrown-500" : "bg-white border-woofBrown-500"
+                    }`}
                   style={{ width: 135, height: 36 }}
                   activeOpacity={1}
                 >
@@ -207,16 +205,22 @@ export default function Woofshare() {
                 .filter((_, i) => i % 2 === 0)
                 .map((media, index) =>
                   media.url ? (
-                    <Image
-                      key={index}
-                      source={{ uri: media.url }}
-                      style={{
-                        width: "100%",
-                        height: getRandomHeight(120, 220),
-                        borderRadius: 12,
-                      }}
-                      resizeMode="cover"
-                    />
+                    <TouchableOpacity key={media.id ?? index} onPress={() =>
+                            router.push({
+                              pathname: "/details/[id]",
+                              params: { id: String(media.stayId) },
+                            })
+                          }>
+                      <Image
+                        source={{ uri: media.url }}
+                        style={{
+                          width: "100%",
+                          height: getRandomHeight(120, 220),
+                          borderRadius: 12,
+                        }}
+                        resizeMode="cover"
+                      />
+                    </TouchableOpacity>
                   ) : null
                 )}
             </View>
@@ -227,16 +231,22 @@ export default function Woofshare() {
                 .filter((_, i) => i % 2 !== 0)
                 .map((media, index) =>
                   media.url ? (
-                    <Image
-                      key={index}
-                      source={{ uri: media.url }}
-                      style={{
-                        width: "100%",
-                        height: getRandomHeight(140, 240),
-                        borderRadius: 12,
-                      }}
-                      resizeMode="cover"
-                    />
+                    <TouchableOpacity key={media.id ?? index} onPress={() =>
+                            router.push({
+                              pathname: "/details/[id]",
+                              params: { id: String(media.stayId) },
+                            })
+                          }>
+                      <Image
+                        source={{ uri: media.url }}
+                        style={{
+                          width: "100%",
+                          height: getRandomHeight(140, 240),
+                          borderRadius: 12,
+                        }}
+                        resizeMode="cover"
+                      />
+                    </TouchableOpacity>
                   ) : null
                 )}
             </View>
