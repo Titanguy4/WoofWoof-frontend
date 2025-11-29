@@ -1,15 +1,13 @@
 export interface Booking {
-  id_booking: number;
+  id: number;
 
-  stayId: number;
+  missionId: number;
 
-  backpackerId: number;
+  userId: number;
 
-  short_description: string;
+  startRequestedDate: Date;
 
-  request_date_start: Date;
-
-  request_date_end: Date;
+  endRequestedDate: Date;
 
   status: "pending" | "accepted" | "rejected" | "cancelled";
 

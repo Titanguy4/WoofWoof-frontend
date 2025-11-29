@@ -1,9 +1,7 @@
 export interface Activity {
-  id_activity: number;
+  id: number;
 
   label: string;
-
-  description: string;
 }
 
 export default Activity;

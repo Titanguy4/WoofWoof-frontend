@@ -1,279 +1,181 @@
-import { ImageSourcePropType } from "react-native";
-
-export type Review = {
-  id: number;
-  country: string;
-  name: string;
-  date: string;
-  rating: string;
-  comment: string;
-};
-
-export type Mission = {
-  id: number;
-  image: ImageSourcePropType;
-  image2x?: ImageSourcePropType;
-  title: string;
-  location: string;
-  rating: string;
-  distance: string;
-  housing: string;
-  heart: boolean;
-  description: string;
-  advantages: string[];
-  reviews: Review[];
-  locationDetails: string;
-  coords: {
-    latitude: number;
-    longitude: number;
-  };
-};
-
-// Helpers
-const defaultDescription =
-  "Join this mission to contribute to local development, help the community and enjoy an enriching volunteer experience.";
-
-const defaultAdvantages = [
-  "Shared housing",
-  "Wifi",
-  "Flexible schedule",
-  "All meals",
-];
+import Review from "@/types/stayservice/Review";
+import { Stay, StayType } from "@/types/stayservice/Stay";
 
 const defaultReviews: Review[] = [];
 
-const defaultLocationDetails = "France";
-
-// --------------------
-// Missions Nearby
-// --------------------
-export const missionsNearby: Mission[] = [
+export const Stays: Stay[] = [
   {
     id: 1,
-    image: require("../assets/images/organicfarm.png"),
-    title: "Organic farm",
-    location: "Dordogne, France",
-    rating: "4.8",
-    distance: "25km away",
-    housing: "All meals included",
-    heart: true,
-    description: defaultDescription,
-    advantages: defaultAdvantages,
+    title: "Wine Farm Experience",
+    description:
+      "Experience life on a traditional vineyard, help with grape harvesting and learn about winemaking.",
+    type: "FARM" as StayType,
+
+    localisation: [44.449, 1.44],
+    startDate: "2025-11-03T00:00:00Z",
+    endDate: "2025-11-10T00:00:00Z",
+    status: true,
+
+    activities: [],
+    learningSkills: [],
+    meals: [],
+    accomodations: [
+      { id_accomodation: 1, label: "Shared housing" },
+      { id_accomodation: 2, label: "AC" },
+      { id_accomodation: 3, label: "Wifi" },
+      { id_accomodation: 4, label: "Flexible schedule" },
+      { id_accomodation: 5, label: "All meals" },
+      { id_accomodation: 6, label: "TV" },
+      { id_accomodation: 7, label: "Hot water" },
+    ],
     reviews: defaultReviews,
-    locationDetails: defaultLocationDetails,
-    coords: { latitude: 45.1445, longitude: 1.1540 }, // Dordogne
+
+    photoId: [],
+    wooferId: 1,
   },
   {
     id: 2,
-    image: require("../assets/images/animalshelter.png"),
-    title: "Animal shelter",
-    location: "Provence, France",
-    rating: "4.9",
-    distance: "37km away",
-    housing: "Shared housing",
-    heart: true,
-    description: defaultDescription,
-    advantages: defaultAdvantages,
-    reviews: defaultReviews,
-    locationDetails: defaultLocationDetails,
-    coords: { latitude: 43.9352, longitude: 5.7800 }, // Provence
-  },
-  {
-    id: 3,
-    image: require("../assets/images/winefarm.png"),
-    image2x: require("../assets/images/winefarm_x2.png"),
-    title: "Wine farm",
-    location: "Cahors, Occitanie, France",
-    rating: "3.3",
-    distance: "25km away",
-    housing: "🍽 All meals included",
-    heart: false,
+    title: "Animal Farm Volunteer",
     description:
-      "Our Cahors wine farm offers a unique volunteering experience in the heart of Occitanie...",
-    advantages: [
-      "Shared housing",
-      "AC",
-      "Wifi",
-      "Flexible schedule",
-      "All meals",
-      "TV",
-      "Hot water",
-    ],
-    reviews: [
-      {
-        id: 1,
-        name: "Amanda",
-        country: "France",
-        date: "2024-01-10",
-        rating: "4",
-        comment:
-          "Overall, it was a very good experience. I liked that it was private room because I am too shy to live with some other people",
-      },
-      {
-        id: 2,
-        country: "USA",
-        name: "John D.",
-        date: "2024-09-10",
-        rating: "4.5",
-        comment:
-          "Great opportunity to learn about wine farming and sustainable practices.",
-      },
-    ],
-    locationDetails: "Domaine de la Vigne, 46000 Cahors, Occitanie, France",
-    coords: { latitude: 44.4490, longitude: 1.4400 }, // Cahors
-  },
-];
+      "Help care for farm animals, feed them, and learn about sustainable farming practices.",
+    type: "FARM" as StayType,
 
-// --------------------
-// Missions Farm
-// --------------------
-export const missionsFarm: Mission[] = [
+    localisation: [49.1829, -0.3707],
+    startDate: "2025-11-05T00:00:00Z",
+    endDate: "2025-11-12T00:00:00Z",
+    status: true,
+
+    activities: [],
+    learningSkills: [],
+    meals: [],
+    accomodations: [
+      { id_accomodation: 8, label: "Shared housing" },
+      { id_accomodation: 9, label: "AC" },
+      { id_accomodation: 10, label: "Wifi" },
+      { id_accomodation: 11, label: "Flexible schedule" },
+      { id_accomodation: 12, label: "All meals" },
+      { id_accomodation: 13, label: "TV" },
+      { id_accomodation: 14, label: "Hot water" },
+    ],
+    reviews: defaultReviews,
+
+    photoId: [],
+    wooferId: 2,
+  },
   {
     id: 3,
-    image: require("../assets/images/winefarm.png"),
-    image2x: require("../assets/images/winefarm_x2.png"),
-    title: "Wine farm",
-    location: "Cahors, Occitanie, France",
-    rating: "3.3",
-    distance: "25km away",
-    housing: "All meals included",
-    heart: false,
-    description: defaultDescription,
-    advantages: defaultAdvantages,
+    title: "Dog Shelter Helper",
+    description:
+      "Assist in caring for dogs, help with training sessions, and provide love and attention to the animals.",
+    type: "ANIMAL" as StayType,
+
+    localisation: [43.2965, 5.3698],
+    startDate: "2025-11-03T00:00:00Z",
+    endDate: "2025-11-10T00:00:00Z",
+    status: true,
+
+    activities: [],
+    learningSkills: [],
+    meals: [],
+    accomodations: [
+      { id_accomodation: 15, label: "Shared housing" },
+      { id_accomodation: 16, label: "AC" },
+      { id_accomodation: 17, label: "Wifi" },
+      { id_accomodation: 18, label: "Flexible schedule" },
+      { id_accomodation: 19, label: "All meals" },
+      { id_accomodation: 20, label: "TV" },
+      { id_accomodation: 21, label: "Hot water" },
+    ],
     reviews: defaultReviews,
-    locationDetails: defaultLocationDetails,
-    coords: { latitude: 44.4490, longitude: 1.4400 },
+
+    photoId: [],
+    wooferId: 3,
   },
   {
     id: 4,
-    image: require("../assets/images/animalfarm.png"),
-    title: "Animal farm",
-    location: "Normandy, France",
-    rating: "4.8",
-    distance: "25km away",
-    housing: "Shared housing",
-    heart: true,
-    description: defaultDescription,
-    advantages: defaultAdvantages,
-    reviews: defaultReviews,
-    locationDetails: defaultLocationDetails,
-    coords: { latitude: 49.1829, longitude: -0.3707 }, // Caen, Normandy
-  },
-];
+    title: "Wildlife Rescue Center",
+    description:
+      "Join our team to care for injured wildlife and participate in rehabilitation programs for safe release.",
+    type: "ANIMAL" as StayType,
 
-// --------------------
-// Missions Animal
-// --------------------
-export const missionsAnimal: Mission[] = [
+    localisation: [42.8263, -0.0064],
+    startDate: "2025-11-06T00:00:00Z",
+    endDate: "2025-11-14T00:00:00Z",
+    status: true,
+
+    activities: [],
+    learningSkills: [],
+    meals: [],
+    accomodations: [
+      { id_accomodation: 22, label: "Shared housing" },
+      { id_accomodation: 23, label: "AC" },
+      { id_accomodation: 24, label: "Wifi" },
+      { id_accomodation: 25, label: "Flexible schedule" },
+      { id_accomodation: 26, label: "All meals" },
+      { id_accomodation: 27, label: "TV" },
+      { id_accomodation: 28, label: "Hot water" },
+    ],
+    reviews: defaultReviews,
+
+    photoId: [],
+    wooferId: 4,
+  },
   {
     id: 5,
-    image: require("../assets/images/dogshelter.png"),
-    title: "Dog shelter",
-    location: "Marseille, France",
-    rating: "3.7",
-    distance: "453km away",
-    housing: "All meals included",
-    heart: false,
-    description: defaultDescription,
-    advantages: defaultAdvantages,
+    title: "Beach Cleanup Volunteer",
+    description:
+      "Help preserve the coastline by participating in organized beach cleanups and marine protection activities.",
+    type: "ENVIRONMENTAL" as StayType,
+
+    localisation: [48.1173, -1.6778],
+    startDate: "2025-11-02T00:00:00Z",
+    endDate: "2025-11-09T00:00:00Z",
+    status: true,
+
+    activities: [],
+    learningSkills: [],
+    meals: [],
+    accomodations: [
+      { id_accomodation: 29, label: "Shared housing" },
+      { id_accomodation: 30, label: "AC" },
+      { id_accomodation: 31, label: "Wifi" },
+      { id_accomodation: 32, label: "Flexible schedule" },
+      { id_accomodation: 33, label: "All meals" },
+      { id_accomodation: 34, label: "TV" },
+      { id_accomodation: 35, label: "Hot water" },
+    ],
     reviews: defaultReviews,
-    locationDetails: defaultLocationDetails,
-    coords: { latitude: 43.2965, longitude: 5.3698 }, // Marseille
+
+    photoId: [],
+    wooferId: 5,
   },
   {
     id: 6,
-    image: require("../assets/images/wildlife.png"),
-    title: "Wildlife Rescue Center",
-    location: "Pyrénées, France",
-    rating: "4.2",
-    distance: "376km away",
-    housing: "All meals included",
-    heart: true,
-    description: defaultDescription,
-    advantages: defaultAdvantages,
+    title: "Art Workshop Assistant",
+    description:
+      "Support local art initiatives by assisting in workshops, engaging with children, and promoting cultural heritage.",
+    type: "CULTURAL" as StayType,
+
+    localisation: [43.7102, 7.262],
+    startDate: "2025-11-04T00:00:00Z",
+    endDate: "2025-11-11T00:00:00Z",
+    status: true,
+
+    activities: [],
+    learningSkills: [],
+    meals: [],
+    accomodations: [
+      { id_accomodation: 36, label: "Shared housing" },
+      { id_accomodation: 37, label: "AC" },
+      { id_accomodation: 38, label: "Wifi" },
+      { id_accomodation: 39, label: "Flexible schedule" },
+      { id_accomodation: 40, label: "All meals" },
+      { id_accomodation: 41, label: "TV" },
+      { id_accomodation: 42, label: "Hot water" },
+    ],
     reviews: defaultReviews,
-    locationDetails: defaultLocationDetails,
-    coords: { latitude: 42.8263, longitude: -0.0064 }, // Pyrenees
+
+    photoId: [],
+    wooferId: 6,
   },
 ];
-
-// --------------------
-// Missions Env
-// --------------------
-export const missionsEnv: Mission[] = [
-  {
-    id: 7,
-    image: require("../assets/images/cleanbeaches.png"),
-    title: "Clean beaches and protect marine life",
-    location: "Brittany, France",
-    rating: "4.8",
-    distance: "222km away",
-    housing: "All meals included",
-    heart: false,
-    description: defaultDescription,
-    advantages: defaultAdvantages,
-    reviews: defaultReviews,
-    locationDetails: defaultLocationDetails,
-    coords: { latitude: 48.1173, longitude: -1.6778 }, // Bretagne
-  },
-  {
-    id: 8,
-    image: require("../assets/images/planttrees.png"),
-    title: "Help plant trees",
-    location: "Alps, France",
-    rating: "3.5",
-    distance: "190km away",
-    housing: "All meals included",
-    heart: false,
-    description: defaultDescription,
-    advantages: defaultAdvantages,
-    reviews: defaultReviews,
-    locationDetails: defaultLocationDetails,
-    coords: { latitude: 45.9237, longitude: 6.8694 }, // Alpes
-  },
-];
-
-// --------------------
-// Missions Cultural
-// --------------------
-export const missionsCultural: Mission[] = [
-  {
-    id: 9,
-    image: require("../assets/images/communityevent.png"),
-    title: "Local festival organization",
-    location: "Nice, France",
-    rating: "4.6",
-    distance: "310km away",
-    housing: "Shared housing",
-    heart: false,
-    description: defaultDescription,
-    advantages: defaultAdvantages,
-    reviews: defaultReviews,
-    locationDetails: defaultLocationDetails,
-    coords: { latitude: 43.7102, longitude: 7.2620 }, // Nice
-  },
-  {
-    id: 10,
-    image: require("../assets/images/kidsart.png"),
-    title: "Support art workshops for children",
-    location: "Toulouse, France",
-    rating: "4.7",
-    distance: "285km away",
-    housing: "All meals included",
-    heart: true,
-    description: defaultDescription,
-    advantages: defaultAdvantages,
-    reviews: defaultReviews,
-    locationDetails: defaultLocationDetails,
-    coords: { latitude: 43.6045, longitude: 1.4442 }, // Toulouse
-  },
-];
-
-// Favorites
-export const missionsFavorited: Mission[] = [
-  ...missionsNearby,
-  ...missionsFarm,
-  ...missionsAnimal,
-  ...missionsEnv,
-  ...missionsCultural,
-].filter((m) => m.heart);

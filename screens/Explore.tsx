@@ -1,20 +1,52 @@
+import { useStay } from "@/hooks/useStay";
+import { Stay } from "@/types/stayservice/Stay";
 import { COLORS } from "@/utils/constants/colors";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import HomeMissionCard from "../components/HomeMissionCard";
-import {
-  missionsAnimal,
-  missionsCultural,
-  missionsEnv,
-  missionsFarm,
-  missionsNearby,
-} from "../data/missions";
 
 export default function ExploreScreen() {
   const { t } = useTranslation("explore");
+  const { getAllStays, loading } = useStay();
+  const [stays, setStays] = useState<Stay[]>([]);
+
+  /** 🔥 Charger toutes les missions du backend */
+  useEffect(() => {
+    const load = async () => {
+      const s = await getAllStays();
+
+      if (s) {
+        setStays(s);
+      }
+    };
+    load();
+  }, []);
+
+  /** 🔥 Filtrage par type */
+  const missionsNearby = stays;
+  const missionsFarm = useMemo(() => {
+    const res = stays.filter((s) => s.type === "FARM");
+    return res;
+  }, [stays]);
+
+  const missionsAnimal = useMemo(() => {
+    const res = stays.filter((s) => s.type === "ANIMAL");
+    return res;
+  }, [stays]);
+
+  const missionsEnv = useMemo(() => {
+    const res = stays.filter((s) => s.type === "ENVIRONMENTAL");
+    return res;
+  }, [stays]);
+
+  const missionsCultural = useMemo(() => {
+    const res = stays.filter((s) => s.type === "CULTURAL");
+    return res;
+  }, [stays]);
+
   return (
     <>
       <View className="bg-woofBrown-500 p-4 gap-y-3">
@@ -23,9 +55,7 @@ export default function ExploreScreen() {
             <Text className="text-base font-manrope text-white ">
               Find your place to make an impact
             </Text>
-            <Text className="text-xl font-manropeBold">
-              WOOF WOOF !
-            </Text>
+            <Text className="text-xl font-manropeBold">WOOF WOOF !</Text>
           </View>
           <View className="flex-row justify-end items-center gap-2 flex-1">
             <TouchableOpacity onPress={() => router.push("/chat")}>
@@ -86,8 +116,8 @@ export default function ExploreScreen() {
         </View>
         <View className="px-4 mt-3">
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {missionsNearby.map((mission) => (
-              <HomeMissionCard key={mission.id} {...mission} />
+            {missionsNearby.map((stay) => (
+              <HomeMissionCard key={stay.id} stay={stay} />
             ))}
           </ScrollView>
         </View>
@@ -102,8 +132,8 @@ export default function ExploreScreen() {
         </View>
         <View className="px-4 mt-3">
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {missionsFarm.map((mission) => (
-              <HomeMissionCard key={mission.id} {...mission} />
+            {missionsFarm.map((stay) => (
+              <HomeMissionCard key={stay.id} stay={stay} />
             ))}
           </ScrollView>
         </View>
@@ -118,8 +148,8 @@ export default function ExploreScreen() {
         </View>
         <View className="px-4 mt-3">
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {missionsAnimal.map((mission) => (
-              <HomeMissionCard key={mission.id} {...mission} />
+            {missionsAnimal.map((stay) => (
+              <HomeMissionCard key={stay.id} stay={stay} />
             ))}
           </ScrollView>
         </View>
@@ -134,8 +164,8 @@ export default function ExploreScreen() {
         </View>
         <View className="px-4 mt-3">
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {missionsEnv.map((mission) => (
-              <HomeMissionCard key={mission.id} {...mission} />
+            {missionsEnv.map((stay) => (
+              <HomeMissionCard key={stay.id} stay={stay} />
             ))}
           </ScrollView>
         </View>
@@ -150,8 +180,8 @@ export default function ExploreScreen() {
         </View>
         <View className="px-4 mt-3">
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {missionsCultural.map((mission) => (
-              <HomeMissionCard key={mission.id} {...mission} />
+            {missionsCultural.map((stay) => (
+              <HomeMissionCard key={stay.id} stay={stay} />
             ))}
           </ScrollView>
         </View>

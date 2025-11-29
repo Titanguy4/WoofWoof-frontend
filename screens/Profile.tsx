@@ -14,7 +14,14 @@ import {
 } from "lucide-react-native";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { ActivityIndicator, Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  Image,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function ProfileScreen() {
   const router: Router = useRouter();
@@ -25,7 +32,7 @@ export default function ProfileScreen() {
   // --- Fetch profile photo when user.id is available ---
   useEffect(() => {
     if (user.id) {
-      fetchProfilePhoto(user.id);
+      fetchProfilePhoto(String(user.id));
     }
   }, [user.id]);
 
@@ -46,7 +53,11 @@ export default function ProfileScreen() {
       <View className="w-5/6 -mt-[120px] z-1 self-center bg-woofCream-50 rounded-2xl shadow p-8 gap-y-5">
         <View className="flex-row items-center gap-x-3">
           {loading ? (
-            <ActivityIndicator size="small" color="#000" className="w-[40px] h-[40px]" />
+            <ActivityIndicator
+              size="small"
+              color="#000"
+              className="w-[40px] h-[40px]"
+            />
           ) : (
             <Image
               source={profilePhoto ? { uri: profilePhoto.url } : undefined}

@@ -1,11 +1,8 @@
 export interface Review {
-  id_review: number;
-
+  id: number;
   rating: number;
-
-  content: string;
-
-  date: Date;
+  content: string | null;
+  date: string | null;
 }
 
 export default Review;

@@ -5,6 +5,7 @@ import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
+  ActivityIndicator,
   Image,
   ScrollView,
   Text,
@@ -18,25 +19,13 @@ import { Media } from "../types/Media";
 
 export default function Woofshare() {
   const { t } = useTranslation("woofshare");
-  const { medias, fetchAllWoofSharePhotos, loading } = useMedia(); // Hook
+  const { medias, fetchAllWoofSharePhotos, loading, error } = useMedia();
+
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState<string[]>([
     "farm",
     "animal",
   ]);
-
-  // --- Fetch WoofShare photos when component mounts ---
-  useEffect(() => {
-    fetchAllWoofSharePhotos();
-  }, []);
-
-  const toggleFilter = (label: string) => {
-    setSelectedFilters((prev) =>
-      prev.includes(label)
-        ? prev.filter((item) => item !== label)
-        : [...prev, label],
-    );
-  };
 
   type CategoryKey = "farm" | "animal" | "cultural" | "environment";
 
@@ -54,11 +43,30 @@ export default function Woofshare() {
     environment: require("../assets/images/environmentalType.png"),
   };
 
-  // --- Optional: filter images based on selected filters ---
-  const filteredMedias: Media[] = medias.filter((media) => {
-    // Ici tu peux filtrer selon ton propre champ si tu as des tags/filtres
-    return true; // Pour l'instant, on prend tout
-  });
+  useEffect(() => {
+    const loadPhotos = async () => {
+      try {
+        await fetchAllWoofSharePhotos();
+      } catch (err) {
+        console.error("Error fetching WoofShare photos:", err);
+      }
+    };
+    loadPhotos();
+  }, []);
+
+  const toggleFilter = (label: string) => {
+    setSelectedFilters((prev) =>
+      prev.includes(label)
+        ? prev.filter((item) => item !== label)
+        : [...prev, label],
+    );
+  };
+
+  const filteredMedias: Media[] = medias.filter((media) => true);
+
+  // Générateur de hauteur aléatoire pour Pinterest
+  const getRandomHeight = (min: number, max: number) =>
+    Math.floor(Math.random() * (max - min + 1)) + min;
 
   return (
     <SafeAreaView
@@ -87,7 +95,6 @@ export default function Woofshare() {
 
       {/* Search + Filter */}
       <View className="bg-white px-6 py-2 flex-row items-center gap-3">
-        {/* Search */}
         <View className="flex-row items-center bg-white border border-woofGrey-500 rounded-full h-[55px] px-4 flex-1">
           <TextInput
             placeholder={t("search.placeholder")}
@@ -97,7 +104,6 @@ export default function Woofshare() {
           <Ionicons name="search" size={20} color={COLORS.woofGrey[500]} />
         </View>
 
-        {/* Filter */}
         <TouchableOpacity
           onPress={() => setFiltersOpen(!filtersOpen)}
           className="flex-row items-center bg-white border border-woofGrey-500 rounded-full px-4 h-[55px]"
@@ -113,7 +119,7 @@ export default function Woofshare() {
         </TouchableOpacity>
       </View>
 
-      {/* FILTER POPOVER */}
+      {/* Filter Popover */}
       {filtersOpen && (
         <View className="absolute top-[150px] right-6 bg-white p-4 rounded-2xl shadow-lg z-50 w-[210px]">
           <Text className="font-manropeBold mb-2 text-[15px]">
@@ -127,14 +133,14 @@ export default function Woofshare() {
                 <TouchableOpacity
                   key={label}
                   onPress={() => toggleFilter(label)}
-                  className={`px-3 py-1 rounded-full border ${active
+                  className={`px-3 py-1 rounded-full border ${
+                    active
                       ? "bg-woofBrown-500 border-woofBrown-500"
                       : "border-woofGrey"
-                    }`}
+                  }`}
                 >
                   <Text
-                    className={`text-[12px] ${active ? "text-white" : "text-black"
-                      }`}
+                    className={`text-[12px] ${active ? "text-white" : "text-black"}`}
                   >
                     {t(`categories.${label}`)}
                   </Text>
@@ -143,7 +149,6 @@ export default function Woofshare() {
             })}
           </View>
 
-          {/* Apply Button */}
           <TouchableOpacity
             onPress={() => setFiltersOpen(false)}
             className="bg-woofBrown-500 px-4 py-2 rounded-full mt-4 items-center"
@@ -155,7 +160,7 @@ export default function Woofshare() {
         </View>
       )}
 
-      {/* Categories preview row */}
+      {/* Categories row */}
       <View className="bg-white px-4 py-2">
         <ScrollView
           horizontal
@@ -165,29 +170,24 @@ export default function Woofshare() {
           <View className="flex-row gap-3">
             {categoryLabels.map((label) => {
               const active = selectedFilters.includes(label);
-
               return (
                 <TouchableOpacity
                   key={label}
                   onPress={() => toggleFilter(label)}
-                  className={`flex-row items-center rounded-full px-2 border
-    ${active ? "bg-woofBrown-500 border-woofBrown-500" : "bg-white border-woofBrown-500"}
-  `}
+                  className={`flex-row items-center rounded-full px-2 border ${
+                    active
+                      ? "bg-woofBrown-500 border-woofBrown-500"
+                      : "bg-white border-woofBrown-500"
+                  }`}
                   style={{ width: 135, height: 36 }}
                   activeOpacity={1}
                 >
                   <Image
                     source={categoryIcons[label]}
-                    style={{
-                      width: 42,
-                      height: 36,
-                      resizeMode: "contain",
-                    }}
+                    style={{ width: 42, height: 36, resizeMode: "contain" }}
                   />
-
                   <Text
-                    className={`ml-2 text-[12px] ${active ? "text-white font-manropeBold" : "text-black"
-                      }`}
+                    className={`ml-2 text-[12px] ${active ? "text-white font-manropeBold" : "text-black"}`}
                     numberOfLines={1}
                   >
                     {t(`categories.${label}`)}
@@ -199,37 +199,68 @@ export default function Woofshare() {
         </ScrollView>
       </View>
 
-      {/* Images Grid */}
+      {/* Images Grid (Pinterest style) */}
       <ScrollView className="flex-1 bg-woofCream-500 px-4 pt-2">
-        <View className="flex-row justify-between">
-          {/* Left Column */}
-          <View className="w-[48%] gap-y-5">
-            {filteredMedias
-              .filter((_, i) => i % 2 === 0)
-              .map((media, index) => (
-                <Image
-                  key={index}
-                  source={{ uri: media.url }}
-                  className="w-full rounded-xl"
-                  resizeMode="cover"
-                />
-              ))}
+        {loading && (
+          <View className="flex-1 items-center justify-center mt-20">
+            <ActivityIndicator size="large" color={COLORS.woofBrown[500]} />
+            <Text className="mt-2 text-[14px] font-manropeMedium">
+              Loading photos...
+            </Text>
           </View>
+        )}
 
-          {/* Right Column */}
-          <View className="w-[48%] gap-y-5">
-            {filteredMedias
-              .filter((_, i) => i % 2 !== 0)
-              .map((media, index) => (
-                <Image
-                  key={index}
-                  source={{ uri: media.url }}
-                  className="w-full rounded-xl"
-                  resizeMode="cover"
-                />
-              ))}
+        {!loading && medias.length === 0 && (
+          <View className="flex-1 items-center justify-center mt-20">
+            <Text className="text-[14px] font-manropeMedium text-gray-400">
+              No photos available.
+            </Text>
           </View>
-        </View>
+        )}
+
+        {!loading && medias.length > 0 && (
+          <View className="flex-row justify-between">
+            {/* Left column */}
+            <View className="w-[48%] gap-y-5">
+              {filteredMedias
+                .filter((_, i) => i % 2 === 0)
+                .map((media, index) =>
+                  media.url ? (
+                    <Image
+                      key={index}
+                      source={{ uri: media.url }}
+                      style={{
+                        width: "100%",
+                        height: getRandomHeight(120, 220),
+                        borderRadius: 12,
+                      }}
+                      resizeMode="cover"
+                    />
+                  ) : null,
+                )}
+            </View>
+
+            {/* Right column */}
+            <View className="w-[48%] gap-y-5">
+              {filteredMedias
+                .filter((_, i) => i % 2 !== 0)
+                .map((media, index) =>
+                  media.url ? (
+                    <Image
+                      key={index}
+                      source={{ uri: media.url }}
+                      style={{
+                        width: "100%",
+                        height: getRandomHeight(140, 240),
+                        borderRadius: 12,
+                      }}
+                      resizeMode="cover"
+                    />
+                  ) : null,
+                )}
+            </View>
+          </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );

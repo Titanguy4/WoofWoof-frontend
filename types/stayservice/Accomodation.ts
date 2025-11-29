@@ -1,5 +1,5 @@
 export interface Accomodation {
-  id_accomodation: number;
+  id: number;
 
   label: string;
 }

@@ -4,8 +4,11 @@ import { LearningSkill } from "./LearningSkill";
 import { Meal } from "./Meal";
 import { Review } from "./Review";
 
+export type StayType = "FARM" | "ANIMAL" | "CULTURAL" | "ENVIRONMENTAL";
+
 export interface Stay {
   id: number;
+  type: StayType;
   title: string;
   description: string;
   localisation: [number, number]; // [latitude, longitude]
@@ -19,4 +22,6 @@ export interface Stay {
   meals: Meal[];
   accomodations: Accomodation[];
   reviews: Review[];
+  // optionnal
+  photoId?: number[];
 }
