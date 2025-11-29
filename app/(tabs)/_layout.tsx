@@ -87,6 +87,13 @@ export default function TabLayout() {
           ),
         }}
       />
+
+      <Tabs.Screen
+        name="map"
+        options={{
+          href: null, // Cache la tab mais garde le stack accessible
+        }}
+      />
     </Tabs>
   );
 }

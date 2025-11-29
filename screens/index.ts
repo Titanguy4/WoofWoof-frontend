@@ -7,7 +7,6 @@ export { default as Discussion } from "./Discussion";
 export { default as EditProfile } from "./EditProfile";
 export { default as Explore } from "./Explore";
 export { default as ForgotPassword } from "./ForgotPassword";
-export { default as Map } from "./Map";
 export { default as MissionRequest } from "./MissionRequest";
 export { default as Missions } from "./Missions";
 export { default as MyOffer } from "./MyOffer";

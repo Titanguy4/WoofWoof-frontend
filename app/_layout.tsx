@@ -38,6 +38,14 @@ export default function RootLayout() {
         <ThemeProvider value={DefaultTheme}>
           <Stack>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="map"
+              options={{
+                headerTransparent: true,
+                headerTitle: "",
+                headerBackTitle: "Explore",
+              }}
+            />
           </Stack>
           <StatusBar style="auto" />
         </ThemeProvider>

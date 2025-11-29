@@ -1,23 +1,17 @@
-import { MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
-import {
-  ActivityIndicator,
-  Dimensions,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import ResultMissionCard from "@/components/ResultMissionCard";
 import { useStay } from "@/hooks/useStay";
+import { Activity } from "@/types/stayservice/Activity";
 import { Stay } from "@/types/stayservice/Stay";
 import { COLORS } from "@/utils/constants/colors";
-import { MapPin } from "lucide-react-native";
+import { MapPin, Route } from "lucide-react-native";
 
-export default function Map() {
+export default function MapPage() {
   const { stays, getAllStays, loading, error } = useStay();
   const [selectedStay, setSelectedStay] = useState<Stay | null>(null);
 
@@ -27,15 +21,12 @@ export default function Map() {
 
   if (loading) {
     return (
-      <SafeAreaView
-        edges={["top"]}
-        className="flex-1 bg-woofBrown-500 justify-center items-center"
-      >
+      <View className="flex-1 bg-woofBrown-500 justify-center items-center pt-safe">
         <ActivityIndicator size="large" color={COLORS.woofCream[500]} />
         <Text className="mt-4 text-white font-manropeSemiBold">
           Chargement des stays...
         </Text>
-      </SafeAreaView>
+      </View>
     );
   }
 
@@ -58,22 +49,12 @@ export default function Map() {
   }
 
   return (
-    <SafeAreaView edges={["top"]} className="flex-1 bg-woofBrown-500">
-      {/* Top bar */}
-      <View className="absolute top-24 left-4 z-20">
-        <TouchableOpacity
-          onPress={() => router.back()}
-          className="w-12 h-12 rounded-full bg-white justify-center items-center shadow-md"
-        >
-          <MaterialIcons name="chevron-left" size={26} color="black" />
-        </TouchableOpacity>
-      </View>
-
+    <>
       {/* MAP */}
       <MapView
         style={{
           width: "100%",
-          height: Dimensions.get("window").height,
+          height: "100%",
         }}
         initialRegion={{
           latitude: stays.length > 0 ? stays[0].localisation[0] : 46.5,
@@ -101,6 +82,12 @@ export default function Map() {
             </Marker>
           );
         })}
+
+        <View className="bg-white rounded-xl p-4 absolute bottom-0 right-0 m-8">
+          <TouchableOpacity onPress={() => router.push("/map/roadtrip")}>
+            <Route />
+          </TouchableOpacity>
+        </View>
       </MapView>
 
       {selectedStay && (
@@ -118,6 +105,6 @@ export default function Map() {
           />
         </View>
       )}
-    </SafeAreaView>
+    </>
   );
 }
