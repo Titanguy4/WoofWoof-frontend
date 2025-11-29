@@ -9,7 +9,7 @@ export interface Booking {
 
   endRequestedDate: Date;
 
-  status: "pending" | "accepted" | "rejected" | "cancelled";
+  status: "PENDING" | "ACCEPTED" | "REJECTED" | "CANCELLED";
 
   email: string;
 

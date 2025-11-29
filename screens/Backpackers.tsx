@@ -14,7 +14,7 @@ import BackpackerCard from "../components/BackpackerCard";
 
 export default function BackPackers() {
   const { t } = useTranslation("backpackers");
-   const { getBookingsForWoofer, loading, error } = useBooking();
+  const { getBookingsForWoofer, acceptBooking, rejectBooking } = useBooking();
   const { getStayById } = useStay();
   const { user } = useAuth();
 
@@ -22,17 +22,19 @@ export default function BackPackers() {
   const [bookingsWithStay, setBookingsWithStay] = useState<
     (Booking & { stayTitle: string })[]
   >([]);
+  const [initialLoading, setInitialLoading] = useState(true);
 
-  // Récupérer tous les bookings pour ce woofer
+  /** Charger toutes les réservations */
   useEffect(() => {
     const fetchBookings = async () => {
-      const bks = await getBookingsForWoofer(user?.id || "");
+      const bks = await getBookingsForWoofer(user?.sub || "");
       if (bks) setBookings(bks);
+      setInitialLoading(false);
     };
     fetchBookings();
-  }, [user?.id]);
+  }, [user?.sub]);
 
-  // Pour chaque booking, récupérer le stayTitle via getStayById
+  /** Ajouter les titres de stays */
   useEffect(() => {
     const fetchStayTitles = async () => {
       const enriched = await Promise.all(
@@ -47,8 +49,30 @@ export default function BackPackers() {
     if (bookings.length > 0) fetchStayTitles();
   }, [bookings]);
 
-  if (loading) return <Text>Loading...</Text>;
-  if (error) return <Text>Error: {error}</Text>;
+  if (initialLoading) return <Text>Loading...</Text>;
+
+  /** ----------------- HANDLERS ------------------ */
+  const handleAccept = async (id: number): Promise<boolean> => {
+    // MAJ immédiate de l’UI
+    setBookingsWithStay((prev) =>
+      prev.map((b) => (b.id === id ? { ...b, status: "ACCEPTED" } : b))
+    );
+
+    // Appel API en arrière-plan
+    acceptBooking(id);
+
+    return true; // obligatoire pour BackpackerCard
+  };
+
+  const handleReject = async (id: number): Promise<boolean> => {
+    setBookingsWithStay((prev) =>
+      prev.map((b) => (b.id === id ? { ...b, status: "REJECTED" } : b))
+    );
+
+    rejectBooking(id);
+
+    return true;
+  };
 
   return (
     <SafeAreaView
@@ -75,18 +99,23 @@ export default function BackPackers() {
         </Text>
       </View>
 
-      {/* Contenu principal */}
+      {/* Content */}
       <ScrollView className="flex-1 bg-woofCream-500 px-4">
         <View className="mt-4">
           {bookingsWithStay.map((b) => (
-            <BackpackerCard key={b.id}
+            <BackpackerCard
+              key={b.id}
               id={b.id}
               email={b.email}
               number={b.number}
               stayId={b.stayId}
               stayTitle={b.stayTitle}
               startDate={b.startRequestedDate.toString()}
-              endDate={b.endRequestedDate.toString()} />
+              endDate={b.endRequestedDate.toString()}
+              status={b.status}
+              onAccept={handleAccept}
+              onReject={handleReject}
+            />
           ))}
         </View>
       </ScrollView>

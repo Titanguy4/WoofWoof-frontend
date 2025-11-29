@@ -3,14 +3,17 @@ import { useState } from "react";
 import { useStay } from "./useStay";
 
 export const useBooking = () => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false); // seulement pour actions
   const [error, setError] = useState<string | null>(null);
 
   const BASE_URL = "http://localhost:8082/bookings";
+  const { getStayIdsByWoofer } = useStay();
 
   type BookingInput = Omit<Booking, "id">;
 
-  const { getStayIdsByWoofer } = useStay();
+  // ------------------------
+  // ACTIONS → loading = true
+  // ------------------------
 
   const createBooking = async (booking: BookingInput) => {
     try {
@@ -26,32 +29,13 @@ export const useBooking = () => {
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       return await response.json() as Booking;
     } catch (err: any) {
-      setError(err.message || "Error creating booking");
-      console.error("Booking error:", err);
+      setError(err.message);
     } finally {
       setLoading(false);
     }
   };
 
-
-  const getBookingsByStayId = async (stayId: number): Promise<Booking[] | undefined> => {
-    try {
-      setLoading(true);
-      setError(null);
-
-      const response = await fetch(`${BASE_URL}/stay/${stayId}`);
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
-      return await response.json() as Booking[];
-    } catch (err: any) {
-      setError(err.message || "Error fetching bookings by stayId");
-      console.error("Booking error:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const updateBookingStatus = async (id: number, action: "accept" | "reject"): Promise<Booking | undefined> => {
+  const updateBookingStatus = async (id: number, action: "accept" | "reject") => {
     try {
       setLoading(true);
       setError(null);
@@ -61,32 +45,40 @@ export const useBooking = () => {
 
       return await response.json() as Booking;
     } catch (err: any) {
-      setError(err.message || `Error ${action}ing booking`);
-      console.error("Booking error:", err);
+      setError(err.message);
     } finally {
       setLoading(false);
     }
   };
 
-  const getBookingsForWoofer = async (wooferId: string): Promise<Booking[] | undefined> => {
-    try {
-      setLoading(true);
-      setError(null);
+  // -----------------------------
+  // FETCH UTILS → PAS de loading
+  // -----------------------------
 
+  const getBookingsByStayId = async (stayId: number): Promise<Booking[]> => {
+    try {
+      const response = await fetch(`${BASE_URL}/stay/${stayId}`);
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      return await response.json();
+    } catch (err) {
+      console.error(err);
+      return [];
+    }
+  };
+
+  const getBookingsForWoofer = async (wooferId: string): Promise<Booking[]> => {
+    try {
       const stayIds = await getStayIdsByWoofer(wooferId);
       if (!stayIds || stayIds.length === 0) return [];
 
-      // On récupère tous les bookings pour chaque stayId
-      const bookingPromises = stayIds.map(id => getBookingsByStayId(id));
-      const bookingsArrays = await Promise.all(bookingPromises);
+      const bookingsArrays = await Promise.all(
+        stayIds.map(id => getBookingsByStayId(id))
+      );
 
-      // On a un array d'array, on aplatit
-      return bookingsArrays.flat().filter(Boolean) as Booking[];
-    } catch (err: any) {
-      setError(err.message || "Error fetching bookings for woofer");
-      console.error("Booking error:", err);
-    } finally {
-      setLoading(false);
+      return bookingsArrays.flat();
+    } catch (err) {
+      console.error(err);
+      return [];
     }
   };
 

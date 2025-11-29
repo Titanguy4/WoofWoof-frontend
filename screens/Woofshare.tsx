@@ -205,14 +205,13 @@ export default function Woofshare() {
                 .filter((_, i) => i % 2 === 0)
                 .map((media, index) =>
                   media.url ? (
-                    <TouchableOpacity onPress={() =>
+                    <TouchableOpacity key={media.id ?? index} onPress={() =>
                             router.push({
                               pathname: "/details/[id]",
                               params: { id: String(media.stayId) },
                             })
                           }>
                       <Image
-                        key={index}
                         source={{ uri: media.url }}
                         style={{
                           width: "100%",
@@ -232,14 +231,13 @@ export default function Woofshare() {
                 .filter((_, i) => i % 2 !== 0)
                 .map((media, index) =>
                   media.url ? (
-                    <TouchableOpacity onPress={() =>
+                    <TouchableOpacity key={media.id ?? index} onPress={() =>
                             router.push({
                               pathname: "/details/[id]",
                               params: { id: String(media.stayId) },
                             })
                           }>
                       <Image
-                        key={index}
                         source={{ uri: media.url }}
                         style={{
                           width: "100%",
