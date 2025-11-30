@@ -1,5 +1,5 @@
 export interface Meal {
-  id_meal: number;
+  id: number;
 
   label: string;
 }

@@ -91,7 +91,7 @@ export default function MissionRequest({ id }: Props) {
       userId: user?.id || null, 
       startRequestedDate: startDate,
       endRequestedDate: endDate,
-      status: "pending",
+      status: "PENDING",
       email,
       number,
     };

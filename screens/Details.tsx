@@ -191,7 +191,7 @@ export default function DetailsScreen({ id }: Props) {
         <View className="p-4">
           <Text className="text-2xl font-manropeBold mb-2">{stay.title}</Text>
           <View className="flex-row items-center justify-between mb-4">
-            <Text className="text-base text-gray-700">📍 {stay.localisation}</Text>
+            <Text className="text-base text-gray-700">📍 {stay.department}, {stay.region}</Text>
             <Text className="text-sm text-gray-500">
               ⭐ {rating} ({stay.reviews ? stay.reviews.length : 0} reviews)
             </Text>
@@ -205,7 +205,7 @@ export default function DetailsScreen({ id }: Props) {
             <View className="ml-4 flex-1">
               <View className="flex-row items-center">
                 <Text className="font-manropeBold text-lg text-black mr-1">
-                  Brooke Davis
+                  {stay.wooferName}
                 </Text>
                 <Image
                   source={require("../assets/icons/house_icon.png")}
@@ -278,7 +278,7 @@ export default function DetailsScreen({ id }: Props) {
             Location
           </Text>
           <Text className="text-lg text-woofDarkGrey font-manrope mb-2">
-            {stay.localisation}
+            {stay.region}, {stay.department}
           </Text>
           <Text className="self-end text-lg text-black underline font-manrope mb-4">
             Go to maps

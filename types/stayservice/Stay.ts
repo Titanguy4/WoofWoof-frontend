@@ -22,6 +22,31 @@ export interface Stay {
   meals: Meal[];
   accomodations: Accomodation[];
   reviews: Review[];
+  wooferName: string;
+  // optionnal
+  photoId?: number[];
+}
+
+type MealCreate = Omit<Meal, "id">;
+type ActivityCreate = Omit<Activity, "id">;
+type AccomodationCreate = Omit<Accomodation, "id">;
+
+export interface NewStay {
+  type: StayType;
+  title: string;
+  description: string;
+  localisation: [number, number]; // [latitude, longitude]
+  department: string | null;
+  region: string | null;
+  status: boolean;
+  wooferId: string;
+  bookingId: number | null;
+  activities: ActivityCreate[];
+  learningSkills: LearningSkill[];
+  meals: MealCreate[];
+  accomodations: AccomodationCreate[];
+  reviews: Review[];
+  wooferName: string;
   // optionnal
   photoId?: number[];
 }
