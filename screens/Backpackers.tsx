@@ -14,9 +14,9 @@ import BackpackerCard from "../components/BackpackerCard";
 
 export default function BackPackers() {
   const { t } = useTranslation("backpackers");
+  const { user, accessToken } = useAuth(); // ✅ on récupère accessToken
   const { getBookingsForWoofer, acceptBooking, rejectBooking } = useBooking();
   const { getStayById } = useStay();
-  const { user } = useAuth();
 
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [bookingsWithStay, setBookingsWithStay] = useState<
@@ -24,18 +24,25 @@ export default function BackPackers() {
   >([]);
   const [initialLoading, setInitialLoading] = useState(true);
 
-  /** Charger toutes les réservations */
+  /** Si pas de token, on ne fait rien */
+  const isAuthenticated = !!accessToken;
+
+  /** Charger toutes les réservations uniquement si connecté */
   useEffect(() => {
+    if (!isAuthenticated || !user?.sub) return; // ✅ stop si pas connecté
+
     const fetchBookings = async () => {
-      const bks = await getBookingsForWoofer(user?.sub || "");
+      const bks = await getBookingsForWoofer(user.sub);
       if (bks) setBookings(bks);
       setInitialLoading(false);
     };
     fetchBookings();
-  }, [user?.sub]);
+  }, [user?.sub, isAuthenticated]);
 
-  /** Ajouter les titres de stays */
+  /** Ajouter les titres de stays uniquement si bookings existent et user connecté */
   useEffect(() => {
+    if (!isAuthenticated || bookings.length === 0) return;
+
     const fetchStayTitles = async () => {
       const enriched = await Promise.all(
         bookings.map(async (b) => {
@@ -45,32 +52,35 @@ export default function BackPackers() {
       );
       setBookingsWithStay(enriched);
     };
+    fetchStayTitles();
+  }, [bookings, isAuthenticated]);
 
-    if (bookings.length > 0) fetchStayTitles();
-  }, [bookings]);
+  if (!isAuthenticated) {
+    return (
+      <SafeAreaView style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text style={{ fontSize: 16, color: COLORS.woofBrown[500] }}>
+          {t("not_connected") || "Vous devez être connecté pour voir cette page."}
+        </Text>
+      </SafeAreaView>
+    );
+  }
 
   if (initialLoading) return <Text>Loading...</Text>;
 
   /** ----------------- HANDLERS ------------------ */
   const handleAccept = async (id: number): Promise<boolean> => {
-    // MAJ immédiate de l’UI
     setBookingsWithStay((prev) =>
       prev.map((b) => (b.id === id ? { ...b, status: "ACCEPTED" } : b))
     );
-
-    // Appel API en arrière-plan
     acceptBooking(id);
-
-    return true; // obligatoire pour BackpackerCard
+    return true;
   };
 
   const handleReject = async (id: number): Promise<boolean> => {
     setBookingsWithStay((prev) =>
       prev.map((b) => (b.id === id ? { ...b, status: "REJECTED" } : b))
     );
-
     rejectBooking(id);
-
     return true;
   };
 

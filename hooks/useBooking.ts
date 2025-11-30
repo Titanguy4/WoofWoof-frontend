@@ -82,10 +82,23 @@ export const useBooking = () => {
     }
   };
 
+  const getBookingsByUserId = async (userId: string): Promise<Booking[]> => {
+  try {
+    const response = await fetch(`${BASE_URL}/user/${userId}`);
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    return await response.json();
+  } catch (err) {
+    console.error(err);
+    return [];
+  }
+};
+
+
   return {
     createBooking,
     getBookingsByStayId,
     getBookingsForWoofer,
+    getBookingsByUserId,
     acceptBooking: (id: number) => updateBookingStatus(id, "accept"),
     rejectBooking: (id: number) => updateBookingStatus(id, "reject"),
     loading,
