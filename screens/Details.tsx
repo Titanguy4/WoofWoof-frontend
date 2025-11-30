@@ -1,8 +1,10 @@
 // screens/DetailsScreen.tsx
 import { getIconForAdvantage } from "@/constants/advantages";
+import { useLikes } from "@/context/LikeContext";
 import { useMedia } from "@/hooks/useMedia";
 import { useStay } from "@/hooks/useStay";
 import { Stay } from "@/types/stayservice/Stay";
+import { useAuth } from "@/utils/auth/AuthContext";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -20,6 +22,9 @@ export default function DetailsScreen({ id }: Props) {
   const { getStayById, loading: stayLoading, error: stayError } = useStay();
   const [stay, setStay] = useState<Stay | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const { toggleLike, isLiked } = useLikes();
+  const liked = isLiked(Number(id));
+  const { isAuthenticated } = useAuth();
 
   //recuperation du stay avec l'id
   useEffect(() => {
@@ -175,9 +180,14 @@ export default function DetailsScreen({ id }: Props) {
             </TouchableOpacity>
 
             <TouchableOpacity
+              onPress={() => toggleLike(Number(id))}
               className="items-center justify-center z-10 ml-3 mt-4 w-12 h-12 bg-white rounded-full shadow-md"
             >
-              <Ionicons name="heart-outline" size={20} color="black" />
+              <Ionicons
+                name={liked ? "heart" : "heart-outline"}
+                size={20}
+                color={liked ? COLORS.woofHeart : "black"}
+              />
             </TouchableOpacity>
           </View>
         </View>
@@ -286,11 +296,25 @@ export default function DetailsScreen({ id }: Props) {
         </View>
         <View className="mx-4 border-b border-b-gray-300 mb-4"></View>
         <View className="items-center mb-4">
-          <TouchableOpacity onPress={() => router.push(`/missionrequest/${id}`)} className="bg-woofBrown-500 w-36 h-12 px-3 py-1 rounded-2xl items-center justify-center mb-6">
-            <Text className="text-base font-manropeBold text-white">
-              Apply
-            </Text>
-          </TouchableOpacity>
+          {isAuthenticated ? (
+            <TouchableOpacity
+              onPress={() => router.push(`/missionrequest/${id}`)}
+              className="bg-woofBrown-500 w-36 h-12 px-3 py-1 rounded-2xl items-center justify-center mb-6"
+            >
+              <Text className="text-base font-manropeBold text-white">
+                Apply
+              </Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={() => router.push("/(tabs)/profile")}
+              className="bg-woofBrown-500 w-36 h-12 px-3 py-1 rounded-2xl items-center justify-center mb-6"
+            >
+              <Text className="text-base font-manropeBold text-white">
+                Connect
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>
