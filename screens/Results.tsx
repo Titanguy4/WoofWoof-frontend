@@ -159,7 +159,7 @@ export default function Results() {
                 description={stay.description}
                 region={stay.region || ""}
                 department={stay.department || ""}
-                imageUrl={stay.imageUrl} // ✅ ici on passe l'image récupérée
+                imageUrl={stay.imageUrl}
                 type={stay.type}
                 accomodations={stay.accomodations}
               />

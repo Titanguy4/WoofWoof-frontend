@@ -1,4 +1,7 @@
+import { COLORS } from "@/constants/colors";
+import { useLikes } from "@/context/LikeContext";
 import Accomodation from "@/types/stayservice/Accomodation";
+import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
@@ -12,7 +15,6 @@ type ResultMissionCardProps = {
   imageUrl: string;
   type: string;
   accomodations: Accomodation[];
-  heart?: boolean;
 };
 
 export default function ResultMissionCard({
@@ -24,19 +26,33 @@ export default function ResultMissionCard({
   imageUrl,
   type,
   accomodations,
-  heart = false,
 }: ResultMissionCardProps) {
+
+  const { isLiked } = useLikes();
+    const heart = isLiked(id);
+
+
   return (
     <TouchableOpacity
       onPress={() => router.push(`/details/${id}`)}
       className="w-full h-[180px] bg-white rounded-2xl flex-row overflow-hidden border border-woofBrown-500 relative"
     >
       {/* Image */}
+      <View>
       <Image
         source={{ uri: imageUrl }}
         className="h-full w-[115px]"
         resizeMode="cover"
       />
+      {heart && (
+          <Ionicons
+            className="absolute top-2 right-2"
+            name="heart"
+            size={20}
+            color={COLORS.woofHeart}
+          />
+        )}
+      </View>
 
       {/* Texte */}
       <View className="p-3">
