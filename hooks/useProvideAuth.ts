@@ -8,7 +8,7 @@ import { useEffect, useMemo, useState } from "react";
 export interface IAuthContext {
   accessToken: string | null;
   isAuthenticated: boolean;
-  user: Record<string, any>;
+  user: Record<string, any> | null;
   login: () => Promise<void>;
   logout: () => Promise<void>;
   isLoading: boolean;
@@ -25,37 +25,44 @@ interface KeycloakTokenPayload {
 
 export function useProvideAuth(): IAuthContext {
   const [accessToken, setAccessToken] = useState<string | null>(null);
-  const [discovery, setDiscovery] = useState<
-    AuthSession.DiscoveryDocument | null
-  >(null);
-  const [user, setUser] = useState<Record<string, any>>({ name: "Username " });
+  const [discovery, setDiscovery] = useState<AuthSession.DiscoveryDocument | null>(null);
+  const [user, setUser] = useState<Record<string, any> | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [userRoles, setUserRoles] = useState<string[]>([]);
-  const isWoofer: boolean = userRoles.includes("woofer");
-  const isBackpacker: boolean = userRoles.includes("backpacker");
+  const [isWoofer, setIsWoofer] = useState(false);
+  const [isBackpacker, setIsBackpacker] = useState(false);
 
   /**
-   * Init Auth for Keycloak
-   * Search endpoints to realm (discovery)
+   * Réinitialisation des states quand on logout ou pas de token
+   */
+  function resetAuth() {
+    setAccessToken(null);
+    setUser(null);
+    setUserRoles([]);
+    setIsWoofer(false);
+    setIsBackpacker(false);
+  }
+
+  /**
+   * Initialisation de Keycloak et chargement token existant
    */
   useEffect(() => {
     async function initAuth() {
       try {
-        const discoveryUrl: string = `${process.env.EXPO_PUBLIC_KEYCLOAK_BASE}`;
-        const result: AuthSession.DiscoveryDocument = await AuthSession
-          .fetchDiscoveryAsync(discoveryUrl);
-        setDiscovery(result);
+        const discoveryUrl = `${process.env.EXPO_PUBLIC_KEYCLOAK_BASE}`;
+        const discoveryDoc = await AuthSession.fetchDiscoveryAsync(discoveryUrl);
+        setDiscovery(discoveryDoc);
 
-        // Check if the accessToken doesn't already exist (if user already connect)
-        const { accessToken } = await AuthStorage.loadTokens();
-        if (accessToken) {
-          setAccessToken(accessToken);
+        const { accessToken: storedToken } = await AuthStorage.loadTokens();
+        if (storedToken) {
+          setAccessToken(storedToken);
+          decodeAndSetRoles(storedToken);
+        } else {
+          resetAuth();
         }
-      } catch (error) {
-        const initAuthErrMessage: string = "Erreur d'initialisation de l'Auth:";
-        if (error instanceof Error) {
-          console.error(initAuthErrMessage, error.message);
-        } else console.log(initAuthErrMessage, error);
+      } catch (e) {
+        console.error("Erreur d'initialisation de l'Auth:", e);
+        resetAuth();
       } finally {
         setIsLoading(false);
       }
@@ -63,58 +70,41 @@ export function useProvideAuth(): IAuthContext {
     initAuth();
   }, []);
 
-  const [request, response, promptAsync] = AuthSession.useAuthRequest(
-    authRequestConfig,
-    discovery,
-  );
+  const [request, response, promptAsync] = AuthSession.useAuthRequest(authRequestConfig, discovery);
 
   /**
-   * Due to PKCE, send code to keycloak and except the token
-   * The token is save using SecureStore from expo
+   * Exchange code -> token après login
    */
   useEffect(() => {
     async function exchangeCode() {
-      try {
-        if (response?.type === "success" && discovery) {
+      if (response?.type === "success" && discovery) {
+        try {
           const config: AuthSession.AccessTokenRequestConfig = {
             code: response.params.code,
             clientId: authRequestConfig.clientId,
             redirectUri,
-            extraParams: {
-              code_verifier: request?.codeVerifier ?? "",
-            },
+            extraParams: { code_verifier: request?.codeVerifier ?? "" },
           };
 
-          const tokenResult: AuthSession.TokenResponse = await AuthSession
-            .exchangeCodeAsync(config, discovery);
+          const tokenResult = await AuthSession.exchangeCodeAsync(config, discovery);
 
           setAccessToken(tokenResult.accessToken);
           decodeAndSetRoles(tokenResult.accessToken);
           await AuthStorage.saveTokens(tokenResult.accessToken);
 
-          const userInfo: Record<string, any> = await AuthSession
-            .fetchUserInfoAsync(tokenResult, discovery);
+          const userInfo = await AuthSession.fetchUserInfoAsync(tokenResult, discovery);
           if (userInfo) setUser(userInfo);
+        } catch (e) {
+          console.error("Erreur d'échange de code :", e);
+          resetAuth();
         }
-      } catch (e) {
-        const exchangeCodeErrorMessage = "Erreur d'échange de code :";
-        if (e instanceof Error) {
-          console.error(exchangeCodeErrorMessage, e.message);
-        } else console.error(exchangeCodeErrorMessage, e);
       }
     }
-
     exchangeCode();
   }, [response, discovery, request]);
 
   /**
-   * Fonctions
-   */
-
-  /**
-   * Login with keycloak
-   * a connection is ask at each connection (no cookies storage)
-   * @returns Promise<void>
+   * Login
    */
   async function login(): Promise<void> {
     if (!discovery || !request) {
@@ -125,121 +115,90 @@ export function useProvideAuth(): IAuthContext {
   }
 
   /**
-   * @returns Promise<void>
+   * Refresh user info
    */
   async function refreshUserData(): Promise<void> {
-    if (!accessToken || !discovery) {
-      console.error("Impossible de rafraîchir : token ou discovery manquant.");
-      return;
-    }
-
+    if (!accessToken || !discovery) return;
     try {
       const tokenResponse = new AuthSession.TokenResponse({ accessToken });
-
-      const userInfo: Record<string, any> = await AuthSession
-        .fetchUserInfoAsync(tokenResponse, discovery);
-
-      if (userInfo) {
-        setUser(userInfo);
-      }
+      const userInfo = await AuthSession.fetchUserInfoAsync(tokenResponse, discovery);
+      if (userInfo) setUser(userInfo);
     } catch (e) {
-      if (e instanceof Error) {
-        console.error("Erreur lors du refreshUserData:", e.message);
-      }
       console.error("Erreur lors du refreshUserData:", e);
     }
   }
 
   /**
-   * Using for edit the account of a user in keycloak
+   * Open Keycloak account page
    */
   async function openAccountPage(): Promise<void> {
-    const keycloakAccountUrl: string =
-      `${process.env.EXPO_PUBLIC_KEYCLOAK_BASE}/account/`;
-
+    const keycloakAccountUrl = `${process.env.EXPO_PUBLIC_KEYCLOAK_BASE}/account/`;
     try {
-      // Ouvre le navigateur et ATTEND que l'utilisateur le ferme
       const result = await WebBrowser.openBrowserAsync(keycloakAccountUrl);
-
-      // L'utilisateur est revenu dans l'application
       if (result.type === "dismiss" || result.type === "cancel") {
-        console.log("Retour du navigateur, rafraîchissement du profil...");
-        // C'est ici que la magie opère :
         await refreshUserData();
       }
-    } catch (error) {
-      console.error("Erreur lors de l'ouverture de la page de profil:", error);
+    } catch (e) {
+      console.error("Erreur lors de l'ouverture de la page de profil:", e);
     }
   }
 
   /**
-   * Logout with keycloak
-   * show the default page of keycloak logout in the browser
-   * @returns Promise<void>
+   * Logout
    */
   async function logout(): Promise<void> {
-    setAccessToken(null);
-
+    resetAuth();
     await AuthStorage.clearTokens();
-
     if (discovery?.endSessionEndpoint) {
       try {
-        const logoutUrl = `${discovery.endSessionEndpoint}` +
-          `?client_id=${authRequestConfig.clientId}`;
-        await WebBrowser.openBrowserAsync(logoutUrl);
-      } catch (error) {
-        console.error("Erreur lors de la déconnexion Keycloak:", error);
+        await WebBrowser.openBrowserAsync(
+          `${discovery.endSessionEndpoint}?client_id=${authRequestConfig.clientId}`
+        );
+      } catch (e) {
+        console.error("Erreur lors de la déconnexion Keycloak:", e);
       }
     }
   }
 
   /**
-   * Helpers to simplify code
+   * Decode token et met à jour rôles
    */
   function decodeAndSetRoles(token: string | null) {
     if (!token) {
-      console.error("pas de token");
-      setUserRoles([]);
+      resetAuth();
       return;
     }
     try {
-      console.log(token);
       const decodedToken = jwtDecode<KeycloakTokenPayload>(token);
-      // 📌 Récupération de l'id utilisateur
-      const keycloakUserId = decodedToken.sub;
-      console.log("User ID Keycloak:", keycloakUserId);
-      setUser((prev) => ({ ...prev, id: keycloakUserId }));
-      const realmRoles = decodedToken.realm_access?.roles || [];
-      setUserRoles(realmRoles);
+      setUser({ id: decodedToken.sub, ...decodedToken });
+
+      const roles = decodedToken.realm_access?.roles || [];
+      setUserRoles(roles);
+      setIsWoofer(roles.includes("Woofer"));
+      setIsBackpacker(roles.includes("Backpacker"));
     } catch (e) {
       console.error("Erreur de décodage du token:", e);
-      setUserRoles([]);
+      resetAuth();
     }
   }
 
-  const contextValue = useMemo(
-    () => ({
-      accessToken,
-      isAuthenticated: !!accessToken,
-      user,
-      login,
-      logout,
-      isLoading,
-      openAccountPage,
-      isWoofer,
-      isBackpacker,
-    }),
-    [
-      accessToken,
-      isLoading,
-      user,
-      isWoofer,
-      isBackpacker,
-      login,
-      logout,
-      openAccountPage,
-    ],
-  );
+  /**
+   * Log roles pour debug
+   */
+  useEffect(() => {
+    console.log("userRoles updated:", userRoles);
+    console.log("isWoofer =", isWoofer, "isBackpacker =", isBackpacker);
+  }, [userRoles, isWoofer, isBackpacker]);
 
-  return contextValue;
+  return useMemo<IAuthContext>(() => ({
+    accessToken,
+    isAuthenticated: !!accessToken,
+    user,
+    login,
+    logout,
+    isLoading,
+    openAccountPage,
+    isWoofer,
+    isBackpacker,
+  }), [accessToken, isLoading, user, isWoofer, isBackpacker]);
 }

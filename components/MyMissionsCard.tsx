@@ -1,36 +1,26 @@
 import React from "react";
-import { Image, ImageSourcePropType, Text, View } from "react-native";
+import { Image, Text, View } from "react-native";
 
 type MyMissionsCardProps = {
   id: number;
-  image: ImageSourcePropType;
-  image2x?: ImageSourcePropType;
-  title: string;
-  location: string;
-  rating: string;
-  distance: string;
-  housing: string;
-  description?: string;
-  advantages?: string[];
-  reviews?: any[];
-  locationDetails?: string;
+  stayTitle: string;
   startDate: string;
   endDate: string;
-  status: "pending" | "accepted" | "rejected" | "completed";
+  status: "PENDING" | "ACCEPTED" | "REJECTED" | "CANCELLED";
+  stayRegion: string;
+  stayDepartment: string;
+  imageUrl: string;
 };
 
 export default function MyMissionsCard({
   id,
-  image,
-  title,
-  location,
-  rating,
-  distance,
-  housing,
-  locationDetails,
+  stayTitle,
   startDate,
   endDate,
   status,
+  imageUrl,
+  stayRegion,
+  stayDepartment,
 }: MyMissionsCardProps) {
   const formatStartDate = (dateStr: string) => {
     const date = new Date(dateStr);
@@ -49,13 +39,13 @@ export default function MyMissionsCard({
 
   const formatStatus = (status: string) => {
     switch (status) {
-      case "pending":
+      case "PENDING":
         return "Pending ⏱";
-      case "accepted":
+      case "ACCEPTED":
         return "Accepted";
-      case "rejected":
+      case "REJECTED":
         return "Rejected ❌";
-      case "completed":
+      case "CANCELLED":
         return "Completed ✔";
       default:
         return status;
@@ -63,23 +53,23 @@ export default function MyMissionsCard({
   };
 
   return (
-    <View className="w-full h-[122px] bg-white rounded-2xl flex-row overflow-hidden border border-woofBrown-500">
+    <View className="w-full h-[140px] bg-white rounded-2xl flex-row overflow-hidden border border-woofBrown-500">
       {/* Image */}
       <View className="relative">
-        <Image source={image} className="h-full w-[115px]" resizeMode="cover" />
+        <Image source={{ uri: imageUrl }} className="h-full w-[115px]" resizeMode="cover" />
       </View>
 
       {/* Texte */}
       <View className="p-3 flex-1">
         <Text className="font-manropeBold text-[16px] mb-2" numberOfLines={1}>
-          {title}
+          {stayTitle}
         </Text>
 
         <Text
           className="font-manrope text-[12px] text-[#7E7E7E] mb-1"
           numberOfLines={2}
         >
-          {location}
+          {stayRegion},{"\n"}{stayDepartment}
         </Text>
 
         <Text
