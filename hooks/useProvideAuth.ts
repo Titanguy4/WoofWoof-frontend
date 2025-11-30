@@ -3,7 +3,7 @@ import * as AuthStorage from "@/utils/auth/auth.storage";
 import * as AuthSession from "expo-auth-session";
 import * as WebBrowser from "expo-web-browser";
 import { jwtDecode } from "jwt-decode";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 export interface IAuthContext {
   accessToken: string | null;
@@ -19,179 +19,34 @@ export interface IAuthContext {
 
 interface KeycloakTokenPayload {
   sub: string;
+  exp: number;
   realm_access?: { roles: string[] };
   resource_access?: { [clientName: string]: { roles: string[] } };
 }
 
 export function useProvideAuth(): IAuthContext {
   const [accessToken, setAccessToken] = useState<string | null>(null);
-  const [discovery, setDiscovery] = useState<
-    AuthSession.DiscoveryDocument | null
-  >(null);
+  const [refreshToken, setRefreshToken] = useState<string | null>(null);
+  const [discovery, setDiscovery] =
+    useState<AuthSession.DiscoveryDocument | null>(null);
   const [user, setUser] = useState<Record<string, any>>({ name: "Username " });
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [userRoles, setUserRoles] = useState<string[]>([]);
   const isWoofer: boolean = userRoles.includes("woofer");
   const isBackpacker: boolean = userRoles.includes("backpacker");
+  const refreshTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isRefreshingRef = useRef<boolean>(false);
 
-  /**
-   * Init Auth for Keycloak
-   * Search endpoints to realm (discovery)
-   */
+  const refreshTokenRef = useRef<string | null>(null);
+  const discoveryRef = useRef<AuthSession.DiscoveryDocument | null>(null);
+
   useEffect(() => {
-    async function initAuth() {
-      try {
-        const discoveryUrl: string = `${process.env.EXPO_PUBLIC_KEYCLOAK_BASE}`;
-        const result: AuthSession.DiscoveryDocument = await AuthSession
-          .fetchDiscoveryAsync(discoveryUrl);
-        setDiscovery(result);
+    refreshTokenRef.current = refreshToken;
+  }, [refreshToken]);
 
-        // Check if the accessToken doesn't already exist (if user already connect)
-        const { accessToken } = await AuthStorage.loadTokens();
-        if (accessToken) {
-          setAccessToken(accessToken);
-        }
-      } catch (error) {
-        const initAuthErrMessage: string = "Erreur d'initialisation de l'Auth:";
-        if (error instanceof Error) {
-          console.error(initAuthErrMessage, error.message);
-        } else console.log(initAuthErrMessage, error);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-    initAuth();
-  }, []);
-
-  const [request, response, promptAsync] = AuthSession.useAuthRequest(
-    authRequestConfig,
-    discovery,
-  );
-
-  /**
-   * Due to PKCE, send code to keycloak and except the token
-   * The token is save using SecureStore from expo
-   */
   useEffect(() => {
-    async function exchangeCode() {
-      try {
-        if (response?.type === "success" && discovery) {
-          const config: AuthSession.AccessTokenRequestConfig = {
-            code: response.params.code,
-            clientId: authRequestConfig.clientId,
-            redirectUri,
-            extraParams: {
-              code_verifier: request?.codeVerifier ?? "",
-            },
-          };
-
-          const tokenResult: AuthSession.TokenResponse = await AuthSession
-            .exchangeCodeAsync(config, discovery);
-
-          setAccessToken(tokenResult.accessToken);
-          decodeAndSetRoles(tokenResult.accessToken);
-          await AuthStorage.saveTokens(tokenResult.accessToken);
-
-          const userInfo: Record<string, any> = await AuthSession
-            .fetchUserInfoAsync(tokenResult, discovery);
-          if (userInfo) setUser(userInfo);
-        }
-      } catch (e) {
-        const exchangeCodeErrorMessage = "Erreur d'échange de code :";
-        if (e instanceof Error) {
-          console.error(exchangeCodeErrorMessage, e.message);
-        } else console.error(exchangeCodeErrorMessage, e);
-      }
-    }
-
-    exchangeCode();
-  }, [response, discovery, request]);
-
-  /**
-   * Fonctions
-   */
-
-  /**
-   * Login with keycloak
-   * a connection is ask at each connection (no cookies storage)
-   * @returns Promise<void>
-   */
-  async function login(): Promise<void> {
-    if (!discovery || !request) {
-      console.warn("Configuration Keycloak non chargée. Réessayez.");
-      return;
-    }
-    await promptAsync();
-  }
-
-  /**
-   * @returns Promise<void>
-   */
-  async function refreshUserData(): Promise<void> {
-    if (!accessToken || !discovery) {
-      console.error("Impossible de rafraîchir : token ou discovery manquant.");
-      return;
-    }
-
-    try {
-      const tokenResponse = new AuthSession.TokenResponse({ accessToken });
-
-      const userInfo: Record<string, any> = await AuthSession
-        .fetchUserInfoAsync(tokenResponse, discovery);
-
-      if (userInfo) {
-        setUser(userInfo);
-      }
-    } catch (e) {
-      if (e instanceof Error) {
-        console.error("Erreur lors du refreshUserData:", e.message);
-      }
-      console.error("Erreur lors du refreshUserData:", e);
-    }
-  }
-
-  /**
-   * Using for edit the account of a user in keycloak
-   */
-  async function openAccountPage(): Promise<void> {
-    const keycloakAccountUrl: string =
-      `${process.env.EXPO_PUBLIC_KEYCLOAK_BASE}/account/`;
-
-    try {
-      // Ouvre le navigateur et ATTEND que l'utilisateur le ferme
-      const result = await WebBrowser.openBrowserAsync(keycloakAccountUrl);
-
-      // L'utilisateur est revenu dans l'application
-      if (result.type === "dismiss" || result.type === "cancel") {
-        console.log("Retour du navigateur, rafraîchissement du profil...");
-        // C'est ici que la magie opère :
-        await refreshUserData();
-      }
-    } catch (error) {
-      console.error("Erreur lors de l'ouverture de la page de profil:", error);
-    }
-  }
-
-  /**
-   * Logout with keycloak
-   * show the default page of keycloak logout in the browser
-   * @returns Promise<void>
-   */
-  async function logout(): Promise<void> {
-    setAccessToken(null);
-
-    await AuthStorage.clearTokens();
-
-    if (discovery?.endSessionEndpoint) {
-      try {
-        const logoutUrl = `${discovery.endSessionEndpoint}` +
-          `?client_id=${authRequestConfig.clientId}`;
-        await WebBrowser.openBrowserAsync(logoutUrl);
-      } catch (error) {
-        console.error("Erreur lors de la déconnexion Keycloak:", error);
-      }
-    }
-  }
+    discoveryRef.current = discovery;
+  }, [discovery]);
 
   /**
    * Helpers to simplify code
@@ -203,12 +58,10 @@ export function useProvideAuth(): IAuthContext {
       return;
     }
     try {
-      console.log(token);
       const decodedToken = jwtDecode<KeycloakTokenPayload>(token);
-      // 📌 Récupération de l'id utilisateur
       const keycloakUserId = decodedToken.sub;
       console.log("User ID Keycloak:", keycloakUserId);
-      setUser((prev) => ({ ...prev, id: keycloakUserId }));
+      setUser((prev) => ({ ...prev, id: keycloakUserId, sub: keycloakUserId }));
       const realmRoles = decodedToken.realm_access?.roles || [];
       setUserRoles(realmRoles);
     } catch (e) {
@@ -216,6 +69,256 @@ export function useProvideAuth(): IAuthContext {
       setUserRoles([]);
     }
   }
+
+  /**
+   * Rafraîchit l'access token en utilisant le refresh token
+   */
+  const refreshAccessToken = useCallback(async (): Promise<boolean> => {
+    const currentRefreshToken = refreshTokenRef.current;
+    const currentDiscovery = discoveryRef.current;
+
+    if (!currentRefreshToken || !currentDiscovery) {
+      console.error(
+        "Impossible de rafraîchir : refresh token ou discovery manquant",
+        {
+          hasRefreshToken: !!currentRefreshToken,
+          hasDiscovery: !!currentDiscovery,
+        },
+      );
+      return false;
+    }
+
+    try {
+      const config: AuthSession.RefreshTokenRequestConfig = {
+        clientId: authRequestConfig.clientId,
+        refreshToken: currentRefreshToken,
+      };
+
+      const tokenResult: AuthSession.TokenResponse =
+        await AuthSession.refreshAsync(config, currentDiscovery);
+
+      setAccessToken(tokenResult.accessToken);
+      const newRefreshToken = tokenResult.refreshToken ?? currentRefreshToken;
+      setRefreshToken(newRefreshToken);
+      decodeAndSetRoles(tokenResult.accessToken);
+
+      await AuthStorage.saveTokens(tokenResult.accessToken, newRefreshToken);
+
+      scheduleTokenRefresh(tokenResult.accessToken);
+
+      return true;
+    } catch (error) {
+      console.error("Erreur lors du refresh du token:", error);
+      setAccessToken(null);
+      setRefreshToken(null);
+      await AuthStorage.clearTokens();
+      return false;
+    }
+  }, []);
+
+  /**
+   * Planifie le rafraîchissement automatique du token avant son expiration
+   */
+  const scheduleTokenRefresh = useCallback(
+    (token: string) => {
+      try {
+        const decoded = jwtDecode<KeycloakTokenPayload>(token);
+        const expiresAt = decoded.exp * 1000;
+        const now = Date.now();
+        const timeUntilExpiry = expiresAt - now;
+
+        const refreshIn = Math.max(timeUntilExpiry - 120000, 0);
+
+        if (refreshTimerRef.current) {
+          clearTimeout(refreshTimerRef.current);
+        }
+
+        refreshTimerRef.current = setTimeout(async () => {
+          isRefreshingRef.current = true;
+          await refreshAccessToken();
+          isRefreshingRef.current = false;
+        }, refreshIn);
+      } catch (error) {
+        console.error("Erreur lors de la planification du refresh:", error);
+      }
+    },
+    [refreshAccessToken],
+  );
+
+  /**
+   * Init Auth for Keycloak
+   * Search endpoints to realm (discovery)
+   */
+  useEffect(() => {
+    async function initAuth() {
+      try {
+        const discoveryUrl: string = `${process.env.EXPO_PUBLIC_KEYCLOAK_BASE}`;
+        const result: AuthSession.DiscoveryDocument =
+          await AuthSession.fetchDiscoveryAsync(discoveryUrl);
+        setDiscovery(result);
+
+        const { accessToken, refreshToken } = await AuthStorage.loadTokens();
+        if (accessToken && refreshToken) {
+          setAccessToken(accessToken);
+          setRefreshToken(refreshToken);
+          decodeAndSetRoles(accessToken);
+          scheduleTokenRefresh(accessToken);
+        }
+      } catch (error) {
+        const initAuthErrMessage: string = "Erreur d'initialisation de l'Auth:";
+        if (error instanceof Error) {
+          console.error(initAuthErrMessage, error.message);
+        } else console.log(initAuthErrMessage, error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    initAuth();
+
+    return () => {
+      if (refreshTimerRef.current) {
+        clearTimeout(refreshTimerRef.current);
+      }
+    };
+  }, [scheduleTokenRefresh]);
+
+  const [request, response, promptAsync] = AuthSession.useAuthRequest(
+    authRequestConfig,
+    discovery,
+  );
+
+  /**
+   * Due to PKCE, send code to keycloak and except the token
+   * The token is save using SecureStore from expo
+   */
+  useEffect(() => {
+    // Ne pas exécuter si on est en train de rafraîchir le token
+    if (isRefreshingRef.current) {
+      return;
+    }
+
+    async function exchangeCode() {
+      try {
+        if (response?.type === "success" && discovery && request) {
+          const config: AuthSession.AccessTokenRequestConfig = {
+            code: response.params.code,
+            clientId: authRequestConfig.clientId,
+            redirectUri,
+            extraParams: {
+              code_verifier: request.codeVerifier ?? "",
+            },
+          };
+
+          const tokenResult: AuthSession.TokenResponse =
+            await AuthSession.exchangeCodeAsync(config, discovery);
+
+          setAccessToken(tokenResult.accessToken);
+          setRefreshToken(tokenResult.refreshToken ?? null);
+          decodeAndSetRoles(tokenResult.accessToken);
+
+          await AuthStorage.saveTokens(
+            tokenResult.accessToken,
+            tokenResult.refreshToken,
+          );
+
+          scheduleTokenRefresh(tokenResult.accessToken);
+
+          const userInfo: Record<string, any> =
+            await AuthSession.fetchUserInfoAsync(tokenResult, discovery);
+          if (userInfo) setUser(userInfo);
+        }
+      } catch (e) {
+        const exchangeCodeErrorMessage = "❌ Erreur d'échange de code :";
+        if (e instanceof Error) {
+          console.error(exchangeCodeErrorMessage, e.message);
+        } else console.error(exchangeCodeErrorMessage, e);
+      }
+    }
+
+    exchangeCode();
+  }, [response, discovery, request, scheduleTokenRefresh]);
+
+  /**
+   * Login with keycloak
+   */
+  const login = useCallback(async (): Promise<void> => {
+    if (!discovery || !request) {
+      console.warn("Configuration Keycloak non chargée. Réessayez.");
+      return;
+    }
+    await promptAsync();
+  }, [discovery, request, promptAsync]);
+
+  /**
+   * Refresh user data
+   */
+  const refreshUserData = useCallback(async (): Promise<void> => {
+    if (!accessToken || !discovery) {
+      console.error("Impossible de rafraîchir : token ou discovery manquant.");
+      return;
+    }
+
+    try {
+      const tokenResponse = new AuthSession.TokenResponse({ accessToken });
+
+      const userInfo: Record<string, any> =
+        await AuthSession.fetchUserInfoAsync(tokenResponse, discovery);
+
+      if (userInfo) {
+        setUser(userInfo);
+      }
+    } catch (e) {
+      if (e instanceof Error) {
+        console.error("Erreur lors du refreshUserData:", e.message);
+      }
+      console.error("Erreur lors du refreshUserData:", e);
+    }
+  }, [accessToken, discovery]);
+
+  /**
+   * Using for edit the account of a user in keycloak
+   */
+  const openAccountPage = useCallback(async (): Promise<void> => {
+    const keycloakAccountUrl: string = `${process.env.EXPO_PUBLIC_KEYCLOAK_BASE}/account/`;
+
+    try {
+      const result = await WebBrowser.openBrowserAsync(keycloakAccountUrl);
+
+      if (result.type === "dismiss" || result.type === "cancel") {
+        console.log("Retour du navigateur, rafraîchissement du profil...");
+        await refreshUserData();
+      }
+    } catch (error) {
+      console.error("Erreur lors de l'ouverture de la page de profil:", error);
+    }
+  }, [refreshUserData]);
+
+  /**
+   * Logout with keycloak
+   */
+  const logout = useCallback(async (): Promise<void> => {
+    if (refreshTimerRef.current) {
+      clearTimeout(refreshTimerRef.current);
+      refreshTimerRef.current = null;
+    }
+
+    setAccessToken(null);
+    setRefreshToken(null);
+    setUserRoles([]);
+
+    await AuthStorage.clearTokens();
+
+    if (discovery?.endSessionEndpoint) {
+      try {
+        const logoutUrl =
+          `${discovery.endSessionEndpoint}` +
+          `?client_id=${authRequestConfig.clientId}`;
+        await WebBrowser.openBrowserAsync(logoutUrl);
+      } catch (error) {
+        console.error("Erreur lors de la déconnexion Keycloak:", error);
+      }
+    }
+  }, [discovery]);
 
   const contextValue = useMemo(
     () => ({

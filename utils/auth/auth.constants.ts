@@ -11,7 +11,7 @@ export const redirectUri = AuthSession.makeRedirectUri({
 export const authRequestConfig: AuthSession.AuthRequestConfig = {
   clientId: process.env.EXPO_PUBLIC_CLIENT_ID || "",
   redirectUri: redirectUri,
-  scopes: ["openid", "profile", "email", "offline_access"],
+  scopes: ["openid", "profile", "email"],
   usePKCE: true,
   responseType: AuthSession.ResponseType.Code,
   extraParams: {
