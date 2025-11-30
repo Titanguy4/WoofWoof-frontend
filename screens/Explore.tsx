@@ -1,3 +1,5 @@
+import map from "@/assets/images/maps.png";
+import woofwoof from "@/assets/images/tete-chien.png";
 import { useStay } from "@/hooks/useStay";
 import { Stay } from "@/types/stayservice/Stay";
 import { COLORS } from "@/utils/constants/colors";
@@ -49,55 +51,26 @@ export default function ExploreScreen() {
 
   return (
     <>
-      <View className="bg-woofBrown-500 p-4 gap-y-3">
-        <View className="flex-row pt-safe ">
-          <View className="h-[48px] w-[267px] gap-2  ">
-            <Text className="text-base font-manrope text-white ">
-              Find your place to make an impact
-            </Text>
-            <Text className="text-xl font-manropeBold">WOOF WOOF !</Text>
-          </View>
-          <View className="flex-row justify-end items-center gap-2 flex-1">
-            <TouchableOpacity onPress={() => router.push("/chat")}>
-              <Image
-                source={require("../assets/icons/message-2.png")}
-                className="w-10 h-10  "
-              />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => router.push("/notifications")}>
-              <Image
-                source={require("../assets/icons/notif.png")}
-                className="w-10 h-10  "
-              />
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View className="flex-row items-center">
-          <View className="flex-row items-center bg-white rounded-3xl h-[48px] flex-1 mr-[10px]">
-            <TouchableOpacity
-              onPress={() => router.push("/search")}
-              className="flex-row items-center flex-1"
+      <View className="bg-woofBrown-500 p-4 gap-x-8 pt-safe flex-row items-center">
+        <Image source={woofwoof} className="w-14 h-14" />
+        <View className="flex-row items-center bg-white rounded-3xl h-[48px] flex-1 mr-[10px]">
+          <TouchableOpacity
+            onPress={() => router.push("/search")}
+            className="flex-row items-center flex-1"
+          >
+            <Text
+              style={{ color: COLORS.woofGrey[500] }}
+              className="flex-1 text-[15px] font-manropeMedium ml-4"
             >
-              <Text
-                style={{ color: COLORS.woofGrey[500] }}
-                className="flex-1 text-[15px] font-manropeMedium ml-4"
-              >
-                {t("search.placeholder")}
-              </Text>
-            </TouchableOpacity>
-            <Ionicons
-              className="mr-[14px]"
-              name="search"
-              size={20}
-              color={COLORS.woofGrey[500]}
-            />
-          </View>
-          <TouchableOpacity onPress={() => router.push("/map")}>
-            <Image
-              source={require("../assets/images/maps.png")}
-              className="w-10 h-10  "
-            />
+              {t("search.placeholder")}
+            </Text>
           </TouchableOpacity>
+          <Ionicons
+            className="mr-[14px]"
+            name="search"
+            size={20}
+            color={COLORS.woofGrey[500]}
+          />
         </View>
       </View>
       <ScrollView
@@ -186,6 +159,13 @@ export default function ExploreScreen() {
           </ScrollView>
         </View>
       </ScrollView>
+
+      <TouchableOpacity
+        className="absolute bottom-0 right-0 m-5 border-4 border-woofBrown-300 rounded-full"
+        onPress={() => router.push("/map")}
+      >
+        <Image source={map} className="w-20 h-20" />
+      </TouchableOpacity>
     </>
   );
 }
