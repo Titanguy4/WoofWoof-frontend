@@ -1,47 +1,72 @@
+import { useMedia } from "@/hooks/useMedia";
+import { useStay } from "@/hooks/useStay";
+import { Stay } from "@/types/stayservice/Stay";
 import { COLORS } from "@/utils/constants/colors";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
+  ActivityIndicator,
   Pressable,
   ScrollView,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSearchFilters } from "../context/SearchFiltersContext";
-import {
-  missionsAnimal,
-  missionsCultural,
-  missionsEnv,
-  missionsFarm,
-  missionsNearby,
-} from "../data/missions";
 
 export default function SearchFilter() {
   const { t } = useTranslation();
   const { filters, toggleFilter, clearFilters } = useSearchFilters();
 
+  const { getAllStays } = useStay();
+  const { fetchStayPhotos } = useMedia();
+  const [stays, setStays] = useState<Stay[]>([]);
+  const [loading, setLoading] = useState(true);
+
   // -------------------------------
-  // ADVANTAGES = extraction unique
+  // LOAD STAYS
   // -------------------------------
-  const allAdvantages = useMemo(() => {
-    const missions = [
-      ...missionsNearby,
-      ...missionsFarm,
-      ...missionsAnimal,
-      ...missionsEnv,
-      ...missionsCultural,
-    ];
-    const r = new Set<string>();
-    missions.forEach((m) => m.advantages.forEach((a) => r.add(a)));
-    return Array.from(r);
+  useEffect(() => {
+    const loadStays = async () => {
+      setLoading(true);
+      try {
+        const allStays = await getAllStays();
+        if (!allStays) return;
+
+        // Fetch first photo for each stay (optional)
+        const staysWithPhotos = await Promise.all(
+          allStays.map(async (s) => {
+            const media = await fetchStayPhotos(s.id);
+            const imageUrl = media && media.length > 0 ? media[0].url : "";
+            return { ...s, imageUrl };
+          })
+        );
+
+        setStays(staysWithPhotos);
+      } catch (err) {
+        console.error("Error loading stays:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadStays();
   }, []);
 
   // -------------------------------
-  // ACTIVITY TYPES
+  // ADVANTAGES = extraction unique depuis stays
+  // -------------------------------
+  const allAdvantages = useMemo(() => {
+    const r = new Set<string>();
+    stays.forEach((s) => s.accomodations.forEach((a) => r.add(a.label)));
+    return Array.from(r);
+  }, [stays]);
+
+  // -------------------------------
+  // ACTIVITY TYPES (toujours statique)
   // -------------------------------
   const activityTypes = [
     "Farm work",
@@ -53,7 +78,7 @@ export default function SearchFilter() {
   ];
 
   // -------------------------------
-  // VOLUNTEER PROFILE
+  // VOLUNTEER PROFILE (toujours statique)
   // -------------------------------
   const volunteerProfiles = [
     "Open to youth / students",
@@ -61,6 +86,14 @@ export default function SearchFilter() {
     "Group volunteering",
     "Senior-friendly",
   ];
+
+  if (loading) {
+    return (
+      <View className="flex-1 justify-center items-center bg-white">
+        <ActivityIndicator size="large" color={COLORS.woofBrown[500]} />
+      </View>
+    );
+  }
 
   return (
     <SafeAreaView

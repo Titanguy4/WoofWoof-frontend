@@ -1,30 +1,30 @@
+import Accomodation from "@/types/stayservice/Accomodation";
 import { router } from "expo-router";
 import React from "react";
-import {
-  Image,
-  ImageSourcePropType,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 
 type ResultMissionCardProps = {
   id: number;
-  image: ImageSourcePropType;
-  image2x?: ImageSourcePropType;
   title: string;
-  location: string;
   description: string;
-  advantages: string[];
-  locationDetails?: string;
+  region: string;
+  department: string;
+  imageUrl: string;
+  type: string;
+  accomodations: Accomodation[];
+  heart?: boolean;
 };
 
 export default function ResultMissionCard({
   id,
-  image,
   title,
-  location,
-  advantages,
+  description,
+  region,
+  department,
+  imageUrl,
+  type,
+  accomodations,
+  heart = false,
 }: ResultMissionCardProps) {
   return (
     <TouchableOpacity
@@ -32,7 +32,11 @@ export default function ResultMissionCard({
       className="w-full h-[180px] bg-white rounded-2xl flex-row overflow-hidden border border-woofBrown-500 relative"
     >
       {/* Image */}
-      <Image source={image} className="h-full w-[115px]" resizeMode="cover" />
+      <Image
+        source={{ uri: imageUrl }}
+        className="h-full w-[115px]"
+        resizeMode="cover"
+      />
 
       {/* Texte */}
       <View className="p-3">
@@ -42,7 +46,7 @@ export default function ResultMissionCard({
 
         <View className="w-[220px] mb-4">
           <Text className="text-[12px] text-[#7E7E7E] mt-1" numberOfLines={2}>
-            {location}
+            {department}, {region}
           </Text>
         </View>
 
@@ -51,9 +55,9 @@ export default function ResultMissionCard({
         </Text>
 
         <View className="mt-1 gap-y-1">
-          {advantages.map((adv, index) => (
+          {accomodations.map((adv, index) => (
             <Text key={index} className="text-[12px] text-[#7E7E7E]">
-              • {adv}
+              • {typeof adv === "string" ? adv : adv.label}
             </Text>
           ))}
         </View>
