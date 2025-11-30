@@ -1,0 +1,73 @@
+{
+  "title": "Road Trip",
+  "header": {
+    "title": "Road Trip"
+  },
+  "steps": {
+    "step": "Étape",
+    "addStep": "Ajouter une étape"
+  },
+  "form": {
+    "emailLabel": "Email de contact",
+    "emailPlaceholder": "votre.email@exemple.com",
+    "phoneLabel": "Numéro de téléphone",
+    "phoneOptional": "(Optionnel)",
+    "phonePlaceholder": "+33 6 12 34 56 78",
+    "startDateLabel": "Date de début",
+    "endDateLabel": "Date de fin",
+    "selectDate": "Sélectionner une date",
+    "cityLabel": "Ville",
+    "cityPlaceholder": "Ex: Paris, Lyon, Marseille...",
+    "maxProposalsLabel": "Nombre maximum de propositions par étape",
+    "confirm": "Confirmer",
+    "cancel": "Annuler"
+  },
+  "city": {
+    "noCity": "Aucune ville trouvée. Vérifiez l'orthographe.",
+    "searching": "Recherche..."
+  },
+  "validation": {
+    "invalidEmail": "Adresse email invalide"
+  },
+  "actions": {
+    "reset": "Réinitialiser",
+    "next": "Suivant",
+    "back": "Retour",
+    "submit": "Soumettre",
+    "acceptSelection": "Accepter la sélection",
+    "viewMore": "Voir Plus",
+    "return": "Retour"
+  },
+  "result": {
+    "noRoadTrip": "Aucun road trip trouvé",
+    "selectedStays": "séjour(s) sélectionné(s)",
+    "staysHere": "séjour(s) ici",
+    "staysAt": "Séjours à",
+    "available": "disponible",
+    "availablePlural": "disponibles",
+    "selected": "sélectionné",
+    "selectedPlural": "sélectionnés",
+    "stay": "séjour",
+    "stays": "séjours",
+    "loading": "Chargement...",
+    "bookingInProgress": "Réservation en cours...",
+    "book": "Réserver"
+  },
+  "errors": {
+    "error": "Erreur",
+    "noSelection": "Aucune sélection",
+    "noSelectionMessage": "Veuillez sélectionner au moins un séjour pour continuer",
+    "missingDates": "Les dates de début et de fin sont manquantes",
+    "bookingError": "Une erreur est survenue lors de la création de vos réservations. Veuillez réessayer."
+  },
+  "booking": {
+    "confirmation": "Confirmation",
+    "confirmMessage": "Vous êtes sur le point de réserver {{count}} séjour(s).\nVoulez-vous continuer ?",
+    "success": "Réservations créées",
+    "successMessage": "{{count}} réservation(s) ont été créées avec succès !",
+    "failure": "Échec",
+    "failureMessage": "Aucune réservation n'a pu être créée.\n{{count}} échec(s).",
+    "partialSuccess": "Réservations partiellement créées",
+    "partialSuccessMessage": "{{success}} réservation(s) créée(s) avec succès.\n{{failed}} échec(s)."
+  }
+}

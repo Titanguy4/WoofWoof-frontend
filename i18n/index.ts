@@ -7,6 +7,7 @@ import enExplore from "./locals/en/en-explore.json";
 import enMissions from "./locals/en/en-missions.json";
 import enMyoffer from "./locals/en/en-myoffer.json";
 import enProfil from "./locals/en/en-profil.json";
+import enRoadtrip from "./locals/en/en-roadtrip.json";
 import enSaved from "./locals/en/en-saved.json";
 import enWoofshare from "./locals/en/en-woofshare.json";
 import frBackpackers from "./locals/fr/fr-backpackers.json";
@@ -15,6 +16,7 @@ import frExplore from "./locals/fr/fr-explore.json";
 import frMissions from "./locals/fr/fr-missions.json";
 import frMyoffer from "./locals/fr/fr-myoffer.json";
 import frProfil from "./locals/fr/fr-profil.json";
+import frRoadtrip from "./locals/fr/fr-roadtrip.json";
 import frSaved from "./locals/fr/fr-saved.json";
 import frWoofshare from "./locals/fr/fr-woofshare.json";
 
@@ -28,6 +30,7 @@ const resources = {
     missions: enMissions,
     myoffer: enMyoffer,
     backpackers: enBackpackers,
+    roadtrip: enRoadtrip,
   },
   fr: {
     common: frCommon,
@@ -38,6 +41,7 @@ const resources = {
     missions: frMissions,
     myoffer: frMyoffer,
     backpackers: frBackpackers,
+    roadtrip: frRoadtrip,
   },
 };
 
@@ -55,6 +59,7 @@ i18next.use(initReactI18next).init({
     "missions",
     "myoffer",
     "backpackers",
+    "roadtrip",
   ],
   resources,
 });

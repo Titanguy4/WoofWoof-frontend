@@ -1,7 +1,7 @@
 import ApplyMissionCard from "@/components/ApplyMissionCard";
 import { useBooking } from "@/hooks/useBooking";
 import { useStay } from "@/hooks/useStay";
-import { Booking } from "@/types/Booking";
+import { Booking } from "@/types/booking/Booking";
 import { Stay } from "@/types/stayservice/Stay";
 import { useAuth } from "@/utils/auth/AuthContext";
 import { COLORS } from "@/utils/constants/colors";

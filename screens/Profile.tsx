@@ -78,10 +78,6 @@ export default function ProfileScreen() {
             <House size={25} />
             <Text>{isWoofer ? "Woofer" : "Backpacker"}</Text>
           </View>
-
-          <Text className="font-manropeSemiBold text-base text-woofBrown-500">
-            27 {t("numHostVolunteers")}
-          </Text>
         </View>
       </View>
 

@@ -1,39 +1,85 @@
-import { Booking } from "@/types/Booking";
+import { Booking } from "@/types/booking/Booking";
+import BookingRequest from "@/types/booking/BookingRequest";
+import { useAuth } from "@/utils/auth/AuthContext";
 import { useState } from "react";
 
 export const useBooking = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { accessToken } = useAuth();
 
-  // On retire "id_booking" car il sera généré par le backend
-  type BookingInput = Omit<Booking, "id">;
+  const API_URL = process.env.EXPO_PUBLIC_API_BASE_URL + "/bookings";
 
-  const createBooking = async (booking: BookingInput) => {
+  /** POST create booking */
+  const createBooking = async (
+    booking: BookingRequest,
+  ): Promise<Booking | undefined> => {
     try {
       setLoading(true);
       setError(null);
 
-      const response = await fetch("http://localhost:8082/bookings", {
+      if (!accessToken) {
+        throw new Error("Token d'authentification manquant");
+      }
+
+      console.log("booking", JSON.stringify(booking));
+
+      const res = await fetch(API_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify(booking),
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.message || `HTTP error: ${res.status}`);
       }
 
-      const data: Booking = await response.json(); // la réponse contient probablement l'objet complet
-      return data;
+      const createdBooking = await res.json();
+      return createdBooking as Booking;
     } catch (err: any) {
-      setError(err.message || "Error creating booking");
-      console.error("Booking error:", err);
+      setError(err.message);
+      console.error("CreateBooking error:", err);
+      return undefined;
     } finally {
       setLoading(false);
     }
   };
 
-  return { createBooking, loading, error };
+  /** POST create multiple bookings */
+  const createMultipleBookings = async (
+    bookings: BookingRequest[],
+  ): Promise<{
+    success: Booking[];
+    failed: { booking: BookingRequest; error: string }[];
+  }> => {
+    const results = {
+      success: [] as Booking[],
+      failed: [] as { booking: BookingRequest; error: string }[],
+    };
+
+    for (const booking of bookings) {
+      const result = await createBooking(booking);
+      if (result) {
+        results.success.push(result);
+      } else {
+        results.failed.push({
+          booking,
+          error: error || "Erreur inconnue",
+        });
+      }
+    }
+
+    return results;
+  };
+
+  return {
+    createBooking,
+    createMultipleBookings,
+    loading,
+    error,
+  };
 };

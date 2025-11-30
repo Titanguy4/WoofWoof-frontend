@@ -11,7 +11,7 @@ export interface Stay {
   type: StayType;
   title: string;
   description: string;
-  localisation: [number, number]; // [latitude, longitude]
+  localisation: [number, number];
   department: string | null;
   region: string | null;
   status: boolean;
@@ -22,6 +22,5 @@ export interface Stay {
   meals: Meal[];
   accomodations: Accomodation[];
   reviews: Review[];
-  // optionnal
   photoId?: number[];
 }

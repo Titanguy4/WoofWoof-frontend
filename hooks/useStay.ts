@@ -8,8 +8,27 @@ export const useStay = () => {
 
   const API_URL = process.env.EXPO_PUBLIC_API_BASE_URL + "/stays";
 
-  // Création : pas d'id_stay
-  type StayInput = Omit<Stay, "id_stay">;
+  type StayInput = Omit<Stay, "id">;
+
+  /** Normalise les coordonnées du backend */
+  const normalizeCoordinate = (coord: number): number => {
+    // Si > 1000, diviser par 1000000
+    if (Math.abs(coord) > 1000) {
+      return coord / 1000000;
+    }
+    return coord;
+  };
+
+  /** Normalise un stay complet */
+  const normalizeStay = (stay: any): Stay => {
+    return {
+      ...stay,
+      localisation: [
+        normalizeCoordinate(stay.localisation[0]),
+        normalizeCoordinate(stay.localisation[1]),
+      ],
+    };
+  };
 
   /** GET all stays */
   const getAllStays = async (): Promise<Stay[] | undefined> => {
@@ -20,12 +39,18 @@ export const useStay = () => {
       const res = await fetch(API_URL);
       if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
 
-      const stays = await res.json();
-      setStays(stays);
-      return stays as Stay[];
+      const rawStays = await res.json();
+      console.log("📡 Raw stays from backend:", rawStays[0]?.localisation);
+
+      const normalizedStays = rawStays.map(normalizeStay);
+      console.log("✅ Normalized stays:", normalizedStays[0]?.localisation);
+
+      setStays(normalizedStays);
+      return normalizedStays as Stay[];
     } catch (err: any) {
       setError(err.message);
       console.error("GetAllStays error:", err);
+      return undefined;
     } finally {
       setLoading(false);
     }
@@ -40,10 +65,14 @@ export const useStay = () => {
       const res = await fetch(`${API_URL}/${id}`);
       if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
 
-      return (await res.json()) as Stay;
+      const rawStay = await res.json();
+      const normalizedStay = normalizeStay(rawStay);
+
+      return normalizedStay as Stay;
     } catch (err: any) {
       setError(err.message);
       console.error("GetStayById error:", err);
+      return undefined;
     } finally {
       setLoading(false);
     }
@@ -63,16 +92,18 @@ export const useStay = () => {
 
       if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
 
-      return (await res.json()) as Stay;
+      const rawStay = await res.json();
+      return normalizeStay(rawStay) as Stay;
     } catch (err: any) {
       setError(err.message);
       console.error("CreateStay error:", err);
+      return undefined;
     } finally {
       setLoading(false);
     }
   };
 
-  /** PUT update stay (OPTION 1 : backend attend tout le Stay) */
+  /** PUT update stay */
   const updateStay = async (stay: Stay): Promise<Stay | undefined> => {
     try {
       setLoading(true);
@@ -86,10 +117,12 @@ export const useStay = () => {
 
       if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
 
-      return (await res.json()) as Stay;
+      const rawStay = await res.json();
+      return normalizeStay(rawStay) as Stay;
     } catch (err: any) {
       setError(err.message);
       console.error("UpdateStay error:", err);
+      return undefined;
     } finally {
       setLoading(false);
     }
@@ -111,6 +144,7 @@ export const useStay = () => {
     } catch (err: any) {
       setError(err.message);
       console.error("DeleteStay error:", err);
+      return false;
     } finally {
       setLoading(false);
     }
