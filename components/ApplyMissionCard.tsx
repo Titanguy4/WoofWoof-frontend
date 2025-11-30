@@ -37,8 +37,6 @@ export default function ApplyMissionCard({
 
       if (isMounted && photos && photos.length > 0) {
         setImageUrl(photos[0].url);
-      } else {
-        console.log("⚠️ Aucun média trouvé pour ce stay");
       }
     };
 

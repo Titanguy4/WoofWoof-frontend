@@ -84,11 +84,11 @@ export default function MissionRequest({ id }: Props) {
 
     // ✅ correspond au type Omit<Booking, "id">
     const booking: Omit<Booking, "id"> = {
-      missionId: stay.id,
-      userId: 888, // temporaire
+      stayId: stay.id,
+      userId: user?.id || null,
       startRequestedDate: startDate,
       endRequestedDate: endDate,
-      status: "pending",
+      status: "PENDING",
       email,
       number,
     };

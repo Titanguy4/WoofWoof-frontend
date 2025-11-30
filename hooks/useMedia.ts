@@ -119,6 +119,31 @@ export function useMedia() {
     }
   };
 
+  // --- Create a new media ---
+  const createMedia = async (media: Partial<Media>): Promise<Media | null> => {
+    setLoading(true);
+    try {
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(media),
+      });
+
+      if (!response.ok) throw new Error("Failed to create media");
+
+      const data: Media = await response.json();
+      setMedias((prev) => [...prev, data]);
+      return data;
+    } catch (err: any) {
+      setError(err.message || "Unknown error");
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     medias,
     mediasByStay,
@@ -131,5 +156,6 @@ export function useMedia() {
     fetchStayIdFromWoofShare,
     fetchAllWoofSharePhotos,
     fetchWoofSharePhotosByStay,
+    createMedia,
   };
 }

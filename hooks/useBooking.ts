@@ -2,13 +2,15 @@ import { Booking } from "@/types/booking/Booking";
 import BookingRequest from "@/types/booking/BookingRequest";
 import { useAuth } from "@/utils/auth/AuthContext";
 import { useState } from "react";
+import { useStay } from "./useStay";
 
 export const useBooking = () => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false); // seulement pour actions
   const [error, setError] = useState<string | null>(null);
   const { accessToken } = useAuth();
 
   const API_URL = process.env.EXPO_PUBLIC_API_BASE_URL + "/bookings";
+  const { getStayIdsByWoofer } = useStay();
 
   /** POST create booking */
   const createBooking = async (
@@ -21,8 +23,6 @@ export const useBooking = () => {
       if (!accessToken) {
         throw new Error("Token d'authentification manquant");
       }
-
-      console.log("booking", JSON.stringify(booking));
 
       const res = await fetch(API_URL, {
         method: "POST",
@@ -44,6 +44,68 @@ export const useBooking = () => {
       setError(err.message);
       console.error("CreateBooking error:", err);
       return undefined;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getBookingsByStayId = async (stayId: number): Promise<Booking[]> => {
+    try {
+      const response = await fetch(`${API_URL}/stay/${stayId}`);
+      if (!response.ok)
+        throw new Error(`HTTP error! status: ${response.status}`);
+      return await response.json();
+    } catch (err) {
+      console.error(err);
+      return [];
+    }
+  };
+
+  const getBookingsForWoofer = async (wooferId: string): Promise<Booking[]> => {
+    try {
+      const stayIds = await getStayIdsByWoofer(wooferId);
+      if (!stayIds || stayIds.length === 0) return [];
+
+      const bookingsArrays = await Promise.all(
+        stayIds.map((id: number) => getBookingsByStayId(id)),
+      );
+
+      return bookingsArrays.flat();
+    } catch (err) {
+      console.error(err);
+      return [];
+    }
+  };
+
+  const getBookingsByUserId = async (userId: string): Promise<Booking[]> => {
+    try {
+      const response = await fetch(`${API_URL}/user/${userId}`);
+      if (!response.ok)
+        throw new Error(`HTTP error! status: ${response.status}`);
+      return await response.json();
+    } catch (err) {
+      console.error(err);
+      return [];
+    }
+  };
+
+  const updateBookingStatus = async (
+    id: number,
+    action: "accept" | "reject",
+  ) => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await fetch(`${API_URL}/${action}/${id}`, {
+        method: "PATCH",
+      });
+      if (!response.ok)
+        throw new Error(`HTTP error! status: ${response.status}`);
+
+      return (await response.json()) as Booking;
+    } catch (err: any) {
+      setError(err.message);
     } finally {
       setLoading(false);
     }
@@ -78,6 +140,11 @@ export const useBooking = () => {
 
   return {
     createBooking,
+    getBookingsByStayId,
+    getBookingsForWoofer,
+    getBookingsByUserId,
+    acceptBooking: (id: number) => updateBookingStatus(id, "accept"),
+    rejectBooking: (id: number) => updateBookingStatus(id, "reject"),
     createMultipleBookings,
     loading,
     error,

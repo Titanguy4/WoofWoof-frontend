@@ -1,3 +1,4 @@
+import { useLikes } from "@/context/LikeContext";
 import { Stay } from "@/types/stayservice/Stay";
 import { COLORS } from "@/utils/constants/colors";
 import { Ionicons } from "@expo/vector-icons";
@@ -8,15 +9,15 @@ import { useMedia } from "../hooks/useMedia";
 
 type HomeMissionCardProps = {
   stay: Stay;
-  heart?: boolean;
 };
 
 export default function HomeMissionCard({
   stay,
-  heart = false,
 }: Readonly<HomeMissionCardProps>) {
   const { mediasByStay, fetchStayPhotos } = useMedia();
   const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const { isLiked } = useLikes();
+  const heart = isLiked(stay.id);
 
   // ⭐ Calcul du rating
   const rating =
@@ -47,8 +48,6 @@ export default function HomeMissionCard({
 
       if (isMounted && photos && photos.length > 0) {
         setImageUrl(photos[0].url);
-      } else {
-        console.log("⚠️ Aucun média trouvé pour ce stay");
       }
     };
 

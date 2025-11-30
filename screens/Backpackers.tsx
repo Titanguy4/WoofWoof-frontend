@@ -1,16 +1,92 @@
+import { useBooking } from "@/hooks/useBooking";
+import { useStay } from "@/hooks/useStay";
+import { Booking } from "@/types/booking/Booking";
+import { useAuth } from "@/utils/auth/AuthContext";
 import { COLORS } from "@/utils/constants/colors";
 import { MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import BackpackerCard from "../components/BackpackerCard";
-import { backpackers } from "../data/backpackers";
 
 export default function BackPackers() {
   const { t } = useTranslation("backpackers");
+  const { user, accessToken } = useAuth(); // ✅ on récupère accessToken
+  const { getBookingsForWoofer, acceptBooking, rejectBooking } = useBooking();
+  const { getStayById } = useStay();
+
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [bookingsWithStay, setBookingsWithStay] = useState<
+    (Booking & { stayTitle: string })[]
+  >([]);
+  const [initialLoading, setInitialLoading] = useState(true);
+
+  /** Si pas de token, on ne fait rien */
+  const isAuthenticated = !!accessToken;
+
+  /** Charger toutes les réservations uniquement si connecté */
+  useEffect(() => {
+    if (!isAuthenticated || !user?.sub) return; // ✅ stop si pas connecté
+
+    const fetchBookings = async () => {
+      const bks = await getBookingsForWoofer(user.sub);
+      if (bks) setBookings(bks);
+      setInitialLoading(false);
+    };
+    fetchBookings();
+  }, [user?.sub, isAuthenticated]);
+
+  /** Ajouter les titres de stays uniquement si bookings existent et user connecté */
+  useEffect(() => {
+    if (!isAuthenticated || bookings.length === 0) return;
+
+    const fetchStayTitles = async () => {
+      const enriched = await Promise.all(
+        bookings.map(async (b) => {
+          const stay = await getStayById(b.stayId);
+          return { ...b, stayTitle: stay?.title ?? "Unknown" };
+        }),
+      );
+      setBookingsWithStay(enriched);
+    };
+    fetchStayTitles();
+  }, [bookings, isAuthenticated]);
+
+  if (!isAuthenticated) {
+    return (
+      <SafeAreaView
+        style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+      >
+        <Text style={{ fontSize: 16, color: COLORS.woofBrown[500] }}>
+          {t("not_connected") ||
+            "Vous devez être connecté pour voir cette page."}
+        </Text>
+      </SafeAreaView>
+    );
+  }
+
+  if (initialLoading) return <Text>Loading...</Text>;
+
+  /** ----------------- HANDLERS ------------------ */
+  const handleAccept = async (id: number): Promise<boolean> => {
+    setBookingsWithStay((prev) =>
+      prev.map((b) => (b.id === id ? { ...b, status: "ACCEPTED" } : b)),
+    );
+    acceptBooking(id);
+    return true;
+  };
+
+  const handleReject = async (id: number): Promise<boolean> => {
+    setBookingsWithStay((prev) =>
+      prev.map((b) => (b.id === id ? { ...b, status: "REJECTED" } : b)),
+    );
+    rejectBooking(id);
+    return true;
+  };
+
   return (
     <SafeAreaView
       style={{ backgroundColor: COLORS.woofBrown[500] }}
@@ -36,11 +112,23 @@ export default function BackPackers() {
         </Text>
       </View>
 
-      {/* Contenu principal */}
+      {/* Content */}
       <ScrollView className="flex-1 bg-woofCream-500 px-4">
         <View className="mt-4">
-          {backpackers.map((b) => (
-            <BackpackerCard key={b.id} {...b} />
+          {bookingsWithStay.map((b) => (
+            <BackpackerCard
+              key={b.id}
+              id={b.id}
+              email={b.email}
+              number={b.number}
+              stayId={b.stayId}
+              stayTitle={b.stayTitle}
+              startDate={b.startRequestedDate.toString()}
+              endDate={b.endRequestedDate.toString()}
+              status={b.status}
+              onAccept={handleAccept}
+              onReject={handleReject}
+            />
           ))}
         </View>
       </ScrollView>

@@ -31,10 +31,10 @@ export default function ProfileScreen() {
 
   // --- Fetch profile photo when user.id is available ---
   useEffect(() => {
-    if (user.id) {
-      fetchProfilePhoto(String(user.id));
+    if (user?.id) {
+      fetchProfilePhoto(String(user?.id));
     }
-  }, [user.id]);
+  }, [user?.id]);
 
   return (
     <ScrollView
@@ -65,8 +65,8 @@ export default function ProfileScreen() {
             />
           )}
           <View className="flex-1">
-            <Text className="text-xl font-bold">{user.name}</Text>
-            <Text className="text-woofGrey-500">{user.email}</Text>
+            <Text className="text-xl font-bold">{user?.name}</Text>
+            <Text className="text-woofGrey-500">{user?.email}</Text>
           </View>
           <TouchableOpacity onPress={openAccountPage}>
             <SquarePen />

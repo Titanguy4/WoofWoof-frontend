@@ -8,7 +8,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 export interface IAuthContext {
   accessToken: string | null;
   isAuthenticated: boolean;
-  user: Record<string, any>;
+  user: Record<string, any> | null;
   login: () => Promise<void>;
   logout: () => Promise<void>;
   isLoading: boolean;
@@ -32,8 +32,8 @@ export function useProvideAuth(): IAuthContext {
   const [user, setUser] = useState<Record<string, any>>({ name: "Username " });
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [userRoles, setUserRoles] = useState<string[]>([]);
-  const isWoofer: boolean = userRoles.includes("woofer");
-  const isBackpacker: boolean = userRoles.includes("backpacker");
+  const isWoofer: boolean = userRoles.includes("Woofer");
+  const isBackpacker: boolean = userRoles.includes("Backpacker");
   const refreshTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isRefreshingRef = useRef<boolean>(false);
 
@@ -60,7 +60,6 @@ export function useProvideAuth(): IAuthContext {
     try {
       const decodedToken = jwtDecode<KeycloakTokenPayload>(token);
       const keycloakUserId = decodedToken.sub;
-      console.log("User ID Keycloak:", keycloakUserId);
       setUser((prev) => ({ ...prev, id: keycloakUserId, sub: keycloakUserId }));
       const realmRoles = decodedToken.realm_access?.roles || [];
       setUserRoles(realmRoles);
@@ -146,8 +145,7 @@ export function useProvideAuth(): IAuthContext {
   );
 
   /**
-   * Init Auth for Keycloak
-   * Search endpoints to realm (discovery)
+   * Initialisation de Keycloak et chargement token existant
    */
   useEffect(() => {
     async function initAuth() {
@@ -188,8 +186,7 @@ export function useProvideAuth(): IAuthContext {
   );
 
   /**
-   * Due to PKCE, send code to keycloak and except the token
-   * The token is save using SecureStore from expo
+   * Exchange code -> token après login
    */
   useEffect(() => {
     // Ne pas exécuter si on est en train de rafraîchir le token
@@ -228,13 +225,12 @@ export function useProvideAuth(): IAuthContext {
           if (userInfo) setUser(userInfo);
         }
       } catch (e) {
-        const exchangeCodeErrorMessage = "❌ Erreur d'échange de code :";
+        const exchangeCodeErrorMessage = "Erreur d'échange de code :";
         if (e instanceof Error) {
           console.error(exchangeCodeErrorMessage, e.message);
         } else console.error(exchangeCodeErrorMessage, e);
       }
     }
-
     exchangeCode();
   }, [response, discovery, request, scheduleTokenRefresh]);
 
@@ -268,15 +264,12 @@ export function useProvideAuth(): IAuthContext {
         setUser(userInfo);
       }
     } catch (e) {
-      if (e instanceof Error) {
-        console.error("Erreur lors du refreshUserData:", e.message);
-      }
       console.error("Erreur lors du refreshUserData:", e);
     }
   }, [accessToken, discovery]);
 
   /**
-   * Using for edit the account of a user in keycloak
+   * Open Keycloak account page
    */
   const openAccountPage = useCallback(async (): Promise<void> => {
     const keycloakAccountUrl: string = `${process.env.EXPO_PUBLIC_KEYCLOAK_BASE}/account/`;
@@ -288,8 +281,8 @@ export function useProvideAuth(): IAuthContext {
         console.log("Retour du navigateur, rafraîchissement du profil...");
         await refreshUserData();
       }
-    } catch (error) {
-      console.error("Erreur lors de l'ouverture de la page de profil:", error);
+    } catch (e) {
+      console.error("Erreur lors de l'ouverture de la page de profil:", e);
     }
   }, [refreshUserData]);
 
@@ -307,7 +300,6 @@ export function useProvideAuth(): IAuthContext {
     setUserRoles([]);
 
     await AuthStorage.clearTokens();
-
     if (discovery?.endSessionEndpoint) {
       try {
         const logoutUrl =
@@ -320,7 +312,7 @@ export function useProvideAuth(): IAuthContext {
     }
   }, [discovery]);
 
-  const contextValue = useMemo(
+  return useMemo<IAuthContext>(
     () => ({
       accessToken,
       isAuthenticated: !!accessToken,
@@ -332,17 +324,6 @@ export function useProvideAuth(): IAuthContext {
       isWoofer,
       isBackpacker,
     }),
-    [
-      accessToken,
-      isLoading,
-      user,
-      isWoofer,
-      isBackpacker,
-      login,
-      logout,
-      openAccountPage,
-    ],
+    [accessToken, isLoading, user, isWoofer, isBackpacker],
   );
-
-  return contextValue;
 }

@@ -5,7 +5,7 @@ import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function RequestReceivedScreen() {
-  const { location, name } = useLocalSearchParams();
+  const { description, name } = useLocalSearchParams();
 
   return (
     <SafeAreaView
@@ -34,7 +34,7 @@ export default function RequestReceivedScreen() {
           <View className="px-4 py-7 border-b border-gray-300 w-full">
             <Text className="text-lg font-manropeBold mb-2">{name}</Text>
             <Text className="text-sm font-manrope mb-6 text-woofDarkGrey">
-              {location}
+              {description}
             </Text>
 
             {/* 👤 User Info */}

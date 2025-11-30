@@ -28,25 +28,25 @@ export default function ActivityTypeModal({
 }: Props) {
   const activities = [
     {
-      key: "animal",
+      key: "ANIMAL",
       title: "Animal care",
       desc: "Assist with farm animals, shelters, or wildlife protection",
       img: require("../assets/images/animalType.png"),
     },
     {
-      key: "farm",
+      key: "FARM",
       title: "Farm work",
       desc: "Planting, harvesting, and daily farm tasks",
       img: require("../assets/images/farmType.png"),
     },
     {
-      key: "cultural",
+      key: "CULTURAL",
       title: "Cultural event",
       desc: "Organize festivals, exhibitions, or community events",
       img: require("../assets/images/culturalType.png"),
     },
     {
-      key: "environment",
+      key: "ENVIRONMENTAL",
       title: "Environmental project",
       desc: "Tree planting, beach cleaning, or eco-construction",
       img: require("../assets/images/environmentalType.png"),

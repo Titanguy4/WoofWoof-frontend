@@ -226,16 +226,25 @@ export default function Woofshare() {
                 .filter((_, i) => i % 2 === 0)
                 .map((media, index) =>
                   media.url ? (
-                    <Image
-                      key={index}
-                      source={{ uri: media.url }}
-                      style={{
-                        width: "100%",
-                        height: getRandomHeight(120, 220),
-                        borderRadius: 12,
-                      }}
-                      resizeMode="cover"
-                    />
+                    <TouchableOpacity
+                      key={media.id ?? index}
+                      onPress={() =>
+                        router.push({
+                          pathname: "/details/[id]",
+                          params: { id: String(media.stayId) },
+                        })
+                      }
+                    >
+                      <Image
+                        source={{ uri: media.url }}
+                        style={{
+                          width: "100%",
+                          height: getRandomHeight(120, 220),
+                          borderRadius: 12,
+                        }}
+                        resizeMode="cover"
+                      />
+                    </TouchableOpacity>
                   ) : null,
                 )}
             </View>
@@ -246,16 +255,25 @@ export default function Woofshare() {
                 .filter((_, i) => i % 2 !== 0)
                 .map((media, index) =>
                   media.url ? (
-                    <Image
-                      key={index}
-                      source={{ uri: media.url }}
-                      style={{
-                        width: "100%",
-                        height: getRandomHeight(140, 240),
-                        borderRadius: 12,
-                      }}
-                      resizeMode="cover"
-                    />
+                    <TouchableOpacity
+                      key={media.id ?? index}
+                      onPress={() =>
+                        router.push({
+                          pathname: "/details/[id]",
+                          params: { id: String(media.stayId) },
+                        })
+                      }
+                    >
+                      <Image
+                        source={{ uri: media.url }}
+                        style={{
+                          width: "100%",
+                          height: getRandomHeight(140, 240),
+                          borderRadius: 12,
+                        }}
+                        resizeMode="cover"
+                      />
+                    </TouchableOpacity>
                   ) : null,
                 )}
             </View>

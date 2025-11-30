@@ -1,4 +1,4 @@
-import { Stay } from "@/types/stayservice/Stay";
+import { NewStay, Stay } from "@/types/stayservice/Stay";
 import { useState } from "react";
 
 export const useStay = () => {
@@ -33,18 +33,11 @@ export const useStay = () => {
   /** GET all stays */
   const getAllStays = async (): Promise<Stay[] | undefined> => {
     try {
-      setLoading(true);
-      setError(null);
-
       const res = await fetch(API_URL);
       if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
 
       const rawStays = await res.json();
-      console.log("📡 Raw stays from backend:", rawStays[0]?.localisation);
-
       const normalizedStays = rawStays.map(normalizeStay);
-      console.log("✅ Normalized stays:", normalizedStays[0]?.localisation);
-
       setStays(normalizedStays);
       return normalizedStays as Stay[];
     } catch (err: any) {
@@ -59,16 +52,13 @@ export const useStay = () => {
   /** GET stay by ID */
   const getStayById = async (id: number): Promise<Stay | undefined> => {
     try {
-      setLoading(true);
-      setError(null);
-
       const res = await fetch(`${API_URL}/${id}`);
       if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
 
       const rawStay = await res.json();
       const normalizedStay = normalizeStay(rawStay);
 
-      return normalizedStay as Stay;
+      return normalizedStay;
     } catch (err: any) {
       setError(err.message);
       console.error("GetStayById error:", err);
@@ -78,8 +68,22 @@ export const useStay = () => {
     }
   };
 
+  /** GET stay IDs by wooferId */
+  const getStayIdsByWoofer = async (
+    wooferId: string,
+  ): Promise<number[] | undefined> => {
+    try {
+      const res = await fetch(`${API_URL}/woofer/${wooferId}/ids`);
+      if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
+
+      return await res.json();
+    } catch (err) {
+      console.error("GetStayIdsByWoofer error:", err);
+    }
+  };
+
   /** POST create stay */
-  const createStay = async (stay: StayInput): Promise<Stay | undefined> => {
+  const createStay = async (stay: NewStay): Promise<NewStay | undefined> => {
     try {
       setLoading(true);
       setError(null);
@@ -93,7 +97,7 @@ export const useStay = () => {
       if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
 
       const rawStay = await res.json();
-      return normalizeStay(rawStay) as Stay;
+      return normalizeStay(rawStay);
     } catch (err: any) {
       setError(err.message);
       console.error("CreateStay error:", err);
@@ -118,7 +122,7 @@ export const useStay = () => {
       if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
 
       const rawStay = await res.json();
-      return normalizeStay(rawStay) as Stay;
+      return normalizeStay(rawStay);
     } catch (err: any) {
       setError(err.message);
       console.error("UpdateStay error:", err);
@@ -153,6 +157,7 @@ export const useStay = () => {
   return {
     stays,
     getAllStays,
+    getStayIdsByWoofer,
     getStayById,
     createStay,
     updateStay,

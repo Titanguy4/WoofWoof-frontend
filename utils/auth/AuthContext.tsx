@@ -5,7 +5,7 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
-const AuthContext = createContext<IAuthContext>({
+export const AuthContext = createContext<IAuthContext>({
   accessToken: null,
   isAuthenticated: false,
   user: { "": "" },
