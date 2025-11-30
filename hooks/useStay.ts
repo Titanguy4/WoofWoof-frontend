@@ -1,4 +1,4 @@
-import { Stay } from "@/types/stayservice/Stay";
+import { NewStay, Stay } from "@/types/stayservice/Stay";
 import { useState } from "react";
 
 export const useStay = () => {
@@ -7,9 +7,6 @@ export const useStay = () => {
   const [stays, setStays] = useState<Stay[]>([]);
 
   const API_URL = process.env.EXPO_PUBLIC_API_BASE_URL + "/stays";
-
-  // Création : pas d'id_stay
-  type StayInput = Omit<Stay, "id_stay">;
 
   /** GET all stays */
 const getAllStays = async (): Promise<Stay[] | undefined> => {
@@ -50,7 +47,7 @@ const getStayIdsByWoofer = async (wooferId: string): Promise<number[] | undefine
 };
 
   /** POST create stay */
-  const createStay = async (stay: StayInput): Promise<Stay | undefined> => {
+  const createStay = async (stay: NewStay): Promise<NewStay | undefined> => {
     try {
       setLoading(true);
       setError(null);

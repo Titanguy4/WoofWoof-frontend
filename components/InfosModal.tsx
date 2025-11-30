@@ -1,5 +1,6 @@
 import { advantages } from "@/utils/constants/advantages";
 import { COLORS } from "@/utils/constants/colors";
+import { meals } from "@/utils/constants/meals";
 import { Ionicons } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
 import { router } from "expo-router";
@@ -23,28 +24,47 @@ type Props = {
   visible: boolean;
   onClose: () => void;
   selectedAdvantages: string[];
-  setSelectedAdvantages: (advantages: string[]) => void;
+  setSelectedAdvantages: (meals: string[]) => void;
+  selectedMeals: string[];
+  setSelectedMeals: (meals: string[]) => void;
   selectedType: string | null;
+  onAdd: (description: string, name: string, activity: string, region: string, department: string) => void;
 };
 
 export default function InfosModal({
   visible,
   onClose,
+  onAdd,
+  selectedMeals,
+  setSelectedMeals,
   selectedAdvantages,
   setSelectedAdvantages,
 }: Props) {
-  const [location, setLocation] = useState("");
-  const [dailyHours, setDailyHours] = useState("");
+  const [department, setDepartment] = useState("");
+  const [region, setRegion] = useState("");
+  const [description, setDescription] = useState("");
+  const [activity, setActivity] = useState("");
   const [name, setName] = useState("");
 
   // ✅ Fonction pour gérer la sélection/désélection multiple
-  const toggleAdvantage = (key: string) => {
-    if (selectedAdvantages.includes(key)) {
-      setSelectedAdvantages(selectedAdvantages.filter((item) => item !== key));
+  const toggleAdvantage = (title: string) => {
+    if (selectedAdvantages.includes(title)) {
+      setSelectedAdvantages(selectedAdvantages.filter((item) => item !== title));
     } else {
-      setSelectedAdvantages([...selectedAdvantages, key]);
+      setSelectedAdvantages([...selectedAdvantages, title]);
     }
   };
+
+  // ✅ Fonction pour gérer la sélection/désélection multiple
+  const toggleMeal = (title: string) => {
+    if (selectedMeals.includes(title)) {
+      setSelectedMeals(selectedMeals.filter((item) => item !== title));
+    } else {
+      setSelectedMeals([...selectedMeals, title]);
+    }
+  };
+
+  const location = `${department.trim()}, ${region.trim()}`;
 
   return (
     <Modal
@@ -89,32 +109,93 @@ export default function InfosModal({
                 />
               </View>
             </View>
-            {/* 📍 Location */}
+            {/* Description */}
             <View className="rounded-2xl px-4 bg-white">
-              <Text className="text-lg font-manrope">Location</Text>
+              <Text className="text-lg font-manrope">Description</Text>
               <View className="flex-row items-center mt-[6px] mb-5 border border-gray-300 rounded-2xl h-[52px]">
                 <TextInput
                   placeholder="Type an address..."
                   placeholderTextColor={COLORS.woofGrey[500]}
-                  value={location}
-                  onChangeText={setLocation}
+                  value={description}
+                  onChangeText={setDescription}
                   className="flex-1 text-[15px] font-manropeMedium ml-4"
                 />
               </View>
             </View>
 
-            {/* ⏰ Daily hours */}
+            {/* Activity */}
             <View className="rounded-2xl px-4 bg-white">
-              <Text className="text-lg font-manrope">Daily hours</Text>
+              <Text className="text-lg font-manrope">Activity</Text>
               <View className="flex-row items-center mt-[6px] mb-5 border border-gray-300 rounded-2xl h-[52px]">
                 <TextInput
-                  placeholder="0 - 8 hours..."
+                  placeholder="Type an activity..."
                   placeholderTextColor={COLORS.woofGrey[500]}
-                  value={dailyHours}
-                  onChangeText={setDailyHours}
+                  value={activity}
+                  onChangeText={setActivity}
                   className="flex-1 text-[15px] font-manropeMedium ml-4"
                 />
               </View>
+            </View>
+
+            {/* Department */}
+            <View className="rounded-2xl px-4 bg-white">
+              <Text className="text-lg font-manrope">Department</Text>
+              <View className="flex-row items-center mt-[6px] mb-5 border border-gray-300 rounded-2xl h-[52px]">
+                <TextInput
+                  placeholder="Department..."
+                  placeholderTextColor={COLORS.woofGrey[500]}
+                  value={department}
+                  onChangeText={setDepartment}
+                  className="flex-1 text-[15px] font-manropeMedium ml-4"
+                />
+              </View>
+            </View>
+
+            {/* Region */}
+            <View className="rounded-2xl px-4 bg-white">
+              <Text className="text-lg font-manrope">Region</Text>
+              <View className="flex-row items-center mt-[6px] mb-5 border border-gray-300 rounded-2xl h-[52px]">
+                <TextInput
+                  placeholder="Region..."
+                  placeholderTextColor={COLORS.woofGrey[500]}
+                  value={region}
+                  onChangeText={setRegion}
+                  className="flex-1 text-[15px] font-manropeMedium ml-4"
+                />
+              </View>
+            </View>
+
+
+            {/* 🧩 Meals */}
+            <View className="px-4">
+              <Text className="text-lg font-manrope mb-4">
+                Meals
+              </Text>
+              {meals.map((item) => {
+                const isSelected = selectedMeals.includes(item.key);
+                return (
+                  <TouchableOpacity
+                    key={item.key}
+                    onPress={() => toggleMeal(item.title)}
+                    activeOpacity={0.8}
+                    className={`flex-row items-center border rounded-xl p-3 mb-3 ${isSelected
+                      ? "border-woofBrown-500 bg-woofBrown-500/5"
+                      : "border-gray-300"
+                      }`}
+                  >
+                    <Text className="flex-1 font-manropeBold text-[16px]">
+                      {item.title}
+                    </Text>
+                    <RadioButton.Android
+                      value={item.key}
+                      onPress={() => toggleAdvantage(item.title)}
+                      status={isSelected ? "checked" : "unchecked"}
+                      color={COLORS.woofBrown[500]}
+                      uncheckedColor="#C9C9C9"
+                    />
+                  </TouchableOpacity>
+                );
+              })}
             </View>
 
             {/* 🧩 Avantages */}
@@ -127,13 +208,12 @@ export default function InfosModal({
                 return (
                   <TouchableOpacity
                     key={item.key}
-                    onPress={() => toggleAdvantage(item.key)}
+                    onPress={() => toggleAdvantage(item.title)}
                     activeOpacity={0.8}
-                    className={`flex-row items-center border rounded-xl p-3 mb-3 ${
-                      isSelected
-                        ? "border-woofBrown-500 bg-woofBrown-500/5"
-                        : "border-gray-300"
-                    }`}
+                    className={`flex-row items-center border rounded-xl p-3 mb-3 ${isSelected
+                      ? "border-woofBrown-500 bg-woofBrown-500/5"
+                      : "border-gray-300"
+                      }`}
                   >
                     <Ionicons
                       name={item.icon as any}
@@ -150,7 +230,7 @@ export default function InfosModal({
                     </Text>
                     <RadioButton.Android
                       value={item.key}
-                      onPress={() => toggleAdvantage(item.key)}
+                      onPress={() => toggleAdvantage(item.title)}
                       status={isSelected ? "checked" : "unchecked"}
                       color={COLORS.woofBrown[500]}
                       uncheckedColor="#C9C9C9"
@@ -161,32 +241,36 @@ export default function InfosModal({
             </View>
 
             {/* ✅ Bouton Add */}
-            <TouchableOpacity
-              onPress={() => {
-                onClose(); // ferme le modal
-                router.push({
-                  pathname: "/requestreceived",
-                  params: {
-                    location,
-                    name,
-                  },
-                });
-              }}
-              disabled={
-                selectedAdvantages.length === 0 ||
-                location.trim() === "" ||
-                dailyHours.trim() === ""
-              }
-              className={`rounded-2xl py-3 mt-6 items-center ${
-                location.trim() !== "" &&
-                dailyHours.trim() !== "" &&
-                selectedAdvantages.length > 0
-                  ? "bg-woofBrow-500"
+            <View className="px-4">
+              <TouchableOpacity
+                onPress={() => {
+                  onAdd(region, department, description, name, activity);
+                  onClose(); // ferme le modal
+                  router.push({
+                    pathname: "/requestreceived",
+                    params: {
+                      location,
+                      name,
+                    },
+                  });
+                }}
+                disabled={
+                  selectedAdvantages.length === 0 || selectedMeals.length === 0 ||
+                  description.trim() === "" ||
+                  activity.trim() === "" ||
+                  name.trim() === ""
+                }
+                className={`rounded-2xl py-3 mt-6 items-center ${description.trim() !== "" && name.trim() !== "" &&
+                  activity.trim() !== "" &&
+                  selectedAdvantages.length > 0 &&
+                  selectedMeals.length > 0
+                  ? "bg-woofBrown-500"
                   : "bg-gray-400"
-              }`}
-            >
-              <Text className="text-white font-manropeBold text-base">Add</Text>
-            </TouchableOpacity>
+                  }`}
+              >
+                <Text className="text-white font-manropeBold text-base">Add</Text>
+              </TouchableOpacity>
+            </View>
           </ScrollView>
         </Animated.View>
       </View>
