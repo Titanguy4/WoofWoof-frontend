@@ -177,7 +177,7 @@ export default function InfosModal({
             <View className="px-4">
               <Text className="text-lg font-manrope mb-4">Meals</Text>
               {meals.map((item) => {
-                const isSelected = selectedMeals.includes(item.key);
+                const isSelected = selectedMeals.includes(item.title);
                 return (
                   <TouchableOpacity
                     key={item.key}
@@ -194,7 +194,7 @@ export default function InfosModal({
                     </Text>
                     <RadioButton.Android
                       value={item.key}
-                      onPress={() => toggleAdvantage(item.title)}
+                      onPress={() => toggleMeal(item.title)}
                       status={isSelected ? "checked" : "unchecked"}
                       color={COLORS.woofBrown[500]}
                       uncheckedColor="#C9C9C9"
@@ -210,7 +210,7 @@ export default function InfosModal({
                 Benefits for backpackers
               </Text>
               {advantages.map((item) => {
-                const isSelected = selectedAdvantages.includes(item.key);
+                const isSelected = selectedAdvantages.includes(item.title);
                 return (
                   <TouchableOpacity
                     key={item.key}

@@ -9,7 +9,7 @@ export const useBooking = () => {
   const [error, setError] = useState<string | null>(null);
   const { accessToken } = useAuth();
 
-  const API_URL = process.env.EXPO_PUBLIC_API_BASE_URL + "/bookings";
+  const API_URL = "http://localhost:8082/bookings";
   const { getStayIdsByWoofer } = useStay();
 
   /** POST create booking */
