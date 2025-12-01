@@ -35,7 +35,7 @@ export default function HomeMissionCard({
       : "No location";
 
   // 🏡 Premier logement
-  const housing = stay.accomodations?.[0]?.label ?? "No housing";
+  const activity = stay.activities?.[0]?.label ?? "Activity unknown";
 
   useEffect(() => {
     let isMounted = true;
@@ -66,7 +66,7 @@ export default function HomeMissionCard({
           params: { id: String(stay.id) },
         })
       }
-      className=" bg-white rounded-2xl mr-4 overflow-hidden"
+      className=" bg-white rounded-2xl mr-4 overflow-hidden w-[175px]"
     >
       {/* Image */}
       <View className="relative">
@@ -99,7 +99,7 @@ export default function HomeMissionCard({
         </Text>
 
         <Text className="text-[12px] text-[#7E7E7E] mt-[2px]" numberOfLines={1}>
-          {location}
+          {stay.description}
         </Text>
 
         <View className="flex-row items-center mt-2">
@@ -108,7 +108,7 @@ export default function HomeMissionCard({
         </View>
 
         <View className="flex-row items-center mt-1">
-          <Text className="ml-1 text-[12px] text-[#7E7E7E]">{housing}</Text>
+          <Text className="ml-1 text-[12px] text-[#7E7E7E]">{activity}</Text>
         </View>
       </View>
     </TouchableOpacity>
