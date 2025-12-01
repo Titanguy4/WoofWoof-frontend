@@ -88,6 +88,7 @@ export const useStay = () => {
       setLoading(true);
       setError(null);
 
+      console.log("SENDING TO BACK:", stay);
       const res = await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

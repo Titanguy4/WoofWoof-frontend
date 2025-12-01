@@ -1,3 +1,4 @@
+import { LikeProvider } from "@/context/LikeContext";
 import { SearchFiltersProvider } from "@/context/SearchFiltersContext";
 import "@/i18n";
 import { AuthProvider } from "@/utils/auth/AuthContext";
@@ -34,22 +35,24 @@ export default function RootLayout() {
 
   return (
     <AuthProvider>
-      <SearchFiltersProvider>
-        <ThemeProvider value={DefaultTheme}>
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen
-              name="map"
-              options={{
-                headerTransparent: true,
-                headerTitle: "",
-                headerBackTitle: "Explore",
-              }}
-            />
-          </Stack>
-          <StatusBar style="auto" />
-        </ThemeProvider>
-      </SearchFiltersProvider>
+      <LikeProvider>
+        <SearchFiltersProvider>
+          <ThemeProvider value={DefaultTheme}>
+            <Stack>
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen
+                name="map"
+                options={{
+                  headerTransparent: true,
+                  headerTitle: "",
+                  headerBackTitle: "Explore",
+                }}
+              />
+            </Stack>
+            <StatusBar style="auto" />
+          </ThemeProvider>
+        </SearchFiltersProvider>
+      </LikeProvider>
     </AuthProvider>
   );
 }
