@@ -9,8 +9,24 @@ export const useBooking = () => {
   const [error, setError] = useState<string | null>(null);
   const { accessToken } = useAuth();
 
-  const API_URL = "http://localhost:8082/bookings";
+  const API_URL = process.env.EXPO_PUBLIC_API_BASE_URL + "/bookings";
   const { getStayIdsByWoofer } = useStay();
+
+  // --- Utilitaire : ajoute automatiquement le token
+  const authFetch = async (url: string, options: RequestInit = {}) => {
+    if (!accessToken) {
+      throw new Error("Aucun token disponible pour l'appel API");
+    }
+
+    return fetch(url, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`, // <-- ici !
+        ...(options.headers || {}),
+      },
+    });
+  };
 
   /** POST create booking */
   const createBooking = async (
@@ -24,7 +40,7 @@ export const useBooking = () => {
         throw new Error("Token d'authentification manquant");
       }
 
-      const res = await fetch(API_URL, {
+      const res = await authFetch(API_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -51,7 +67,7 @@ export const useBooking = () => {
 
   const getBookingsByStayId = async (stayId: number): Promise<Booking[]> => {
     try {
-      const response = await fetch(`${API_URL}/stay/${stayId}`);
+      const response = await authFetch(`${API_URL}/stay/${stayId}`);
       if (!response.ok)
         throw new Error(`HTTP error! status: ${response.status}`);
       return await response.json();
@@ -79,7 +95,7 @@ export const useBooking = () => {
 
   const getBookingsByUserId = async (userId: string): Promise<Booking[]> => {
     try {
-      const response = await fetch(`${API_URL}/user/${userId}`);
+      const response = await authFetch(`${API_URL}/user/${userId}`);
       if (!response.ok)
         throw new Error(`HTTP error! status: ${response.status}`);
       return await response.json();
@@ -97,7 +113,7 @@ export const useBooking = () => {
       setLoading(true);
       setError(null);
 
-      const response = await fetch(`${API_URL}/${action}/${id}`, {
+      const response = await authFetch(`${API_URL}/${action}/${id}`, {
         method: "PATCH",
       });
       if (!response.ok)

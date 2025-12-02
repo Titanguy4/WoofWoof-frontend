@@ -1,3 +1,5 @@
+import { useStay } from "@/hooks/useStay";
+import { Stay, StayType } from "@/types/stayservice/Stay";
 import { COLORS } from "@/utils/constants/colors";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
@@ -19,40 +21,77 @@ import { Media } from "../types/Media";
 
 export default function Woofshare() {
   const { t } = useTranslation("woofshare");
-  const { medias, fetchAllWoofSharePhotos, loading, error } = useMedia();
+  const { medias, fetchAllWoofSharePhotos, loading: mediaLoading } = useMedia();
+  const { getStayById } = useStay();
+  const [mediaStays, setMediaStays] = useState<{ [mediaId: number]: Stay }>({});
 
   const [filtersOpen, setFiltersOpen] = useState(false);
-  const [selectedFilters, setSelectedFilters] = useState<string[]>([
-    "farm",
-    "animal",
-  ]);
+  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+  const [searchText, setSearchText] = useState("");
 
-  type CategoryKey = "farm" | "animal" | "cultural" | "environment";
 
-  const categoryLabels: CategoryKey[] = [
-    "farm",
-    "animal",
-    "cultural",
-    "environment",
+
+  const categoryLabels: StayType[] = [
+    "FARM",
+    "ANIMAL",
+    "CULTURAL",
+    "ENVIRONMENTAL",
   ];
 
-  const categoryIcons: Record<CategoryKey, any> = {
-    farm: require("../assets/images/farmType.png"),
-    animal: require("../assets/images/animalType.png"),
-    cultural: require("../assets/images/culturalType.png"),
-    environment: require("../assets/images/environmentalType.png"),
+  const categoryIcons: Record<StayType, any> = {
+    FARM: require("../assets/images/farmType.png"),
+    ANIMAL: require("../assets/images/animalType.png"),
+    CULTURAL: require("../assets/images/culturalType.png"),
+    ENVIRONMENTAL: require("../assets/images/environmentalType.png"),
   };
 
   useEffect(() => {
-    const loadPhotos = async () => {
+    const loadPhotosWithStays = async () => {
       try {
-        await fetchAllWoofSharePhotos();
+        const fetchedMedias: Media[] = await fetchAllWoofSharePhotos();
+
+        for (const media of fetchedMedias) {
+          if (media.stayId) {
+            const stay = await getStayById(media.stayId);
+            if (stay) {
+              setMediaStays((prev) => ({
+                ...prev,
+                [media.id]: stay,
+              }));
+            }
+          }
+        }
       } catch (err) {
-        console.error("Error fetching WoofShare photos:", err);
+        console.error("Error fetching photos with stays:", err);
       }
     };
-    loadPhotos();
+
+    loadPhotosWithStays();
   }, []);
+
+  const filteredMedias: Media[] = medias.filter((media) => {
+    if (!media.stayId || !mediaStays[media.id]) return false;
+
+    const stay = mediaStays[media.id];
+
+    // Filtre par type
+    const typeMatches =
+      selectedFilters.length === 0 ||
+      selectedFilters.map(f => f.toUpperCase()).includes(stay.type);
+
+    // Filtre par titre
+    const searchMatches =
+      searchText.trim() === "" ||
+      stay.title.toLowerCase().split(" ").some(word =>
+        word.includes(searchText.toLowerCase())
+      );
+
+    return typeMatches && searchMatches;
+  });
+
+
+
+
 
   const toggleFilter = (label: string) => {
     setSelectedFilters((prev) =>
@@ -62,7 +101,8 @@ export default function Woofshare() {
     );
   };
 
-  const filteredMedias: Media[] = medias.filter((media) => true);
+
+
 
   // Générateur de hauteur aléatoire pour Pinterest
   const getRandomHeight = (min: number, max: number) =>
@@ -100,6 +140,8 @@ export default function Woofshare() {
             placeholder={t("search.placeholder")}
             placeholderTextColor={COLORS.woofGrey[500]}
             className="flex-1 text-[15px] font-manropeMedium ml-2"
+            value={searchText}
+            onChangeText={setSearchText}
           />
           <Ionicons name="search" size={20} color={COLORS.woofGrey[500]} />
         </View>
@@ -133,16 +175,15 @@ export default function Woofshare() {
                 <TouchableOpacity
                   key={label}
                   onPress={() => toggleFilter(label)}
-                  className={`px-3 py-1 rounded-full border ${
-                    active
-                      ? "bg-woofBrown-500 border-woofBrown-500"
-                      : "border-woofGrey"
-                  }`}
+                  className={`px-3 py-1 rounded-full border ${active
+                    ? "bg-woofBrown-500 border-woofBrown-500"
+                    : "border-woofGrey"
+                    }`}
                 >
                   <Text
                     className={`text-[12px] ${active ? "text-white" : "text-black"}`}
                   >
-                    {t(`categories.${label}`)}
+                    {t(`categories.${label.toLowerCase()}`)}
                   </Text>
                 </TouchableOpacity>
               );
@@ -174,11 +215,10 @@ export default function Woofshare() {
                 <TouchableOpacity
                   key={label}
                   onPress={() => toggleFilter(label)}
-                  className={`flex-row items-center rounded-full px-2 border ${
-                    active
-                      ? "bg-woofBrown-500 border-woofBrown-500"
-                      : "bg-white border-woofBrown-500"
-                  }`}
+                  className={`flex-row items-center rounded-full px-2 border ${active
+                    ? "bg-woofBrown-500 border-woofBrown-500"
+                    : "bg-white border-woofBrown-500"
+                    }`}
                   style={{ width: 135, height: 36 }}
                   activeOpacity={1}
                 >
@@ -190,7 +230,7 @@ export default function Woofshare() {
                     className={`ml-2 text-[12px] ${active ? "text-white font-manropeBold" : "text-black"}`}
                     numberOfLines={1}
                   >
-                    {t(`categories.${label}`)}
+                    {t(`categories.${label.toLowerCase()}`)}
                   </Text>
                 </TouchableOpacity>
               );
@@ -201,7 +241,7 @@ export default function Woofshare() {
 
       {/* Images Grid (Pinterest style) */}
       <ScrollView className="flex-1 bg-woofCream-500 px-4 pt-2">
-        {loading && (
+        {mediaLoading && (
           <View className="flex-1 items-center justify-center mt-20">
             <ActivityIndicator size="large" color={COLORS.woofBrown[500]} />
             <Text className="mt-2 text-[14px] font-manropeMedium">
@@ -210,7 +250,7 @@ export default function Woofshare() {
           </View>
         )}
 
-        {!loading && medias.length === 0 && (
+        {!mediaLoading && medias.length === 0 && (
           <View className="flex-1 items-center justify-center mt-20">
             <Text className="text-[14px] font-manropeMedium text-gray-400">
               No photos available.
@@ -218,7 +258,7 @@ export default function Woofshare() {
           </View>
         )}
 
-        {!loading && medias.length > 0 && (
+        {!mediaLoading && medias.length > 0 && (
           <View className="flex-row justify-between">
             {/* Left column */}
             <View className="w-[48%] gap-y-5">

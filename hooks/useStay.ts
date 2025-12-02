@@ -1,7 +1,9 @@
 import { NewStay, Stay } from "@/types/stayservice/Stay";
+import { useAuth } from "@/utils/auth/AuthContext";
 import { useState } from "react";
 
 export const useStay = () => {
+  const { accessToken } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [stays, setStays] = useState<Stay[]>([]);
@@ -30,10 +32,39 @@ export const useStay = () => {
     };
   };
 
+  // --- Utilitaire : ajoute automatiquement le token
+  const authFetch = async (url: string, options: RequestInit = {}) => {
+    if (!accessToken) {
+      throw new Error("Aucun token disponible pour l'appel API");
+    }
+
+    return fetch(url, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`, // <-- ici !
+        ...(options.headers || {}),
+      },
+    });
+  };
+
+  // Utilitaire pour GET public
+  const publicFetch = async (url: string, options: RequestInit = {}) => {
+    return fetch(url, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...(options.headers || {}),
+      },
+    });
+  };
+
   /** GET all stays */
   const getAllStays = async (): Promise<Stay[] | undefined> => {
+    setLoading(true);
+    setError(null);
     try {
-      const res = await fetch(API_URL);
+      const res = await publicFetch(API_URL);
       if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
 
       const rawStays = await res.json();
@@ -51,8 +82,10 @@ export const useStay = () => {
 
   /** GET stay by ID */
   const getStayById = async (id: number): Promise<Stay | undefined> => {
+    setLoading(true);
+    setError(null);
     try {
-      const res = await fetch(`${API_URL}/${id}`);
+      const res = await publicFetch(`${API_URL}/${id}`);
       if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
 
       const rawStay = await res.json();
@@ -72,8 +105,10 @@ export const useStay = () => {
   const getStayIdsByWoofer = async (
     wooferId: string,
   ): Promise<number[] | undefined> => {
+    setLoading(true);
+    setError(null);
     try {
-      const res = await fetch(`${API_URL}/woofer/${wooferId}/ids`);
+      const res = await authFetch(`${API_URL}/woofer/${wooferId}/ids`);
       if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
 
       return await res.json();
@@ -89,7 +124,7 @@ export const useStay = () => {
       setError(null);
 
       console.log("SENDING TO BACK:", stay);
-      const res = await fetch(API_URL, {
+      const res = await authFetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(stay),
@@ -114,7 +149,7 @@ export const useStay = () => {
       setLoading(true);
       setError(null);
 
-      const res = await fetch(API_URL, {
+      const res = await authFetch(API_URL, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(stay),
@@ -139,7 +174,7 @@ export const useStay = () => {
       setLoading(true);
       setError(null);
 
-      const res = await fetch(`${API_URL}/${id}`, {
+      const res = await authFetch(`${API_URL}/${id}`, {
         method: "DELETE",
       });
 
