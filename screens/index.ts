@@ -11,7 +11,6 @@ export { default as MissionRequest } from "./MissionRequest";
 export { default as Missions } from "./Missions";
 export { default as MyOffer } from "./MyOffer";
 export { default as Notifications } from "./Notifications";
-export { default as PaymentSuccess } from "./PaymentSuccess";
 export { default as Profile } from "./Profile";
 export { default as RequestReceived } from "./RequestReceived";
 export { default as RequestSuccess } from "./RequestSuccess";
@@ -22,3 +21,4 @@ export { default as SearchFilter } from "./SearchFilter";
 export { default as SignIn } from "./SignIn";
 export { default as SignUp } from "./Signup";
 export { default as Woofshare } from "./Woofshare";
+

@@ -1,13 +1,25 @@
 import { COLORS } from "@/utils/constants/colors";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+
 export default function PaymentSuccess() {
   const { t } = useTranslation();
+  const params = useLocalSearchParams();
+  const sessionId = params.session_id as string | undefined;
+
+  useEffect(() => {
+    if (!sessionId) return;
+
+    fetch(
+      `http://localhost:8082/payments/verify-session?session_id=${sessionId}`
+    );
+  }, [sessionId]);
+
   return (
     <SafeAreaView
       style={{ backgroundColor: COLORS.woofCream[500] }}
@@ -21,7 +33,7 @@ export default function PaymentSuccess() {
         <View className="p-6 bg-white rounded-2xl">
           <View className="items-center">
             <Image
-              source={require("../assets/images/check_circle.png")}
+              source={require("../../assets/images/check_circle.png")}
               className="w-[126px] h-[126px] mb-8"
               resizeMode="contain"
             />
@@ -47,7 +59,10 @@ export default function PaymentSuccess() {
           <TouchableOpacity
             className="bg-woofBrown-500 rounded-2xl py-3 items-center"
             onPress={() => {
-              router.push("/(tabs)/profile");
+              router.push({
+                pathname: "/map",
+                params: { sessionId },
+              });
             }}
           >
             <Text className="font-manropeBold text-base text-white">
