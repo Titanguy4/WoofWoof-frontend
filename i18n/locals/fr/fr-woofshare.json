@@ -12,7 +12,7 @@
         "farm": "Travail agricole",
         "animal": "Soin des animaux",
         "cultural": "Culturel",
-        "environment": "Environnement"
+        "environmental": "Environnement"
     },
     "noResults": "Aucun résultat trouvé"
 }

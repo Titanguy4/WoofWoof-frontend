@@ -12,7 +12,7 @@
         "farm": "Farm work",
         "animal": "Animal care",
         "cultural": "Cultural",
-        "environment": "Environment"
+        "environmental": "Environment"
     },
     "noResults": "No results found"
 }

@@ -2,6 +2,7 @@ import map from "@/assets/images/maps.png";
 import woofwoof from "@/assets/images/tete-chien.png";
 import { useStay } from "@/hooks/useStay";
 import { Stay } from "@/types/stayservice/Stay";
+import { useAuth } from "@/utils/auth/AuthContext";
 import { COLORS } from "@/utils/constants/colors";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
@@ -14,6 +15,7 @@ export default function ExploreScreen() {
   const { t } = useTranslation("explore");
   const { getAllStays, loading } = useStay();
   const [stays, setStays] = useState<Stay[]>([]);
+  const { isAuthenticated } = useAuth();
 
   /** 🔥 Charger toutes les missions du backend */
   useEffect(() => {
@@ -162,7 +164,13 @@ export default function ExploreScreen() {
 
       <TouchableOpacity
         className="absolute bottom-0 right-0 m-5 border-4 border-woofBrown-300 rounded-full"
-        onPress={() => router.push("/map")}
+        onPress={() => {
+          if (isAuthenticated) {
+            router.push("/map");
+          } else {
+            router.push("/(tabs)/profile");
+          }
+        }}
       >
         <Image source={map} className="w-20 h-20" />
       </TouchableOpacity>
