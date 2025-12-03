@@ -86,8 +86,6 @@ export default function ProfileScreen() {
             label={t("languages.title")}
             onPress={() => router.push("/profile/languages")}
           ></SectionButton>
-        </Section>
-        <Section title={t("general")}>
           <SectionButton
             icon={<ShieldCheck />}
             label={t("legal")}
