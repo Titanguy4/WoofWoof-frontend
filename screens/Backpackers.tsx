@@ -8,7 +8,13 @@ import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ActivityIndicator, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import BackpackerCard from "../components/BackpackerCard";
 
@@ -17,7 +23,6 @@ export default function BackPackers() {
   const { user, accessToken } = useAuth(); // ✅ on récupère accessToken
   const { getBookingsForWoofer, acceptBooking, rejectBooking } = useBooking();
   const { getStayById } = useStay();
-  console.log(user?.sub);
 
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [bookingsWithStay, setBookingsWithStay] = useState<
@@ -70,12 +75,12 @@ export default function BackPackers() {
   }
 
   if (initialLoading) {
-      return (
-        <View className="flex-1 items-center justify-center bg-white">
-          <ActivityIndicator size="large" color={COLORS.woofBrown[500]} />
-        </View>
-      );
-    }
+    return (
+      <View className="flex-1 items-center justify-center bg-white">
+        <ActivityIndicator size="large" color={COLORS.woofBrown[500]} />
+      </View>
+    );
+  }
 
   /** ----------------- HANDLERS ------------------ */
   const handleAccept = async (id: number): Promise<boolean> => {

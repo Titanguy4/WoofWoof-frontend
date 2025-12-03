@@ -50,7 +50,7 @@ export default function Search() {
         const saved = await AsyncStorage.getItem("search_history");
         if (saved) setHistory(JSON.parse(saved));
       } catch (err) {
-        console.log("Error loading history:", err);
+        console.error("Error loading history:", err);
       }
     };
     loadHistory();
@@ -69,7 +69,7 @@ export default function Search() {
       setHistory(newHistory);
       await AsyncStorage.setItem("search_history", JSON.stringify(newHistory));
     } catch (err) {
-      console.log("Error saving history:", err);
+      console.error("Error saving history:", err);
     }
   };
 

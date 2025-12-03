@@ -93,7 +93,6 @@ export default function MissionRequest({ id }: Props) {
       number,
     };
 
-    console.log("Creating booking:", booking);
     const result = await createBooking(booking);
 
     if (result) {

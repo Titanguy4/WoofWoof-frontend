@@ -5,7 +5,6 @@ import { useMedia } from "@/hooks/useMedia";
 import { useAuth } from "@/utils/auth/AuthContext";
 import { Router, useRouter } from "expo-router";
 import {
-  Bell,
   Globe,
   House,
   MessageCircleQuestionMark,
@@ -29,7 +28,6 @@ export default function ProfileScreen() {
   const { t } = useTranslation("profil");
   const { profilePhoto, fetchProfilePhoto, loading } = useMedia();
 
-  // --- Fetch profile photo when user.id is available ---
   useEffect(() => {
     if (user?.id) {
       fetchProfilePhoto(String(user?.id));
@@ -88,11 +86,6 @@ export default function ProfileScreen() {
             label={t("languages.title")}
             onPress={() => router.push("/profile/languages")}
           ></SectionButton>
-          <SectionButton
-            icon={<Bell />}
-            label={t("notifications")}
-            onPress={() => router.push("/profile/notifications")}
-          />
         </Section>
         <Section title={t("general")}>
           <SectionButton
