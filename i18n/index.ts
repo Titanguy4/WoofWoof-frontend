@@ -48,7 +48,7 @@ const resources = {
 const lng = getLocales()[0].languageCode ?? "en";
 
 i18next.use(initReactI18next).init({
-  debug: true,
+  debug: false,
   lng,
   ns: [
     "common",
