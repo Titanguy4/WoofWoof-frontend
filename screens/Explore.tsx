@@ -8,7 +8,14 @@ import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  Image,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import HomeMissionCard from "../components/HomeMissionCard";
 
 export default function ExploreScreen() {
@@ -17,7 +24,6 @@ export default function ExploreScreen() {
   const [stays, setStays] = useState<Stay[]>([]);
   const { isAuthenticated } = useAuth();
 
-  /** 🔥 Charger toutes les missions du backend */
   useEffect(() => {
     const load = async () => {
       const s = await getAllStays();
@@ -29,7 +35,6 @@ export default function ExploreScreen() {
     load();
   }, []);
 
-  /** 🔥 Filtrage par type */
   const missionsNearby = stays;
   const missionsFarm = useMemo(() => {
     const res = stays.filter((s) => s.type === "FARM");
@@ -80,86 +85,78 @@ export default function ExploreScreen() {
         className="bg-woofCream-500 "
         contentContainerClassName=""
       >
-        {/* Nearby */}
-        <View className="px-4 flex-row justify-between items-center  ">
-          <Text className="font-manropeBold text-lg mt-4  ">
-            {t("sections.nearby")}
-          </Text>
-          <Text className="font-manropeSemiBold underline text-xs mt-4  ">
-            {t("sections.showAll")}
-          </Text>
-        </View>
-        <View className="px-4 mt-3">
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {missionsNearby.map((stay) => (
-              <HomeMissionCard key={stay.id} stay={stay} />
-            ))}
-          </ScrollView>
-        </View>
-        {/* Farm work */}
-        <View className="px-4 flex-row justify-between items-center  ">
-          <Text className="font-manropeBold text-lg mt-4  ">
-            {t("sections.farm")}
-          </Text>
-          <Text className="font-manropeSemiBold underline text-xs mt-4  ">
-            {t("sections.showAll")}
-          </Text>
-        </View>
-        <View className="px-4 mt-3">
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {missionsFarm.map((stay) => (
-              <HomeMissionCard key={stay.id} stay={stay} />
-            ))}
-          </ScrollView>
-        </View>
-        {/* Animal care */}
-        <View className="px-4 flex-row justify-between items-center  ">
-          <Text className="font-manropeBold text-lg mt-4  ">
-            {t("sections.animal")}
-          </Text>
-          <Text className="font-manropeSemiBold underline text-xs mt-4  ">
-            {t("sections.showAll")}
-          </Text>
-        </View>
-        <View className="px-4 mt-3">
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {missionsAnimal.map((stay) => (
-              <HomeMissionCard key={stay.id} stay={stay} />
-            ))}
-          </ScrollView>
-        </View>
-        {/* Environmental Projects */}
-        <View className="px-4 flex-row justify-between items-center  ">
-          <Text className="font-manropeBold text-lg mt-4  ">
-            {t("sections.environment")}
-          </Text>
-          <Text className="font-manropeSemiBold underline text-xs mt-4  ">
-            {t("sections.showAll")}
-          </Text>
-        </View>
-        <View className="px-4 mt-3">
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {missionsEnv.map((stay) => (
-              <HomeMissionCard key={stay.id} stay={stay} />
-            ))}
-          </ScrollView>
-        </View>
-        {/* Community & Cultural Support */}
-        <View className="px-4 flex-row justify-between items-center  ">
-          <Text className="font-manropeBold text-lg mt-4  ">
-            {t("sections.community")}
-          </Text>
-          <Text className="font-manropeSemiBold underline text-xs mt-4  ">
-            {t("sections.showAll")}
-          </Text>
-        </View>
-        <View className="px-4 mt-3">
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {missionsCultural.map((stay) => (
-              <HomeMissionCard key={stay.id} stay={stay} />
-            ))}
-          </ScrollView>
-        </View>
+        {loading ? (
+          <View className="jusitify-center items-center">
+            <ActivityIndicator />
+          </View>
+        ) : (
+          <>
+            <View className="px-4 flex-row justify-between items-center  ">
+              <Text className="font-manropeBold text-lg mt-4  ">
+                {t("sections.nearby")}
+              </Text>
+            </View>
+            <View className="px-4 mt-3">
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                {missionsNearby.map((stay) => (
+                  <HomeMissionCard key={stay.id} stay={stay} />
+                ))}
+              </ScrollView>
+            </View>
+            {/* Farm work */}
+            <View className="px-4 flex-row justify-between items-center  ">
+              <Text className="font-manropeBold text-lg mt-4  ">
+                {t("sections.farm")}
+              </Text>
+            </View>
+            <View className="px-4 mt-3">
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                {missionsFarm.map((stay) => (
+                  <HomeMissionCard key={stay.id} stay={stay} />
+                ))}
+              </ScrollView>
+            </View>
+            {/* Animal care */}
+            <View className="px-4 flex-row justify-between items-center  ">
+              <Text className="font-manropeBold text-lg mt-4  ">
+                {t("sections.animal")}
+              </Text>
+            </View>
+            <View className="px-4 mt-3">
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                {missionsAnimal.map((stay) => (
+                  <HomeMissionCard key={stay.id} stay={stay} />
+                ))}
+              </ScrollView>
+            </View>
+            {/* Environmental Projects */}
+            <View className="px-4 flex-row justify-between items-center  ">
+              <Text className="font-manropeBold text-lg mt-4  ">
+                {t("sections.environment")}
+              </Text>
+            </View>
+            <View className="px-4 mt-3">
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                {missionsEnv.map((stay) => (
+                  <HomeMissionCard key={stay.id} stay={stay} />
+                ))}
+              </ScrollView>
+            </View>
+            {/* Community & Cultural Support */}
+            <View className="px-4 flex-row justify-between items-center  ">
+              <Text className="font-manropeBold text-lg mt-4  ">
+                {t("sections.community")}
+              </Text>
+            </View>
+            <View className="px-4 mt-3">
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                {missionsCultural.map((stay) => (
+                  <HomeMissionCard key={stay.id} stay={stay} />
+                ))}
+              </ScrollView>
+            </View>
+          </>
+        )}
       </ScrollView>
 
       <TouchableOpacity

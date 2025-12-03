@@ -4,7 +4,7 @@ import { useState } from "react";
 
 export const useStay = () => {
   const { accessToken } = useAuth();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [stays, setStays] = useState<Stay[]>([]);
 
@@ -123,7 +123,6 @@ export const useStay = () => {
       setLoading(true);
       setError(null);
 
-      console.log("SENDING TO BACK:", stay);
       const res = await authFetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
