@@ -1,6 +1,7 @@
+import { LikeProvider } from "@/context/LikeContext";
 import { SearchFiltersProvider } from "@/context/SearchFiltersContext";
-import "../global.css";
-
+import "@/i18n";
+import { AuthProvider } from "@/utils/auth/AuthContext";
 import {
   Manrope_400Regular,
   Manrope_500Medium,
@@ -11,10 +12,11 @@ import {
 } from "@expo-google-fonts/manrope";
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { Stack } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
-import React from "react";
-
-
+import React, { useEffect } from "react";
+import "react-native-reanimated";
+import "../global.css";
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
@@ -25,19 +27,32 @@ export default function RootLayout() {
     Manrope_800ExtraBold,
   });
 
+  useEffect(() => {
+    if (fontsLoaded) SplashScreen.hideAsync();
+  }, [fontsLoaded]);
+
   if (!fontsLoaded) return null;
 
-
   return (
-    <SearchFiltersProvider>
-      <ThemeProvider value={DefaultTheme}>
-        <Stack>
-          {/* Layout principal avec les onglets */}
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        </Stack>
-
-        <StatusBar style="auto" />
-      </ThemeProvider>
-    </SearchFiltersProvider>
+    <AuthProvider>
+      <LikeProvider>
+        <SearchFiltersProvider>
+          <ThemeProvider value={DefaultTheme}>
+            <Stack>
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen
+                name="map"
+                options={{
+                  headerTransparent: true,
+                  headerTitle: "",
+                  headerBackTitle: "Explore",
+                }}
+              />
+            </Stack>
+            <StatusBar style="auto" />
+          </ThemeProvider>
+        </SearchFiltersProvider>
+      </LikeProvider>
+    </AuthProvider>
   );
 }

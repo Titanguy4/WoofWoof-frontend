@@ -1,10 +1,12 @@
 import { useSearchFilters } from "@/context/SearchFiltersContext";
+import { COLORS } from "@/utils/constants/colors";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
+  ActivityIndicator,
   Modal,
   Pressable,
   ScrollView,
@@ -15,131 +17,134 @@ import {
 } from "react-native";
 import { Calendar } from "react-native-calendars";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS } from "../constants/colors";
 
-import {
-  missionsAnimal,
-  missionsCultural,
-  missionsEnv,
-  missionsFarm,
-  missionsNearby,
-} from "../data/missions";
+import { useMedia } from "@/hooks/useMedia";
+import { useStay } from "@/hooks/useStay";
+import { Stay } from "@/types/stayservice/Stay";
+import HomeMissionCard from "../components/HomeMissionCard";
+
+type HistoryItem = {
+  title: string;
+  region?: string;
+};
 
 export default function Search() {
-  const [query, setQuery] = useState("");
-  const [startDate, setStartDate] = useState<string | null>("31Mar, 2024");
-  const [endDate, setEndDate] = useState<string | null>("01Apr, 2024");
-  const [showDateModal, setShowDateModal] = useState(false);
-
-  const [history, setHistory] = useState<string[]>([]);
-
   const { filters } = useSearchFilters();
+  const [query, setQuery] = useState("");
+  const [startDate, setStartDate] = useState<string | null>(null);
+  const [endDate, setEndDate] = useState<string | null>(null);
+  const [showDateModal, setShowDateModal] = useState(false);
+  const [history, setHistory] = useState<HistoryItem[]>([]);
 
-  const allMissions = [
-    ...missionsNearby,
-    ...missionsFarm,
-    ...missionsAnimal,
-    ...missionsEnv,
-    ...missionsCultural,
-  ];
+  const { getAllStays } = useStay();
+  const { fetchStayPhotos } = useMedia();
+  const [stays, setStays] = useState<Stay[]>([]);
+  const [loading, setLoading] = useState(true);
 
   // -----------------------------
-  // LOAD HISTORY FROM STORAGE
+  // LOAD HISTORY
   // -----------------------------
   useEffect(() => {
     const loadHistory = async () => {
       try {
         const saved = await AsyncStorage.getItem("search_history");
-        if (saved) {
-          setHistory(JSON.parse(saved));
-        }
+        if (saved) setHistory(JSON.parse(saved));
       } catch (err) {
-        console.log("Error loading history:", err);
+        console.error("Error loading history:", err);
       }
     };
-
     loadHistory();
   }, []);
 
   // -----------------------------
-  // SAVE HISTORY ON CLICK
+  // SAVE HISTORY
   // -----------------------------
-  const saveToHistory = async (location: string) => {
+  const saveToHistory = async (item: HistoryItem) => {
     try {
-      let newHistory = [location, ...history];
-
-      // remove duplicates
-      newHistory = [...new Set(newHistory)];
-
-      // limit to last 10
-      newHistory = newHistory.slice(0, 10);
-
+      // Remove duplicate by title
+      const newHistory = [
+        item,
+        ...history.filter((h) => h.title !== item.title),
+      ].slice(0, 10);
       setHistory(newHistory);
       await AsyncStorage.setItem("search_history", JSON.stringify(newHistory));
     } catch (err) {
-      console.log("Error saving history:", err);
+      console.error("Error saving history:", err);
     }
   };
 
   // -----------------------------
-  // CITIES EXTRACTION
+  // LOAD STAYS + PHOTOS
   // -----------------------------
-  const extractedCities = allMissions.map((mission) => {
-    const [city, region, country] = mission.location
-      .split(",")
-      .map((s) => s.trim());
+  useEffect(() => {
+    const loadStays = async () => {
+      setLoading(true);
+      try {
+        const allStays = await getAllStays();
+        if (!allStays) return;
 
-    return {
-      city,
-      region: region || "",
-      country: country || "France",
-      fullLocation: mission.location,
-    };
-  });
-
-  const uniqueCities = Array.from(
-    new Map(extractedCities.map((c) => [c.city, c])).values()
-  );
-
-  // -----------------------------
-  // SEARCH FILTERING
-  // -----------------------------
-  const searchedCities =
-    query.length === 0
-      ? []
-      : uniqueCities.filter((c) =>
-          c.fullLocation.toLowerCase().includes(query.toLowerCase())
+        const staysWithPhotos = await Promise.all(
+          allStays.map(async (s) => {
+            const media = await fetchStayPhotos(s.id);
+            const imageUrl = media && media.length > 0 ? media[0].url : "";
+            return { ...s, imageUrl };
+          }),
         );
 
+        setStays(staysWithPhotos);
+      } catch (err) {
+        console.error("Error loading stays:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadStays();
+  }, []);
+
   // -----------------------------
-  // COUNT FILTERS
+  // FILTERING BY QUERY
   // -----------------------------
+  const filteredStays = useMemo(() => {
+    if (!query) return [];
+    return stays.filter((s) =>
+      `${s.region || ""} ${s.department || ""} ${s.title}`
+        .toLowerCase()
+        .includes(query.toLowerCase()),
+    );
+  }, [query, stays]);
+
   const activeCount =
     filters.advantages.length +
     filters.activityTypes.length +
     filters.volunteerProfile.length;
 
   // -----------------------------
-  // DATE LOGIC
+  // DATE SELECTION
   // -----------------------------
   const handleSelectDay = (day: any) => {
     if (!startDate || (startDate && endDate)) {
       setStartDate(day.dateString);
       setEndDate(null);
-      return;
-    }
-    if (startDate && !endDate) {
+    } else if (startDate && !endDate) {
       setEndDate(day.dateString);
     }
   };
 
+  if (loading) {
+    return (
+      <View className="flex-1 justify-center items-center bg-white">
+        <ActivityIndicator size="large" color={COLORS.woofBrown[500]} />
+      </View>
+    );
+  }
+
   return (
     <SafeAreaView
-      style={{ backgroundColor: COLORS.woofBrown }}
+      style={{ backgroundColor: COLORS.woofBrown[500] }}
       className="flex-1"
       edges={["top"]}
     >
-      <StatusBar backgroundColor={COLORS.woofBrown} style="light" />
+      <StatusBar backgroundColor={COLORS.woofBrown[500]} style="light" />
 
       {/* HEADER */}
       <View className="items-center w-full bg-white flex-row px-4 pt-2">
@@ -150,20 +155,20 @@ export default function Search() {
           <MaterialIcons
             name="chevron-left"
             size={30}
-            color={COLORS.woofBrown}
+            color={COLORS.woofBrown[500]}
           />
         </TouchableOpacity>
 
         {/* SEARCH BAR */}
-        <View className="ml-6 flex-row items-center bg-white border border-woofGrey rounded-full h-[55px] px-4 flex-1">
+        <View className="ml-6 flex-row items-center bg-white border border-woofGrey-500 rounded-full h-[55px] px-4 flex-1">
           <TextInput
             placeholder="Where do you want to help?"
-            placeholderTextColor={COLORS.woofGrey}
+            placeholderTextColor={COLORS.woofGrey[500]}
             className="flex-1 text-[15px] font-manropeMedium ml-2"
             value={query}
             onChangeText={setQuery}
           />
-          <Ionicons name="search" size={20} color={COLORS.woofGrey} />
+          <Ionicons name="search" size={20} color={COLORS.woofGrey[500]} />
         </View>
       </View>
 
@@ -171,31 +176,31 @@ export default function Search() {
       <View className="bg-white p-4 flex-row items-center gap-3 border-b border-gray-200">
         <TouchableOpacity
           onPress={() => setShowDateModal(true)}
-          className="flex-1 border border-woofGrey rounded-full px-4 h-[45px] justify-center"
+          className="flex-1 border border-woofGrey-500 rounded-full px-4 h-[45px] justify-center"
         >
-          <Text className="font-manropeMedium text-[13px] text-woofBrown">
-            Tonight
+          <Text className="font-manropeMedium text-[13px] text-gray-500">
+            Start
           </Text>
-          <Text className="text-[12px] text-gray-500">{startDate}</Text>
+          <Text className="text-[12px] text-woofBrown-500">{startDate}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={() => setShowDateModal(true)}
-          className="flex-1 border border-woofGrey rounded-full px-4 h-[45px] justify-center"
+          className="flex-1 border border-woofGrey-500 rounded-full px-4 h-[45px] justify-center"
         >
-          <Text className="font-manropeMedium text-[13px] text-woofBrown">
-            Tomorrow
+          <Text className="font-manropeMedium text-[13px] text-gray-500">
+            End
           </Text>
-          <Text className="text-[12px] text-gray-500">{endDate}</Text>
+          <Text className="text-[12px] text-woofBrown-500">{endDate}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={() => router.push("/searchfilter")}
-          className="flex-row items-center bg-white border border-woofGrey rounded-full px-4 h-[45px]"
+          className="flex-row items-center bg-white border border-woofGrey-500 rounded-2xl px-4 h-[45px]"
         >
-          <Ionicons name="filter" size={20} color={COLORS.woofGrey} />
+          <Ionicons name="filter" size={20} color={COLORS.woofGrey[500]} />
           <Text className="ml-2 font-manropeMedium">Filter</Text>
-          <View className="ml-2 bg-woofBrown px-2 rounded-full">
+          <View className="ml-2 bg-woofBrown-500 px-2 rounded-full">
             <Text className="text-white text-[12px] font-manropeBold">
               {activeCount}
             </Text>
@@ -206,23 +211,24 @@ export default function Search() {
       {/* RESULTS */}
       <ScrollView className="flex-1 bg-white px-4 pt-4">
         {query.length > 0 ? (
-          <>
-            {searchedCities.length === 0 && (
-              <Text className="text-center text-gray-500 mt-10">
-                No city found.
-              </Text>
-            )}
-
-            {searchedCities.map((item, index) => (
+          filteredStays.length === 0 ? (
+            <Text className="text-center text-gray-500 mt-10">
+              No stay found.
+            </Text>
+          ) : (
+            filteredStays.map((stay) => (
               <Pressable
-                key={index}
+                key={stay.id}
                 className="flex-row items-start py-4"
                 onPress={() => {
-                  saveToHistory(item.fullLocation); // <--- SAVE HERE
+                  saveToHistory({
+                    title: stay.title,
+                    region: stay.region || "",
+                  });
                   router.push({
                     pathname: "/results",
                     params: {
-                      location: item.fullLocation,
+                      location: stay.region || stay.title,
                       startDate,
                       endDate,
                     },
@@ -233,47 +239,31 @@ export default function Search() {
                   <Ionicons
                     name="location-outline"
                     size={20}
-                    color={COLORS.woofBrown}
+                    color={COLORS.woofBrown[500]}
                   />
                 </View>
 
                 <View className="ml-4 flex-1">
                   <Text className="text-base font-manropeMedium">
-                    {item.city}
+                    {stay.title}
                   </Text>
                   <Text className="text-sm text-gray-500">
-                    City in {item.region || "France"}, {item.country}
+                    {stay.department || stay.region || "France"}
                   </Text>
                 </View>
               </Pressable>
-            ))}
-          </>
+            ))
+          )
         ) : (
           <>
             <Text className="text-[18px] font-manropeBold mt-4 mb-6">
               Nearby
             </Text>
-
-            <TouchableOpacity
-              className="flex-row items-center justify-between"
-              onPress={() =>
-                router.push({
-                  pathname: "/results",
-                  params: {
-                    location: "Nearby",
-                    startDate,
-                    endDate,
-                    missions: JSON.stringify(missionsNearby),
-                  },
-                })
-              }
-            >
-              <View className="flex-row items-center">
-                <Ionicons name="location" size={24} color={COLORS.woofBrown} />
-                <Text className="ml-2 font-manrope">100+ Missions</Text>
-              </View>
-              <Ionicons name="chevron-forward" size={22} color={"gray"} />
-            </TouchableOpacity>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              {stays.map((stay) => (
+                <HomeMissionCard key={stay.id} stay={stay} />
+              ))}
+            </ScrollView>
 
             {/* HISTORY */}
             <Text className="text-[18px] font-manropeBold mt-8 mb-6">
@@ -284,21 +274,25 @@ export default function Search() {
               <Text className="text-gray-400">No recent searches.</Text>
             )}
 
-            {history.map((loc, i) => (
+            {history.map((item, i) => (
               <Pressable
                 key={i}
                 className="flex-row items-center mb-6"
                 onPress={() => {
-                  saveToHistory(loc); // boost to top
+                  saveToHistory(item);
                   router.push({
                     pathname: "/results",
-                    params: { location: loc, startDate, endDate },
+                    params: {
+                      location: item.region || item.title,
+                      startDate,
+                      endDate,
+                    },
                   });
                 }}
               >
                 <Ionicons name="time-outline" size={24} color="black" />
                 <Text className="ml-3 text-[15px] font-manropeMedium">
-                  {loc}
+                  {item.title}
                 </Text>
               </Pressable>
             ))}
@@ -319,37 +313,34 @@ export default function Search() {
               </TouchableOpacity>
             </View>
 
-            {/* Tabs */}
             <View className="flex-row mt-6 mb-4">
-              <View className="flex-1 bg-woofBrown rounded-full py-2 px-3">
-                <Text className="text-white font-manropeBold">Start</Text>
-                <Text className="text-white opacity-80">{startDate}</Text>
+              <View className="flex-1 bg-gray-200 rounded-full py-2 px-3">
+                <Text className="text-black font-manrope">Start</Text>
+                <Text className="text-gray-500">{startDate || "-"}</Text>
               </View>
               <View className="flex-1 bg-gray-200 rounded-full py-2 px-3 ml-3">
-                <Text className="font-manropeBold text-gray-600">End</Text>
+                <Text className="font-manrope text-black">End</Text>
                 <Text className="text-gray-500">{endDate || "-"}</Text>
               </View>
             </View>
 
-            {/* Calendar */}
             <Calendar
               onDayPress={handleSelectDay}
               markedDates={{
                 [startDate || ""]: {
                   startingDay: true,
-                  color: COLORS.woofBrown,
+                  color: COLORS.woofBrown[500],
                   textColor: "#fff",
                 },
                 [endDate || ""]: {
                   endingDay: true,
-                  color: COLORS.woofBrown,
+                  color: COLORS.woofBrown[500],
                   textColor: "#fff",
                 },
               }}
               markingType="period"
             />
 
-            {/* Footer */}
             <View className="flex-row justify-between mt-6">
               <TouchableOpacity
                 onPress={() => {
@@ -363,7 +354,7 @@ export default function Search() {
 
               <TouchableOpacity
                 onPress={() => setShowDateModal(false)}
-                className="bg-woofBrown w-[48%] rounded-xl py-3 items-center"
+                className="bg-woofBrown-500 w-[48%] rounded-xl py-3 items-center"
               >
                 <Text className="text-white font-manropeMedium">Done</Text>
               </TouchableOpacity>

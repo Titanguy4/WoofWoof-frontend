@@ -1,13 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
 import React, { useEffect, useState } from "react";
-import {
-  Modal,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Modal, Text, TextInput, TouchableOpacity, View } from "react-native";
 import CountryPicker, {
   Country,
   CountryCode,
@@ -118,7 +112,10 @@ export default function EditProfileModal({
                 className="border border-gray-300 rounded-xl px-4 py-3 text-base text-black font-manropeBold"
                 value={passwords.current}
                 onChangeText={(t) =>
-                  setPasswords((prev) => ({ ...prev, current: t }))
+                  setPasswords((prev) => ({
+                    ...prev,
+                    current: t,
+                  }))
                 }
               />
               <Text className="text-lg font-manrope capitalize">
@@ -130,7 +127,10 @@ export default function EditProfileModal({
                 className="border border-gray-300 rounded-xl px-4 py-3 text-base text-black font-manropeBold"
                 value={passwords.new}
                 onChangeText={(t) =>
-                  setPasswords((prev) => ({ ...prev, new: t }))
+                  setPasswords((prev) => ({
+                    ...prev,
+                    new: t,
+                  }))
                 }
               />
               <Text className="text-lg font-manrope capitalize">
@@ -142,12 +142,15 @@ export default function EditProfileModal({
                 className="border border-gray-300 rounded-xl px-4 py-3 text-base text-black font-manropeBold"
                 value={passwords.confirm}
                 onChangeText={(t) =>
-                  setPasswords((prev) => ({ ...prev, confirm: t }))
+                  setPasswords((prev) => ({
+                    ...prev,
+                    confirm: t,
+                  }))
                 }
               />
               <TouchableOpacity
                 onPress={handlePasswordSave}
-                className="rounded-2xl py-3 mt-4 items-center bg-woofBrown"
+                className="rounded-2xl py-3 mt-4 items-center bg-woofBrown-500"
               >
                 <Text className="text-white font-manropeBold text-base">
                   Save Password
@@ -179,7 +182,7 @@ export default function EditProfileModal({
 
               <TouchableOpacity
                 onPress={handleNumberSave}
-                className="rounded-2xl py-3 mt-6 items-center bg-woofBrown"
+                className="rounded-2xl py-3 mt-6 items-center bg-woofBrown-500"
               >
                 <Text className="text-white font-manropeBold text-base">
                   Save Number
@@ -215,7 +218,7 @@ export default function EditProfileModal({
               />
               <TouchableOpacity
                 onPress={handleDefaultSave}
-                className="rounded-2xl py-3 mt-6 items-center bg-woofBrown"
+                className="rounded-2xl py-3 mt-6 items-center bg-woofBrown-500"
               >
                 <Text className="text-white font-manropeBold text-base">
                   Save

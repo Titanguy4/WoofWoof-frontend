@@ -1,0 +1,35 @@
+{
+    "title": "languages",
+    "auth": {
+        "signInTitle": "Sign in",
+        "welcomeBack": "Welcome back !",
+        "welcomeSubtitle": "Hello there, sign in to continue",
+        "emailPlaceholder": "Email",
+        "passwordPlaceholder": "Password",
+        "forgotPassword": "Forgot your password ?",
+        "signInButton": "Sign in",
+        "dontHaveAccount": "Don't have an account?",
+        "signUp": "Sign Up"
+    },
+    "forgotPassword": {
+        "title": "Forgot password",
+        "instructions": "Type your email",
+        "sentMessage": "We’ll text you a code by mail!",
+        "send": "Send"
+    },
+    "payment": {
+        "successTitle": "Payment Successful",
+        "successMessageLine1": "Your subscription is now active  🎉",
+        "successMessageLine2": "You can now enjoy all premium features !",
+        "backToProfile": "Back to profile"
+    },
+    "searchFilter": {
+        "cancel": "Cancel",
+        "title": "Filter",
+        "clearAll": "Clear all",
+        "advantages": "Advantages",
+        "activityType": "Activity type",
+        "volunteerProfile": "Volunteer profile",
+        "applyFilters": "Apply Filters"
+    }
+}

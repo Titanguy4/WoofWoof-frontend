@@ -1,0 +1,18 @@
+{
+    "title": "Explore",
+    "header": {
+        "title": "Find your place to make an impact",
+        "subtitle": "WOOF WOOF !"
+    },
+    "search": {
+        "placeholder": "Where do you want to help?"
+    },
+    "sections": {
+        "nearby": "Nearby",
+        "farm": "Farm work",
+        "animal": "Animal care",
+        "environment": "Environmental Projects",
+        "community": "Community & Cultural Support",
+        "showAll": "Show all"
+    }
+}

@@ -1,0 +1,42 @@
+{
+    "title": "Profile",
+    "numHostVolunteers": "Backpackers hosted",
+    "notifications": "Notifications",
+    "preferences": "Preferences",
+    "general": "General",
+    "legal": "Legal & Policies",
+    "help": "Help & Support",
+    "signout": "Sign out",
+    "languages": {
+        "title": "Languages",
+        "description": "Choose your language"
+    },
+    "notificationsPage": {
+        "title": "Notifications"
+    },
+    "helpPage": {
+        "title": "Help & Support",
+        "description": "We won't help. Here are some external resources:",
+        "google": "Google",
+        "chatgpt": "ChatGPT",
+        "gemini": "Gemini",
+        "myWebsite": "My website (hugotanguy.fr)",
+        "googleScholar": "Google Scholar",
+        "cannotOpenLink": "Cannot open link",
+        "error": "Error"
+    },
+    "legalPage": {
+        "title": "Legal & Policies",
+        "termsTitle": "Terms of Use",
+        "termsDescription": "By using WoofWoof, you agree to our terms of use. The application provides a connection platform and is not responsible for users' actions.",
+        "privacyTitle": "Privacy Policy",
+        "privacyDescription": "We only collect data necessary to operate the service (profile, preferences, etc.). Data is not sold to third parties.",
+        "fullPrivacyPolicy": "View full privacy policy",
+        "cookiesTitle": "Cookies & tracking",
+        "cookiesDescription": "We use cookies and analytics tools to improve the application. You can disable some tracking via your device settings.",
+        "rightsTitle": "Rights & requests",
+        "rightsDescription": "To request deletion or export of your data, contact us:",
+        "supportEmail": "support@woofwoof.app",
+        "version": "App version: 1.0.0 — Last updated: 2025"
+    }
+}

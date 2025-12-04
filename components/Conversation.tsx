@@ -1,6 +1,6 @@
+import { COLORS } from "@/utils/constants/colors";
 import { router } from "expo-router";
 import { Image, Text, TouchableOpacity, View } from "react-native";
-import { COLORS } from "../constants/colors";
 
 type Message = {
   id: string;
@@ -17,7 +17,13 @@ type Props = {
   unread?: number;
 };
 
-export default function Conversation({ id, name, messages, image, unread }: Props) {
+export default function Conversation({
+  id,
+  name,
+  messages,
+  image,
+  unread,
+}: Props) {
   const lastMessage = messages?.[messages.length - 1];
 
   const handlePress = () => {
@@ -30,13 +36,16 @@ export default function Conversation({ id, name, messages, image, unread }: Prop
   return (
     <TouchableOpacity
       onPress={handlePress}
-      className="flex-row items-center py-4 border-b border-woofCream"
+      className="flex-row items-center py-4 border-b border-gray-300"
     >
       {image ? (
-        <Image source={{ uri: image }} className="w-12 h-12 rounded-full mr-3" />
+        <Image
+          source={{ uri: image }}
+          className="w-12 h-12 rounded-full mr-3"
+        />
       ) : (
         <View className="w-12 h-12 rounded-full bg-[#F4E3D3] mr-3 items-center justify-center">
-          <Text className="text-lg font-manropeBold text-woofBrown">
+          <Text className="text-lg font-manropeBold text-woofBrown-500">
             {name.charAt(0)}
           </Text>
         </View>
@@ -56,10 +65,12 @@ export default function Conversation({ id, name, messages, image, unread }: Prop
 
       {unread ? (
         <View
-          style={{ backgroundColor: COLORS.woofBrown }}
+          style={{ backgroundColor: COLORS.woofBrown[500] }}
           className="w-6 h-6 rounded-full items-center justify-center"
         >
-          <Text className="text-white text-[12px] font-manropeBold">{unread}</Text>
+          <Text className="text-white text-[12px] font-manropeBold">
+            {unread}
+          </Text>
         </View>
       ) : null}
     </TouchableOpacity>

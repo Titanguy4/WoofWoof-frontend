@@ -1,45 +1,72 @@
+import { useMedia } from "@/hooks/useMedia";
+import { useStay } from "@/hooks/useStay";
+import { Stay } from "@/types/stayservice/Stay";
+import { COLORS } from "@/utils/constants/colors";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
+  ActivityIndicator,
   Pressable,
   ScrollView,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS } from "../constants/colors";
 import { useSearchFilters } from "../context/SearchFiltersContext";
-import {
-  missionsAnimal,
-  missionsCultural,
-  missionsEnv,
-  missionsFarm,
-  missionsNearby,
-} from "../data/missions";
 
 export default function SearchFilter() {
+  const { t } = useTranslation();
   const { filters, toggleFilter, clearFilters } = useSearchFilters();
 
+  const { getAllStays } = useStay();
+  const { fetchStayPhotos } = useMedia();
+  const [stays, setStays] = useState<Stay[]>([]);
+  const [loading, setLoading] = useState(true);
+
   // -------------------------------
-  // ADVANTAGES = extraction unique
+  // LOAD STAYS
   // -------------------------------
-  const allAdvantages = useMemo(() => {
-    const missions = [
-      ...missionsNearby,
-      ...missionsFarm,
-      ...missionsAnimal,
-      ...missionsEnv,
-      ...missionsCultural,
-    ];
-    const r = new Set<string>();
-    missions.forEach((m) => m.advantages.forEach((a) => r.add(a)));
-    return Array.from(r);
+  useEffect(() => {
+    const loadStays = async () => {
+      setLoading(true);
+      try {
+        const allStays = await getAllStays();
+        if (!allStays) return;
+
+        // Fetch first photo for each stay (optional)
+        const staysWithPhotos = await Promise.all(
+          allStays.map(async (s) => {
+            const media = await fetchStayPhotos(s.id);
+            const imageUrl = media && media.length > 0 ? media[0].url : "";
+            return { ...s, imageUrl };
+          }),
+        );
+
+        setStays(staysWithPhotos);
+      } catch (err) {
+        console.error("Error loading stays:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadStays();
   }, []);
 
   // -------------------------------
-  // ACTIVITY TYPES
+  // ADVANTAGES = extraction unique depuis stays
+  // -------------------------------
+  const allAdvantages = useMemo(() => {
+    const r = new Set<string>();
+    stays.forEach((s) => s.accomodations.forEach((a) => r.add(a.label)));
+    return Array.from(r);
+  }, [stays]);
+
+  // -------------------------------
+  // ACTIVITY TYPES (toujours statique)
   // -------------------------------
   const activityTypes = [
     "Farm work",
@@ -51,7 +78,7 @@ export default function SearchFilter() {
   ];
 
   // -------------------------------
-  // VOLUNTEER PROFILE
+  // VOLUNTEER PROFILE (toujours statique)
   // -------------------------------
   const volunteerProfiles = [
     "Open to youth / students",
@@ -60,40 +87,51 @@ export default function SearchFilter() {
     "Senior-friendly",
   ];
 
+  if (loading) {
+    return (
+      <View className="flex-1 justify-center items-center bg-white">
+        <ActivityIndicator size="large" color={COLORS.woofBrown[500]} />
+      </View>
+    );
+  }
+
   return (
     <SafeAreaView
-      style={{ backgroundColor: COLORS.woofBrown }}
+      style={{ backgroundColor: COLORS.woofBrown[500] }}
       className="flex-1"
       edges={["top"]}
     >
-      <StatusBar backgroundColor={COLORS.woofBrown} style="light" />
+      <StatusBar backgroundColor={COLORS.woofBrown[500]} style="light" />
 
       {/* HEADER */}
       <View className="items-center w-full h-[56px] bg-white flex-row px-6 justify-between">
         <TouchableOpacity onPress={() => router.back()}>
-          <Text className="text-sm text-woofBrown font-manropeSemiBold">
-            Cancel
+          <Text className="text-sm text-woofBrown-500 font-manropeSemiBold">
+            {t("searchFilter.cancel")}
           </Text>
         </TouchableOpacity>
 
-        <Text className="text-lg font-manropeBold">Filter</Text>
+        <Text className="text-lg font-manropeBold">
+          {t("searchFilter.title")}
+        </Text>
 
         <TouchableOpacity onPress={clearFilters}>
-          <Text className="text-sm text-woofBrown font-manropeSemiBold">
-            Clear all
+          <Text className="text-sm text-woofBrown-500 font-manropeSemiBold">
+            {t("searchFilter.clearAll")}
           </Text>
         </TouchableOpacity>
       </View>
 
       {/* CONTENT */}
       <ScrollView className="flex-1 bg-white px-4 pt-2">
-
         {/* --------------------- */}
         {/* ADVANTAGES SECTION */}
         {/* --------------------- */}
         <View className="mt-6">
           <View className="flex-row justify-between items-center mb-3">
-            <Text className="text-[17px] font-manropeBold">Advantages</Text>
+            <Text className="text-[17px] font-manropeBold">
+              {t("searchFilter.advantages")}
+            </Text>
           </View>
 
           <View className="flex-row flex-wrap gap-2">
@@ -104,11 +142,11 @@ export default function SearchFilter() {
                   key={i}
                   onPress={() => toggleFilter("advantages", label)}
                   className={`px-3 py-1.5 rounded-full border
-                    ${active ? "bg-woofBrown border-woofBrown" : "bg-[#eef4ff] border-[#dde7ff]"}`}
+                    ${active ? "bg-woofBrown-500 border-woofBrown-500" : "bg-[#eef4ff] border-[#dde7ff]"}`}
                 >
                   <Text
                     className={`text-[13px] font-manropeMedium
-                      ${active ? "text-white" : "text-woofBrown"}`}
+                      ${active ? "text-white" : "text-woofBrown-500"}`}
                   >
                     {label}
                   </Text>
@@ -126,7 +164,9 @@ export default function SearchFilter() {
         {/* --------------------- */}
         <View>
           <View className="flex-row justify-between mb-3">
-            <Text className="text-[17px] font-manropeBold">Activity type</Text>
+            <Text className="text-[17px] font-manropeBold">
+              {t("searchFilter.activityType")}
+            </Text>
           </View>
 
           <View className="flex-row flex-wrap gap-2">
@@ -137,12 +177,11 @@ export default function SearchFilter() {
                   key={i}
                   onPress={() => toggleFilter("activityTypes", label)}
                   className={`px-4 py-2 rounded-full border
-                    ${active ? "bg-woofBrown border-woofBrown" : "bg-[#f2f6ff] border-[#ddd]"}`
-                  }
+                    ${active ? "bg-woofBrown-500 border-woofBrown-500" : "bg-[#f2f6ff] border-[#ddd]"}`}
                 >
                   <Text
                     className={`font-manropeMedium
-                      ${active ? "text-white" : "text-woofBrown"}`}
+                      ${active ? "text-white" : "text-woofBrown-500"}`}
                   >
                     {label}
                   </Text>
@@ -160,7 +199,7 @@ export default function SearchFilter() {
         {/* --------------------- */}
         <View>
           <Text className="text-[17px] font-manropeBold mb-3">
-            Volunteer profile
+            {t("searchFilter.volunteerProfile")}
           </Text>
 
           <View className="flex-row flex-wrap gap-2">
@@ -171,12 +210,11 @@ export default function SearchFilter() {
                   key={i}
                   onPress={() => toggleFilter("volunteerProfile", label)}
                   className={`px-4 py-2 rounded-full border
-                    ${active ? "bg-woofBrown border-woofBrown" : "bg-[#f2f6ff] border-[#ddd]"}`
-                  }
+                    ${active ? "bg-woofBrown-500 border-woofBrown-500" : "bg-[#f2f6ff] border-[#ddd]"}`}
                 >
                   <Text
                     className={`font-manropeMedium
-                      ${active ? "text-white" : "text-woofBrown"}`}
+                      ${active ? "text-white" : "text-woofBrown-500"}`}
                   >
                     {label}
                   </Text>
@@ -189,13 +227,12 @@ export default function SearchFilter() {
         {/* APPLY FILTERS BUTTON */}
         <TouchableOpacity
           onPress={() => router.back()}
-          className="bg-woofBrown mt-12 mb-10 py-4 rounded-xl items-center"
+          className="bg-woofBrown-500 mt-12 mb-10 py-4 rounded-xl items-center"
         >
           <Text className="text-white font-manropeBold text-[16px]">
-            Apply Filters
+            {t("searchFilter.applyFilters")}
           </Text>
         </TouchableOpacity>
-
       </ScrollView>
     </SafeAreaView>
   );

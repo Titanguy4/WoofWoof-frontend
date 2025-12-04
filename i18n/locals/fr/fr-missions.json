@@ -1,0 +1,9 @@
+{
+    "title": "Missions",
+    "listEmpty": "Aucune mission disponible",
+    "tabs": {
+        "ongoing": "En cours",
+        "history": "Historique"
+    },
+    "noMissionsFound": "Aucune mission trouvée"
+}

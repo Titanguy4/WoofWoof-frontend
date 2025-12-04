@@ -1,87 +1,108 @@
-import { COLORS } from "@/constants/colors";
+import { COLORS } from "@/utils/constants/colors";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import { Image, ImageSourcePropType, Text, View } from "react-native";
-
+import { Image, Text, TouchableOpacity, View } from "react-native";
 
 type OfferMissionCardProps = {
-    id: number;
-    image: ImageSourcePropType;
-    image2x?: ImageSourcePropType;
-    title: string;
-    location: string;
-    activity: string;
-    meals: string;
-    dailyHours: string;
-    backpackersMax: number;
-    housing: string;
-    description?: string;
-    advantages?: string[];
-    locationDetails?: string;
-    backpackersTotal: number;
+  id: number;
+  imageUrl: string;
+  title: string;
+  region: string;
+  department: string;
+  activities: string[];
+  meals: string[];
+  learningSkills: string[];
+  accomodations: string[];
+  backpackersTotal: number;
+  noPhoto?: boolean; // <-- nouveau boolean
+  onAddPhotoPress?: () => void; // <-- callback pour le bouton
 };
 
 export default function OfferMissionCard({
-    id,
-    image,
-    title,
-    locationDetails,
-    housing,
-    meals,
-    backpackersMax,
-    dailyHours,
-    activity,
-    backpackersTotal,
+  id,
+  imageUrl,
+  title,
+  region,
+  department,
+  activities,
+  meals,
+  learningSkills,
+  accomodations,
+  backpackersTotal,
+  noPhoto = false,
+  onAddPhotoPress,
 }: OfferMissionCardProps) {
-    return (
-        <View className="w-full h-[250px] bg-white rounded-2xl flex-row overflow-hidden border border-woofBrown">
-            {/* Image */}
-            <View className="relative">
-                <Image source={image} className="h-full w-[115px]" resizeMode="cover" />
-            </View>
+  const renderList = (items: string[]) => items.join(", ");
 
-            {/* Texte */}
-            <View className="p-3">
-                <Text className="font-manropeBold text-[14px]" numberOfLines={1}>
-                    {title}
-                </Text>
-                <View className="w-[220px]">
-                    <Text className="text-[12px] text-[#7E7E7E] mt-1" numberOfLines={2} >
-                        {locationDetails}
-                    </Text>
-                </View>
-                <Text className="font-manropeBold text-[14px] mt-1" numberOfLines={1}>
-                    Mission details
-                </Text>
-                <View className="mt-1 gap-y-2">
-                    <View className="w-[220px]">
-                        <Text className="text-[12px] text-[#7E7E7E]">
-                            🌱 Activity: {activity}
-                        </Text>
-                    </View>
-                    <Text className="text-[12px] text-[#7E7E7E]">
-                        ⏱ Daily hours: {dailyHours}
-                    </Text>
-                    <Text className="text-[12px] text-[#7E7E7E]">
-                        👥 Backpackers: up to {backpackersMax} at time
-                    </Text>
-                    <Text className="text-[12px] text-[#7E7E7E]">
-                        🍽 Meals: {meals}
-                    </Text>
-                    <Text className="text-[12px] text-[#7E7E7E]">
-                        🏠 Housing: {housing}
-                    </Text>
-                    <View className="px-2 flex-row items-center justify-between">
-                        <Text
-                            className="mt-2 mb-2 font-manropeBold text-[16px] text-woofBrown"
-                            numberOfLines={1}
-                        >
-                            {backpackersTotal} backpackers hosted
-                        </Text>
-                        <Ionicons name="paw" size={20} color={COLORS.woofBrown} />
-                    </View>
-                </View>
-            </View>
+  return (
+    <View className="w-full h-[220px] bg-white rounded-2xl flex-row overflow-hidden border border-woofBrown-500">
+      {/* Image ou bouton Ajouter une photo */}
+      <View className="relative">
+        {noPhoto ? (
+          <TouchableOpacity
+            onPress={onAddPhotoPress}
+            className="w-[115px] h-full bg-gray-200 flex items-center justify-center rounded-l-2xl"
+          >
+            <Text className="text-2xl font-bold text-gray-500 text-center">
+              +{"\n"}Ajouter une photo
+            </Text>
+          </TouchableOpacity>
+        ) : (
+          <Image
+            source={{ uri: imageUrl }}
+            className="h-full w-[115px]"
+            resizeMode="cover"
+          />
+        )}
+      </View>
+
+      {/* Texte */}
+      <View className="p-3 flex-1">
+        <Text className="font-manropeBold text-[14px]" numberOfLines={1}>
+          {title}
+        </Text>
+
+        <Text className="text-[12px] text-[#7E7E7E] mt-1" numberOfLines={2}>
+          {department}, {region}
+        </Text>
+
+        <Text className="font-manropeBold text-[14px] mt-2">
+          Mission details
+        </Text>
+
+        <View className="mt-1 gap-y-1">
+          {activities.length > 0 && (
+            <Text className="text-[12px] text-[#7E7E7E]">
+              🌱 Activities: {renderList(activities)}
+            </Text>
+          )}
+
+          {learningSkills.length > 0 && (
+            <Text className="text-[12px] text-[#7E7E7E]">
+              🧠 Learning skills: {renderList(learningSkills)}
+            </Text>
+          )}
+
+          {meals.length > 0 && (
+            <Text className="text-[12px] text-[#7E7E7E]">
+              🍽 Meals: {renderList(meals)}
+            </Text>
+          )}
+
+          {accomodations.length > 0 && (
+            <Text className="text-[12px] text-[#7E7E7E]">
+              🏡 Advantages: {renderList(accomodations)}
+            </Text>
+          )}
         </View>
-    );
+
+        <View className="px-2 flex-row items-center justify-between mt-2">
+          <Text className="font-manropeBold text-[16px] text-woofBrown-500">
+            {backpackersTotal} backpackers hosted
+          </Text>
+          <Ionicons name="paw" size={20} color={COLORS.woofBrown[500]} />
+        </View>
+      </View>
+    </View>
+  );
 }

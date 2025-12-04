@@ -1,0 +1,35 @@
+{
+    "title": "langues",
+    "auth": {
+        "signInTitle": "Connexion",
+        "welcomeBack": "Bon retour !",
+        "welcomeSubtitle": "Bonjour, connectez-vous pour continuer",
+        "emailPlaceholder": "Email",
+        "passwordPlaceholder": "Mot de passe",
+        "forgotPassword": "Mot de passe oublié ?",
+        "signInButton": "Se connecter",
+        "dontHaveAccount": "Vous n'avez pas de compte ?",
+        "signUp": "S'inscrire"
+    },
+    "forgotPassword": {
+        "title": "Mot de passe oublié",
+        "instructions": "Saisissez votre email",
+        "sentMessage": "Nous vous enverrons un code par email !",
+        "send": "Envoyer"
+    },
+    "payment": {
+        "successTitle": "Paiement réussi",
+        "successMessageLine1": "Votre abonnement est maintenant actif 🎉",
+        "successMessageLine2": "Vous pouvez désormais profiter de toutes les fonctionnalités premium !",
+        "backToProfile": "Retour au profil"
+    },
+    "searchFilter": {
+        "cancel": "Annuler",
+        "title": "Filtrer",
+        "clearAll": "Tout effacer",
+        "advantages": "Avantages",
+        "activityType": "Type d'activité",
+        "volunteerProfile": "Profil du bénévole",
+        "applyFilters": "Appliquer les filtres"
+    }
+}

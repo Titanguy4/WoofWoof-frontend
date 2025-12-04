@@ -1,0 +1,73 @@
+{
+  "title": "Road Trip",
+  "header": {
+    "title": "Road Trip"
+  },
+  "steps": {
+    "step": "Step",
+    "addStep": "Add step"
+  },
+  "form": {
+    "emailLabel": "Contact email",
+    "emailPlaceholder": "your.email@example.com",
+    "phoneLabel": "Phone number",
+    "phoneOptional": "(Optional)",
+    "phonePlaceholder": "+33 6 12 34 56 78",
+    "startDateLabel": "Start date",
+    "endDateLabel": "End date",
+    "selectDate": "Select a date",
+    "cityLabel": "City",
+    "cityPlaceholder": "E.g.: Paris, Lyon, Marseille...",
+    "maxProposalsLabel": "Maximum number of proposals per step",
+    "confirm": "Confirm",
+    "cancel": "Cancel"
+  },
+  "city": {
+    "noCity": "No city found. Check spelling.",
+    "searching": "Searching..."
+  },
+  "validation": {
+    "invalidEmail": "Invalid email address"
+  },
+  "actions": {
+    "reset": "Reset",
+    "next": "Next",
+    "back": "Back",
+    "submit": "Submit",
+    "acceptSelection": "Accept selection",
+    "viewMore": "View More",
+    "return": "Return"
+  },
+  "result": {
+    "noRoadTrip": "No road trip found",
+    "selectedStays": "stay(s) selected",
+    "staysHere": "stay(s) here",
+    "staysAt": "Stays at",
+    "available": "available",
+    "availablePlural": "available",
+    "selected": "selected",
+    "selectedPlural": "selected",
+    "stay": "stay",
+    "stays": "stays",
+    "loading": "Loading...",
+    "bookingInProgress": "Booking in progress...",
+    "book": "Book"
+  },
+  "errors": {
+    "error": "Error",
+    "noSelection": "No selection",
+    "noSelectionMessage": "Please select at least one stay to continue",
+    "missingDates": "Start and end dates are missing",
+    "bookingError": "An error occurred while creating your bookings. Please try again."
+  },
+  "booking": {
+    "confirmation": "Confirmation",
+    "confirmMessage": "You are about to book {{count}} stay(s).\nDo you want to continue?",
+    "success": "Bookings created",
+    "successMessage": "{{count}} booking(s) successfully created!",
+    "failure": "Failure",
+    "failureMessage": "No booking could be created.\n{{count}} failure(s).",
+    "partialSuccess": "Bookings partially created",
+    "partialSuccessMessage": "{{success}} booking(s) successfully created.\n{{failed}} failure(s)."
+  }
+}

@@ -1,0 +1,42 @@
+{
+    "title": "Profil",
+    "numHostVolunteers": "Backpackers accueillis",
+    "notifications": "Notifications",
+    "preferences": "Préférences",
+    "general": "Général",
+    "legal": "Légale & Réglementation",
+    "help": "Aide & Support",
+    "signout": "Déconnexion",
+    "languages": {
+        "title": "Langues",
+        "description": "Choisissez votre langue"
+    },
+    "notificationsPage": {
+        "title": "Notifications"
+    },
+    "helpPage": {
+        "title": "Aide & Support",
+        "description": "Nous n'aiderons pas. Voici quelques ressources externes :",
+        "google": "Google",
+        "chatgpt": "ChatGPT",
+        "gemini": "Gemini",
+        "myWebsite": "Mon site (hugotanguy.fr)",
+        "googleScholar": "Google Scholar",
+        "cannotOpenLink": "Impossible d'ouvrir le lien",
+        "error": "Erreur"
+    },
+    "legalPage": {
+        "title": "Légale & Réglementation",
+        "termsTitle": "Conditions d'utilisation",
+        "termsDescription": "En utilisant WoofWoof, vous acceptez nos conditions d'utilisation. L'application fournit une plateforme de mise en relation et n'est pas responsable des actions des utilisateurs.",
+        "privacyTitle": "Politique de confidentialité",
+        "privacyDescription": "Nous collectons uniquement les données nécessaires pour faire fonctionner le service (profil, préférences, etc.). Les données ne sont pas vendues à des tiers.",
+        "fullPrivacyPolicy": "Voir la politique de confidentialité complète",
+        "cookiesTitle": "Cookies & tracking",
+        "cookiesDescription": "Nous utilisons des cookies et des outils d'analyse pour améliorer l'application. Vous pouvez désactiver certains tracking via les paramètres de votre appareil.",
+        "rightsTitle": "Droits & demandes",
+        "rightsDescription": "Pour demander la suppression ou l'export de vos données, contactez-nous :",
+        "supportEmail": "support@woofwoof.app",
+        "version": "Version de l'application : 1.0.0 — Dernière mise à jour : 2025"
+    }
+}

@@ -1,216 +1,106 @@
-import CardModal from "@/components/CardModal";
-import LanguageModal from "@/components/LanguageModal";
-import LogoutModal from "@/components/LogoutModal";
-import SubscriptionModal from "@/components/SubscriptionModal";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { router } from "expo-router";
-import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS } from "../constants/colors";
-
+import dogheader from "@/assets/images/dogheader.png";
+import { Section } from "@/components/Section";
+import { SectionButton } from "@/components/SectionButton";
+import { useMedia } from "@/hooks/useMedia";
+import { useAuth } from "@/utils/auth/AuthContext";
+import { Router, useRouter } from "expo-router";
+import {
+  Globe,
+  House,
+  MessageCircleQuestionMark,
+  ShieldCheck,
+  SquarePen,
+} from "lucide-react-native";
+import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import {
+  ActivityIndicator,
+  Image,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function ProfileScreen() {
+  const router: Router = useRouter();
+  const { user, logout, openAccountPage, isWoofer } = useAuth();
+  const { t } = useTranslation("profil");
+  const { profilePhoto, fetchProfilePhoto, loading } = useMedia();
 
-  const [logoutVisible, setLogoutVisible] = useState(false);
-  const [languageVisible, setLanguageVisible] = useState(false);
-  const [upgradeVisible, setUpgradeVisible] = useState(false);
-  const [selectedType, setSelectedType] = useState<string | null>(null);
-  const [cardVisible, setCardVisible] = useState(false);
-  const [selectedAdvantages, setSelectedAdvantages] = useState<string[]>([]);
-
-
+  useEffect(() => {
+    if (user?.id) {
+      fetchProfilePhoto(String(user?.id));
+    }
+  }, [user?.id]);
 
   return (
-    <SafeAreaView
-      style={{ backgroundColor: COLORS.woofBrown }}
-      className="flex-1"
-      edges={["top"]}
+    <ScrollView
+      className="flex pt-safe bg-woofCream-500"
+      contentContainerClassName="grow"
+      showsVerticalScrollIndicator={false}
     >
-      <StatusBar backgroundColor={COLORS.woofBrown} style="light" />
+      <View className="w-full h-[230px] items-center">
+        <Image
+          source={dogheader}
+          className="w-[180px] h-[180px]"
+          resizeMode="contain"
+        />
+      </View>
 
-      <ScrollView
-        className="flex-1 bg-woofCream"
-        showsVerticalScrollIndicator={false}
-      >
-        {/* === HEADER AVEC LE CHIEN === */}
-        <View className="w-full h-[230px] -ml-9 bg-[#F6E9D8] items-center justify-center">
-          <Image
-            source={require("../assets/images/dogheader.png")}
-            className="w-[180px] h-[180px]"
-            resizeMode="contain"
-          />
-        </View>
-
-        {/* === CARTE PROFIL === */}
-        <View className="bg-white mx-4 -mt-36 mb-2 rounded-2xl shadow p-4">
-
-          {/* --- Ligne 1 : Photo + Nom + Upgrade + Edit --- */}
-          <View className="flex-row items-center">
-            <Image
-              source={require("../assets/images/scoobyprofile.png")}
-              className="w-[40px] h-[40px] rounded-full"
+      <View className="w-5/6 -mt-[120px] z-1 self-center bg-woofCream-50 rounded-2xl shadow p-8 gap-y-5">
+        <View className="flex-row items-center gap-x-3">
+          {loading ? (
+            <ActivityIndicator
+              size="small"
+              color="#000"
+              className="w-[40px] h-[40px]"
             />
-            <View className="ml-4 flex-1">
-              <Text className="font-manropeBold text-base text-black">
-                Brooke Davis
-              </Text>
-              <Text className="font-manrope text-sm text-[#A6A9AC]">
-                brookedavis@gmail.com
-              </Text>
-            </View>
-            <TouchableOpacity
-              onPress={() => setUpgradeVisible(true)}
-              className="bg-woofBrown px-3 py-1 rounded-full"
-            >
-              <Text className="text-[12px] font-manropeSemiBold text-white">
-                Upgrade
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity onPress={() => router.push('/editProfile')}>
-              <Image
-                source={require("../assets/icons/edit.png")}
-                className="w-[20px] h-[20px] ml-4"
-              />
-            </TouchableOpacity>
+          ) : (
+            <Image
+              source={profilePhoto ? { uri: profilePhoto.url } : undefined}
+              className="w-[40px] h-[40px] rounded-full bg-woofGrey-200"
+            />
+          )}
+          <View className="flex-1">
+            <Text className="text-xl font-bold">{user?.name}</Text>
+            <Text className="text-woofGrey-500">{user?.email}</Text>
           </View>
-
-          {/* --- Ligne 2 : Maison + Woofer + Volunteers --- */}
-          <View className="py-3 px-4 flex-row rounded-lg border border-woofGreyBorder items-center justify-between mt-4">
-            <View className="flex-row items-center">
-              <Image
-                source={require("../assets/images/home.png")}
-                className="w-[36px] h-[30px] mr-2"
-                resizeMode="contain"
-              />
-              <Text className="font-manropeMedium text-base text-black">
-                Woofer
-              </Text>
-            </View>
-
-            <Text className="font-manropeSemiBold text-base text-woofBrown">
-              27 Volunteers hosted
-            </Text>
-          </View>
-        </View>
-        <View className="bg-white px-4 gap-y-1">
-          <Text className="mt-3 text-lg text-black font-manrope">
-            General
-          </Text>
-          <TouchableOpacity onPress={() => setLanguageVisible(true)} className="flex-row py-3 items-center justify-between">
-
-            <View className="flex-row items-center">
-              <Ionicons name="globe-outline" size={30} />
-              <Text className="ml-3 text-xl text-black font-manropeBold">
-                Language
-              </Text>
-            </View>
-            <MaterialIcons name="chevron-right" className="start-end" size={24} color={COLORS.woofDarkGrey} />
-          </TouchableOpacity>
-          <TouchableOpacity className="flex-row py-3 mb-4 items-center justify-between">
-
-            <View className="flex-row items-center">
-              <Ionicons name="notifications" size={30} />
-              <Text className="ml-3 text-xl text-black font-manropeBold">
-                Notifications
-              </Text>
-            </View>
-            <MaterialIcons name="chevron-right" className="start-end" size={24} color={COLORS.woofDarkGrey} />
+          <TouchableOpacity onPress={openAccountPage}>
+            <SquarePen />
           </TouchableOpacity>
         </View>
-        <View className="bg-white px-4 gap-y-1">
-          <View className="border-t border-woofGrey"></View>
-          <Text className="mt-3 text-lg text-black font-manrope">
-            Preferences
-          </Text>
-          <View className="flex-row py-3 items-center justify-between">
 
-            <View className="flex-row items-center">
-              <Ionicons name="shield-checkmark-outline" size={30} color="black" />
-              <Text className="ml-3 text-xl text-black font-manropeBold">
-                Legal & Policies
-              </Text>
-            </View>
-            <MaterialIcons name="chevron-right" className="start-end" size={24} color={COLORS.woofDarkGrey} />
+        <View className="flex-row rounded-lg items-center justify-between mt-4">
+          <View className="flex-row items-center gap-x-3">
+            <House size={25} />
+            <Text>{isWoofer ? "Woofer" : "Backpacker"}</Text>
           </View>
-          <View className="flex-row py-3 items-center justify-between">
-
-            <View className="flex-row items-center">
-              <Ionicons name="help-circle-outline" size={30} />
-              <Text className="ml-3 text-xl text-black font-manropeBold">
-                Help & Support
-              </Text>
-            </View>
-            <MaterialIcons name="chevron-right" className="start-end" size={24} color={COLORS.woofDarkGrey} />
-          </View>
-          <TouchableOpacity
-            className="flex-row py-3 items-center justify-between"
-            onPress={() => setLogoutVisible(true)}
-          >
-            <View className="flex-row items-center">
-              <Ionicons name="log-out-outline" size={30} />
-              <Text className="ml-3 text-xl text-black font-manropeBold">
-                Logout
-              </Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            className="flex-row py-3 items-center justify-between"
-            onPress={() => router.push('/signin')}
-          >
-            <View className="flex-row items-center">
-              <Ionicons name="log-out-outline" size={30} />
-              <Text className="ml-3 text-xl text-black font-manropeBold">
-                Signin
-              </Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            className="flex-row py-3 items-center justify-between"
-            onPress={() => router.push('/changepassword')}
-          >
-            <View className="flex-row items-center">
-              <Ionicons name="log-out-outline" size={30} />
-              <Text className="ml-3 text-xl text-black font-manropeBold">
-                Change password
-              </Text>
-            </View>
-          </TouchableOpacity>
         </View>
-      </ScrollView>
+      </View>
 
-      {/* ✅ MODAL LOGOUT */}
-      <LogoutModal
-        visible={logoutVisible}
-        onClose={() => setLogoutVisible(false)}
-      />
-
-      <LanguageModal
-        visible={languageVisible}
-        onClose={() => setLanguageVisible(false)}
-      />
-
-      <SubscriptionModal
-        visible={upgradeVisible}
-        onClose={() => setUpgradeVisible(false)}
-        selectedType={selectedType}
-        setSelectedType={setSelectedType}
-        onApply={() => {
-          setUpgradeVisible(false);   // ferme abonnement
-          setTimeout(() => setCardVisible(true), 300); // ouvre carte après animation
-        }}
-      />
-
-      <CardModal
-        visible={cardVisible}
-        onClose={() => setCardVisible(false)}
-      />
-
-
-
-
-    </SafeAreaView>
+      <View className="bg-woofCream-50 p-4 gap-y-1 mt-10 rounded-t-3xl flex-1">
+        <Section title={t("general")}>
+          <SectionButton
+            icon={<Globe />}
+            label={t("languages.title")}
+            onPress={() => router.push("/profile/languages")}
+          ></SectionButton>
+          <SectionButton
+            icon={<ShieldCheck />}
+            label={t("legal")}
+            onPress={() => router.push("/profile/policies")}
+          />
+          <SectionButton
+            icon={<MessageCircleQuestionMark />}
+            label={t("help")}
+            onPress={() => router.push("/profile/help")}
+          />
+        </Section>
+        <View className="mt-5">
+          <SectionButton label={t("signout")} onPress={logout} />
+        </View>
+      </View>
+    </ScrollView>
   );
 }
