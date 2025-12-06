@@ -102,11 +102,15 @@ export default function DetailsScreen({ id }: Props) {
 
   const ReviewCard = ({
     id,
+    name,
+    country,
     rating,
     content,
     date,
   }: {
     id: number;
+    name: string;
+    country: string;
     rating: string;
     content: string;
     date: string;
@@ -122,8 +126,8 @@ export default function DetailsScreen({ id }: Props) {
             className="w-[42px] h-[42px] rounded-full mr-3"
           />
           <View>
-            <Text className="font-manropeBold text-base text-black">Name</Text>
-            <Text className="text-xs text-gray-500">Country</Text>
+            <Text className="font-manropeBold text-base text-black">{name}</Text>
+            <Text className="text-xs text-gray-500">{country}</Text>
           </View>
         </View>
 
@@ -287,6 +291,8 @@ export default function DetailsScreen({ id }: Props) {
                 <ReviewCard
                   key={review.id}
                   id={review.id}
+                  name={review.name}
+                  country={review.country}
                   rating={String(review.rating)}
                   date={review.date ?? ""}
                   content={review.content ?? ""}

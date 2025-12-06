@@ -1,7 +1,7 @@
 import ApplyMissionCard from "@/components/ApplyMissionCard";
 import { useBooking } from "@/hooks/useBooking";
 import { useStay } from "@/hooks/useStay";
-import { Booking } from "@/types/booking/Booking";
+import BookingRequest from "@/types/booking/BookingRequest";
 import { Stay } from "@/types/stayservice/Stay";
 import { useAuth } from "@/utils/auth/AuthContext";
 import { COLORS } from "@/utils/constants/colors";
@@ -83,11 +83,11 @@ export default function MissionRequest({ id }: Props) {
     if (!stay || !startDate || !endDate) return;
 
     // ✅ correspond au type Omit<Booking, "id">
-    const booking: Omit<Booking, "id"> = {
+    const booking: BookingRequest = {
       stayId: stay.id,
       userId: user?.id || null,
-      startRequestedDate: startDate,
-      endRequestedDate: endDate,
+      startRequestedDate: dayjs(startDate).format("YYYY-MM-DD"),
+      endRequestedDate: dayjs(endDate).format("YYYY-MM-DD"),
       status: "PENDING",
       email,
       number,
@@ -253,9 +253,8 @@ export default function MissionRequest({ id }: Props) {
             <TouchableOpacity
               disabled={!isFormValid || loading}
               onPress={handleApply}
-              className={`w-36 h-12 px-3 py-1 rounded-2xl items-center justify-center ${
-                isFormValid ? "bg-woofBrown-500" : "bg-gray-400"
-              }`}
+              className={`w-36 h-12 px-3 py-1 rounded-2xl items-center justify-center ${isFormValid ? "bg-woofBrown-500" : "bg-gray-400"
+                }`}
             >
               <Text className="text-base font-manropeBold text-white">
                 {loading ? "Submitting..." : "Apply now"}
