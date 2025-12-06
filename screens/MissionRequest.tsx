@@ -85,7 +85,7 @@ export default function MissionRequest({ id }: Props) {
     // ✅ correspond au type Omit<Booking, "id">
     const booking: BookingRequest = {
       stayId: stay.id,
-      userId: user?.id || null,
+      userId: user?.sub || null,
       startRequestedDate: dayjs(startDate).format("YYYY-MM-DD"),
       endRequestedDate: dayjs(endDate).format("YYYY-MM-DD"),
       status: "PENDING",
