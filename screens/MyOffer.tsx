@@ -9,9 +9,7 @@ import Meal from "@/types/stayservice/Meal";
 import { NewStay, Stay } from "@/types/stayservice/Stay";
 import { useAuth } from "@/utils/auth/AuthContext";
 import { COLORS } from "@/utils/constants/colors";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { router } from "expo-router";
-import { StatusBar } from "expo-status-bar";
+import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -104,14 +102,6 @@ export default function MyOffer() {
     );
   }
 
-  if (staysData.length === 0) {
-    return (
-      <View className="flex-1 items-center justify-center bg-white">
-        <Text className="text-lg font-manropeBold">{t("notFound")}</Text>
-      </View>
-    );
-  }
-
   const lat = 44.449;
   const lon = 0.144;
   const localisation: [number, number] = [
@@ -196,72 +186,46 @@ export default function MyOffer() {
   };
 
   return (
-    <SafeAreaView
-      style={{ backgroundColor: COLORS.woofBrown[500], flex: 1 }}
-      edges={["top"]}
-    >
-      <StatusBar backgroundColor={COLORS.woofBrown[500]} style="light" />
-
-      {/* Header */}
-      <View className="items-center w-full h-[56px] bg-white flex-row py-4">
-        <TouchableOpacity
-          onPress={() => router.back()}
-          className="items-center justify-center ml-6 w-12 h-12"
-        >
-          <MaterialIcons
-            name="chevron-left"
-            size={30}
-            color={COLORS.woofBrown[500]}
-          />
-        </TouchableOpacity>
-        <Text className="text-lg font-manropeBold ml-[114px]">
-          {t("title")}
-        </Text>
-      </View>
-
-      {/* Contenu principal */}
+    <View className="flex-1 pt-safe bg-woofCream-500">
       <ScrollView
-        className="flex-1 bg-woofCream-500 px-4"
-        contentContainerStyle={{ paddingBottom: 100 }}
+        className="flex-1 px-4"
+        contentContainerStyle={{ paddingBottom: 180 }}
       >
-        {staysData.map((offer) => (
-          <View key={offer.id} className="items-center mt-4 w-full">
-            <OfferMissionCard
-              {...offer}
-              backpackersTotal={backpackersNumber}
-              noPhoto={!offer.imageUrl}
-              onAddPhotoPress={() => {
-                setCurrentStayIdForPhoto(offer.id);
-                setIsAddPhotoModalVisible(true);
-              }}
-            />
+        {staysData.length === 0 ? (
+          <View className="flex-1 justify-center items-center">
+            <Text className="text-lg font-manropeBold">{t("notFound")}</Text>
           </View>
-        ))}
+        ) : (
+          staysData.map((offer) => (
+            <View key={offer.id} className="items-center mt-4 w-full">
+              <OfferMissionCard
+                {...offer}
+                backpackersTotal={backpackersNumber}
+                noPhoto={!offer.imageUrl}
+                onAddPhotoPress={() => {
+                  setCurrentStayIdForPhoto(offer.id);
+                  setIsAddPhotoModalVisible(true);
+                }}
+              />
+            </View>
+          ))
+        )}
       </ScrollView>
 
-      {/* Bouton flottant */}
-      <TouchableOpacity
-        onPress={() => setIsActivityModalVisible(true)}
-        style={{
-          position: "absolute",
-          bottom: 24,
-          alignSelf: "center",
-          width: 144,
-          height: 48,
-          backgroundColor: COLORS.woofBrown[500],
-          borderRadius: 24,
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "center",
-          paddingHorizontal: 12,
-          zIndex: 10,
-        }}
-      >
-        <Text className="text-base font-manropeBold text-white">
-          {t("addNow")}
-        </Text>
-        <Ionicons name="add-circle-outline" size={22} color="white" />
-      </TouchableOpacity>
+      <View className="absolute bottom-0 left-0 right-0 bg-woofCream-500">
+        <View className="items-center pb-2">
+          <TouchableOpacity
+            onPress={() => setIsActivityModalVisible(true)}
+            className="bg-woofBrown-500 rounded-xl items-center justify-center px-12 py-4 flex-row"
+          >
+            <Text className="text-base font-manropeBold text-white mr-2">
+              {t("addNow")}
+            </Text>
+            <Ionicons name="add-circle-outline" size={22} color="white" />
+          </TouchableOpacity>
+        </View>
+        <SafeAreaView edges={["bottom"]} />
+      </View>
 
       {/* Modales */}
       <ActivityTypeModal
@@ -319,6 +283,6 @@ export default function MyOffer() {
           </View>
         </Modal>
       )}
-    </SafeAreaView>
+    </View>
   );
 }
