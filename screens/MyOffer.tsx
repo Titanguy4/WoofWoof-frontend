@@ -111,10 +111,10 @@ export default function MyOffer() {
 
   const handleCreateStay = async (
     name: string,
+    description: string,
     activity: string,
-    imageUrl: string,
-    region: string,
     department: string,
+    region: string,
   ) => {
     if (!selectedType) return;
 
