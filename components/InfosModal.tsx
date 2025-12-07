@@ -29,11 +29,11 @@ type Props = {
   setSelectedMeals: (meals: string[]) => void;
   selectedType: string | null;
   onAdd: (
-    description: string,
     name: string,
+    description: string,
     activity: string,
-    region: string,
     department: string,
+        region: string,
   ) => void;
 };
 
@@ -251,7 +251,7 @@ export default function InfosModal({
             <View className="px-4">
               <TouchableOpacity
                 onPress={() => {
-                  onAdd(region, department, description, name, activity);
+                  onAdd(name, description, activity, department, region);
                   onClose(); // ferme le modal
                   router.push({
                     pathname: "/requestreceived",

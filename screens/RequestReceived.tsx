@@ -1,3 +1,4 @@
+import { useAuth } from "@/utils/auth/AuthContext";
 import { COLORS } from "@/utils/constants/colors";
 import { router, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -6,6 +7,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function RequestReceivedScreen() {
   const { description, name } = useLocalSearchParams();
+  const { user } = useAuth();
 
   return (
     <SafeAreaView
@@ -38,9 +40,9 @@ export default function RequestReceivedScreen() {
             </Text>
 
             {/* 👤 User Info */}
-            <Text className="text-lg font-manropeBold mb-2">Brooke Davis</Text>
+            <Text className="text-lg font-manropeBold mb-2">{user?.name ?? "Lisandre Begon"}</Text>
             <Text className="text-sm font-manrope mb-2 text-woofDarkGrey">
-              brookedavis@gmail.com
+              {user?.email ?? "Unknown email"}
             </Text>
             <Text className="text-sm font-manrope text-woofDarkGrey">
               +33 796 000 000
