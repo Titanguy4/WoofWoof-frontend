@@ -27,8 +27,9 @@ interface KeycloakTokenPayload {
 export function useProvideAuth(): IAuthContext {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [refreshToken, setRefreshToken] = useState<string | null>(null);
-  const [discovery, setDiscovery] =
-    useState<AuthSession.DiscoveryDocument | null>(null);
+  const [discovery, setDiscovery] = useState<
+    AuthSession.DiscoveryDocument | null
+  >(null);
   const [user, setUser] = useState<Record<string, any>>({ name: "Username " });
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [userRoles, setUserRoles] = useState<string[]>([]);
@@ -93,8 +94,8 @@ export function useProvideAuth(): IAuthContext {
         refreshToken: currentRefreshToken,
       };
 
-      const tokenResult: AuthSession.TokenResponse =
-        await AuthSession.refreshAsync(config, currentDiscovery);
+      const tokenResult: AuthSession.TokenResponse = await AuthSession
+        .refreshAsync(config, currentDiscovery);
 
       setAccessToken(tokenResult.accessToken);
       const newRefreshToken = tokenResult.refreshToken ?? currentRefreshToken;
@@ -151,8 +152,8 @@ export function useProvideAuth(): IAuthContext {
     async function initAuth() {
       try {
         const discoveryUrl: string = `${process.env.EXPO_PUBLIC_KEYCLOAK_BASE}`;
-        const result: AuthSession.DiscoveryDocument =
-          await AuthSession.fetchDiscoveryAsync(discoveryUrl);
+        const result: AuthSession.DiscoveryDocument = await AuthSession
+          .fetchDiscoveryAsync(discoveryUrl);
         setDiscovery(result);
 
         const { accessToken, refreshToken } = await AuthStorage.loadTokens();
@@ -206,8 +207,8 @@ export function useProvideAuth(): IAuthContext {
             },
           };
 
-          const tokenResult: AuthSession.TokenResponse =
-            await AuthSession.exchangeCodeAsync(config, discovery);
+          const tokenResult: AuthSession.TokenResponse = await AuthSession
+            .exchangeCodeAsync(config, discovery);
 
           setAccessToken(tokenResult.accessToken);
           setRefreshToken(tokenResult.refreshToken ?? null);
@@ -220,8 +221,8 @@ export function useProvideAuth(): IAuthContext {
 
           scheduleTokenRefresh(tokenResult.accessToken);
 
-          const userInfo: Record<string, any> =
-            await AuthSession.fetchUserInfoAsync(tokenResult, discovery);
+          const userInfo: Record<string, any> = await AuthSession
+            .fetchUserInfoAsync(tokenResult, discovery);
           if (userInfo) setUser(userInfo);
         }
       } catch (e) {
@@ -257,8 +258,8 @@ export function useProvideAuth(): IAuthContext {
     try {
       const tokenResponse = new AuthSession.TokenResponse({ accessToken });
 
-      const userInfo: Record<string, any> =
-        await AuthSession.fetchUserInfoAsync(tokenResponse, discovery);
+      const userInfo: Record<string, any> = await AuthSession
+        .fetchUserInfoAsync(tokenResponse, discovery);
 
       if (userInfo) {
         setUser(userInfo);
@@ -272,7 +273,8 @@ export function useProvideAuth(): IAuthContext {
    * Open Keycloak account page
    */
   const openAccountPage = useCallback(async (): Promise<void> => {
-    const keycloakAccountUrl: string = `${process.env.EXPO_PUBLIC_KEYCLOAK_BASE}/account/`;
+    const keycloakAccountUrl: string =
+      `${process.env.EXPO_PUBLIC_KEYCLOAK_BASE}/account/`;
 
     try {
       const result = await WebBrowser.openBrowserAsync(keycloakAccountUrl);
@@ -302,8 +304,7 @@ export function useProvideAuth(): IAuthContext {
     await AuthStorage.clearTokens();
     if (discovery?.endSessionEndpoint) {
       try {
-        const logoutUrl =
-          `${discovery.endSessionEndpoint}` +
+        const logoutUrl = `${discovery.endSessionEndpoint}` +
           `?client_id=${authRequestConfig.clientId}`;
         await WebBrowser.openBrowserAsync(logoutUrl);
       } catch (error) {
